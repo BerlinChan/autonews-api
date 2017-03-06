@@ -17,6 +17,7 @@
     <h3>欢迎使用【新闻源】监控系统</h3>
     <div v-cloak>客户端连接数：{{connectionCount}}</div>
 
+    <span v-if="isShowMonitoring">已连接到服务器，正在监控中……</span>
     <ul class="news-list" v-cloak>
         <li v-for="item in newsList">
             <span>{{item.origin}}</span>
@@ -25,7 +26,6 @@
             <span>{{item.editorName}}</span>
         </li>
     </ul>
-    <span v-if="isShowMonitoring">已连接到服务器，正在监控中……</span>
 </div>
 
 <script>
@@ -44,7 +44,7 @@
         newsListApp.isShowMonitoring = true;
     });
     socket.on('addNews', function (event) {
-        newsListApp.newsList.push(event.data);
+        newsListApp.newsList.unshift(event.data);
     });
 </script>
 </body>
