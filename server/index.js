@@ -27,8 +27,11 @@ app.use(route.post('/addNews', async function (ctx) {
 io.attach(app);
 
 // socketIO events
-app.io.on('connection', (ctx, data) => {
-    console.log('connect client, id: ', data);
+app.io.on('connection', (ctx, id) => {
+    console.log('connect client, id: ', id);
+    app.io.broadcast('connections', {
+        numConnections: app.io.connections.size,
+    });
 });
 
 app.listen(process.env.PORT || 3000);
