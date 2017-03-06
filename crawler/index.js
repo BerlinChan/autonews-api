@@ -78,7 +78,7 @@ const detailCrawler = new Crawler({
                 origin: mainDom.find('.hd .tit-bar .color-a-1').text(),
                 originUrl: res.request.uri.href,
                 //content: mainDom.find('.bd #Cnt-Main-Article-QQ').html(),
-                autherName: mainDom.find('.hd .tit-bar .color-a-3').text(),
+                authorName: mainDom.find('.hd .tit-bar .color-a-3').text(),
                 editorName: mainDom.find('.ft .QQeditor').text(),
             };
 

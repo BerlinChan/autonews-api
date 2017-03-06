@@ -2,35 +2,43 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <script src="./jquery-3.1.1.min.js"></script>
+    <script src="./vue.js"></script>
     <script src="./socket.io-1.4.5.js"></script>
     <style>
-
+        [v-cloak] {
+            display: none;
+        }
     </style>
     <title>新闻源监控</title>
 </head>
 <body>
-hello world!
 
-<ul class="news-list">
-    <li>
+<h3>欢迎使用【新闻源】监控系统</h3>
+
+<ul class="news-list" v-cloak>
+    <li v-for="item in newsList">
         <span>{{item.origin}}</span>
-        <span>{{item.title}}</span>
         <a :href="item.originUrl" target="_blank">{{item.title}}</a>
-        <span>{{item.autherName}}</span>
+        <span>{{item.authorName}}</span>
         <span>{{item.editorName}}</span>
     </li>
 </ul>
+<span>正在监控中……</span>
 
 <script>
     var socket = io();
+    var newsListApp = new Vue({
+        el: '.news-list',
+        data: {
+            newsList: [],
+        }
+    });
 
-    socket.emit('connect', {
+    socket.emit('connection', {
         foo: 'bar',
     });
     socket.on('addNews', function (event) {
-        console.log(event.data);
-
+        newsListApp.newsList.push(event.data);
     });
 </script>
 </body>

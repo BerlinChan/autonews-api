@@ -11,7 +11,6 @@ const rawBody = require('raw-body');
 
 const app = new Koa();
 const io = new IO();
-const crawler = new IO('chat');
 
 app.use(require('koa-static')('../client'));
 
@@ -20,17 +19,16 @@ app.use(route.post('/addNews', async function (ctx) {
     ctx.status = 200;
     ctx.req.body = await rawBody(ctx.req, {limit: '100kb', encoding: 'utf8'});
     ctx.req.body = JSON.parse(ctx.req.body);
-    //emit socket event
-    console.log(ctx.req.body);
-    app.io.broadcast('addNews', {data: ctx.req.body});
     ctx.body = {msg: 'success'};
+    //broadcast socket event
+    app.io.broadcast('addNews', {data: ctx.req.body});
 }));
 
 io.attach(app);
 
 // socketIO events
-app.io.on('connect', (ctx, data) => {
-    console.log('join event fired', data);
+app.io.on('connection', (ctx, data) => {
+    console.log('connect client, id: ', data);
 });
 
 app.listen(process.env.PORT || 3000);
