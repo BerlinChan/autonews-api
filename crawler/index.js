@@ -1,6 +1,6 @@
 /**
  * Created by berlin on 2017/3/6.
- * 测试爬取大楚宜昌新闻列表页面，得到[新闻列表]
+ * 爬取大楚地市新闻列表页面，抓取[新闻详情]并存到数据库
  */
 
 const Crawler = require("crawler");
@@ -10,14 +10,16 @@ const seen = new Seenreq();
 const admin = require("firebase-admin");
 const serviceAccount = require("../security/fiery-heat-7406-firebase-adminsdk-kpbna-ed5b591529.json");
 
-//firebase admin init
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    databaseURL: "https://fiery-heat-7406.firebaseio.com/"
-});
-// Get a database reference to our blog
-let db = admin.database();
-let ref = db.ref("auto-news/");
+const initFirebase = ()=> {
+    //firebase admin init
+    admin.initializeApp({
+        credential: admin.credential.cert(serviceAccount),
+        databaseURL: "https://fiery-heat-7406.firebaseio.com/"
+    });
+    // Get a database reference to our blog
+    let db = admin.database();
+    let ref = db.ref("auto-news/");
+};
 
 const QUEUE_LIST = [
     'http://hb.qq.com/l/yc/list20130619124315.htm',// 大楚-宜昌-新闻列表
@@ -76,7 +78,7 @@ const detailCrawler = new Crawler({
             };
 
             // save to database
-            ref.child('detail').push(newsDetail);
+            // ref.child('detail').push(newsDetail);
             console.log('save news detail: ' + newsDetail.title);
         }
 
@@ -84,6 +86,7 @@ const detailCrawler = new Crawler({
     }
 });
 
+// Crawler event
 listCrawler.on('drain', function () {
     queueDetail.forEach(item => {
         if (!item.duplicate) {
@@ -110,4 +113,5 @@ detailCrawler.on('drain', function () {
 });
 
 //init
+// initFirebase();
 listCrawler.queue(QUEUE_LIST);
