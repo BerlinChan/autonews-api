@@ -7,9 +7,20 @@ const Crawler = require("crawler");
 const url = require('url');
 const Seenreq = require('seenreq');//remove duplicate news
 const seen = new Seenreq();
+const request = require('request-promise');
 const admin = require("firebase-admin");
 const serviceAccount = require("../security/fiery-heat-7406-firebase-adminsdk-kpbna-ed5b591529.json");
 
+// constant values
+const QUEUE_LIST = [
+    'http://hb.qq.com/l/yc/list20130619124315.htm',// 大楚-宜昌-新闻列表
+    //'http://hb.qq.com/l/xy/list20130619124740.htm',// 大楚-襄阳-新闻列表
+];//新闻目录页面地址
+const INTERVAL = 60 * 1000;//开始新一轮抓取间隔时间，单位：ms
+
+// constructor
+let queueDetail,// 从 [新闻列表页] 中获取的列表
+    queueDetailFiltered;// 排重后用于抓取的列表
 const initFirebase = ()=> {
     //firebase admin init
     admin.initializeApp({
@@ -20,21 +31,10 @@ const initFirebase = ()=> {
     let db = admin.database();
     let ref = db.ref("auto-news/");
 };
-
-const QUEUE_LIST = [
-    'http://hb.qq.com/l/yc/list20130619124315.htm',// 大楚-宜昌-新闻列表
-    //'http://hb.qq.com/l/xy/list20130619124740.htm',// 大楚-襄阳-新闻列表
-];//新闻目录页面地址
-const INTERVAL = 60 * 1000;//开始新一轮抓取间隔时间，单位：ms
-
-let tempDetails = [];// 测试用
-let queueDetail,// 从 [新闻列表页] 中获取的列表
-    queueDetailFiltered;// 排重后用于抓取的列表
 const initQueue = ()=> {
     queueDetail = [];
     queueDetailFiltered = [];
 };
-
 
 // news list crawler
 const listCrawler = new Crawler({
@@ -66,7 +66,7 @@ const listCrawler = new Crawler({
 const detailCrawler = new Crawler({
     maxConnections: 5,
     // This will be called for each crawled page
-    callback: function (error, res, done) {
+    callback: async function (error, res, done) {
         if (error) {
             console.log(error);
         } else {
@@ -77,14 +77,19 @@ const detailCrawler = new Crawler({
                 title: mainDom.find('.hd h1').text(),
                 origin: mainDom.find('.hd .tit-bar .color-a-1').text(),
                 originUrl: res.request.uri.href,
-                content: mainDom.find('.bd #Cnt-Main-Article-QQ').html(),
+                //content: mainDom.find('.bd #Cnt-Main-Article-QQ').html(),
                 autherName: mainDom.find('.hd .tit-bar .color-a-3').text(),
                 editorName: mainDom.find('.ft .QQeditor').text(),
             };
 
             // save to database
             // ref.child('detail').push(newsDetail);
-            tempDetails.push(newsDetail);
+            await request({
+                method: 'POST',
+                url: 'http://localhost:3000/addNews',
+                headers: {'content-type': 'application/json'},
+                body: JSON.stringify(newsDetail),
+            });
             console.log('save news detail: ' + newsDetail.title);
         }
 

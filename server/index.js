@@ -6,15 +6,28 @@
 
 const Koa = require('koa');
 const IO = require('koa-socket');
+const route = require('koa-route');
+const rawBody = require('raw-body');
 
 const app = new Koa();
 const io = new IO();
+const crawler = new IO('chat');
 
 app.use(require('koa-static')('../client'));
 
+//route
+app.use(route.post('/addNews', async function (ctx) {
+    ctx.req.body = await rawBody(ctx.req, {limit: '100kb', encoding: 'utf8'});
+    ctx.req.body = JSON.parse(ctx.req.body);
+    //emit socket event
+    console.log(ctx.req.body);
+    app.io.broadcast('addNews', {data: ctx.req.body});
+}));
+
 io.attach(app);
 
-io.on('join', (ctx, data) => {
+// socketIO events
+app.io.on('connect', (ctx, data) => {
     console.log('join event fired', data);
 });
 

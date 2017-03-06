@@ -12,8 +12,11 @@ hello world!
 <script>
     var socket = io();
 
-    socket.emit('join', {
-        foo: 'foo',
+    socket.emit('connect', {
+        foo: 'bar',
+    });
+    socket.on('addNews', function (event) {
+        console.log(event.data);
     });
 </script>
 </body>
