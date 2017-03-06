@@ -25,10 +25,16 @@ const QUEUE_LIST = [
     'http://hb.qq.com/l/yc/list20130619124315.htm',// 大楚-宜昌-新闻列表
     //'http://hb.qq.com/l/xy/list20130619124740.htm',// 大楚-襄阳-新闻列表
 ];//新闻目录页面地址
-const INTERVAL = 10 * 1000;//开始新一轮抓取间隔时间，单位：ms
+const INTERVAL = 60 * 1000;//开始新一轮抓取间隔时间，单位：ms
 
-let queueDetail = [];
-let queueDetailFiltered = [];
+let tempDetails = [];// 测试用
+let queueDetail,// 从 [新闻列表页] 中获取的列表
+    queueDetailFiltered;// 排重后用于抓取的列表
+const initQueue = ()=> {
+    queueDetail = [];
+    queueDetailFiltered = [];
+};
+
 
 // news list crawler
 const listCrawler = new Crawler({
@@ -56,7 +62,6 @@ const listCrawler = new Crawler({
         done();
     }
 });
-
 // detail crawler
 const detailCrawler = new Crawler({
     maxConnections: 5,
@@ -79,6 +84,7 @@ const detailCrawler = new Crawler({
 
             // save to database
             // ref.child('detail').push(newsDetail);
+            tempDetails.push(newsDetail);
             console.log('save news detail: ' + newsDetail.title);
         }
 
@@ -100,18 +106,17 @@ listCrawler.on('drain', function () {
         detailCrawler.queue(queueDetailFiltered);
     } else {
         // no new details, crawl list again
-        queueDetail = [];
-        queueDetailFiltered = [];
+        initQueue();
         setTimeout(() => listCrawler.queue(QUEUE_LIST), INTERVAL);
     }
 });
 detailCrawler.on('drain', function () {
-    queueDetail = [];
-    queueDetailFiltered = [];
+    initQueue();
     console.log('wait to crawl list again...');
     setTimeout(() => listCrawler.queue(QUEUE_LIST), INTERVAL);
 });
 
 //init
 // initFirebase();
+initQueue();
 listCrawler.queue(QUEUE_LIST);
