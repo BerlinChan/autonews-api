@@ -19,10 +19,12 @@ admin.initializeApp({
 let db = admin.database();
 let ref = db.ref("auto-news/");
 
-const queueList = [
+const QUEUE_LIST = [
     'http://hb.qq.com/l/yc/list20130619124315.htm',// 大楚-宜昌-新闻列表
     //'http://hb.qq.com/l/xy/list20130619124740.htm',// 大楚-襄阳-新闻列表
-];
+];//新闻目录页面地址
+const INTERVAL = 10 * 1000;//开始新一轮抓取间隔时间，单位：ms
+
 let queueDetail = [];
 let queueDetailFiltered = [];
 
@@ -83,21 +85,29 @@ const detailCrawler = new Crawler({
 });
 
 listCrawler.on('drain', function () {
-    queueDetailFiltered = queueDetail.map(item => {
+    queueDetail.forEach(item => {
         if (!item.duplicate) {
-            return item.url;
+            queueDetailFiltered.push(item.url);
         }
     });
 
-    console.log('111111', queueDetail.length, queueDetailFiltered.length);
-    detailCrawler.queue(queueDetailFiltered);
+    console.log('all list length: ', queueDetail.length, ' | detail queue length: ', queueDetailFiltered.length);
+    if (queueDetailFiltered.length) {
+        // have new details, crawl them
+        detailCrawler.queue(queueDetailFiltered);
+    } else {
+        // no new details, crawl list again
+        queueDetail = [];
+        queueDetailFiltered = [];
+        setTimeout(() => listCrawler.queue(QUEUE_LIST), INTERVAL);
+    }
 });
 detailCrawler.on('drain', function () {
     queueDetail = [];
     queueDetailFiltered = [];
-    console.log('crawl news list start');
-    setTimeout(() => listCrawler.queue(queueList), 10000);
+    console.log('wait to crawl list again...');
+    setTimeout(() => listCrawler.queue(QUEUE_LIST), INTERVAL);
 });
 
 //init
-listCrawler.queue(queueList);
+listCrawler.queue(QUEUE_LIST);

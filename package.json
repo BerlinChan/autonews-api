@@ -11,6 +11,7 @@
   "dependencies": {
     "crawler": "^1.0.3",
     "firebase-admin": "^4.1.2",
+    "koa": "^2.0.1",
     "seenreq": "^0.1.11"
   }
 }
