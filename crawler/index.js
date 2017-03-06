@@ -19,12 +19,14 @@ admin.initializeApp({
 let db = admin.database();
 let ref = db.ref("auto-news/");
 
-// news list crawler
-let detailQueue = [];
 const queueList = [
     'http://hb.qq.com/l/yc/list20130619124315.htm',// 大楚-宜昌-新闻列表
     //'http://hb.qq.com/l/xy/list20130619124740.htm',// 大楚-襄阳-新闻列表
 ];
+let queueDetail = [];
+let queueDetailFiltered = [];
+
+// news list crawler
 const listCrawler = new Crawler({
     maxConnections: 5,
     // This will be called for each crawled page
@@ -36,14 +38,17 @@ const listCrawler = new Crawler({
 
             let newsListDom = $(".mod.newslist li");
             newsListDom.each(function (index) {
-                detailQueue.push({
+                queueDetail.push({
                     title: $(this).children('a').text(),
                     url: $(this).children('a').attr('href'),
                     date: $(this).children('span').text(),
+                    origin: $('title').text(),
+                    originUrl: res.request.uri.href,
                     duplicate: seen.exists($(this).children('a').attr('href')),
                 });
             });
         }
+
         done();
     }
 });
@@ -59,23 +64,36 @@ const detailCrawler = new Crawler({
         } else {
             let $ = res.$;
 
-            let newsListDom = $(".mod.newslist li");
-            newsListDom.each(function (index) {
-                detailQueue.push({
-                    title: $(this).children('a').text(),
-                    url: $(this).children('a').attr('href'),
-                    date: $(this).children('span').text(),
-                    duplicate: seen.exists($(this).children('a').attr('href')),
-                });
-            });
+            let mainDom = $(".main");
+            let newsDetail = {
+                title: mainDom.find('.hd h1').text(),
+                origin: mainDom.find('.hd .tit-bar .color-a-1').text(),
+                originUrl: res.request.uri.href,
+                content: mainDom.find('.bd #Cnt-Main-Article-QQ').html(),
+                autherName: mainDom.find('.hd .tit-bar .color-a-3').text(),
+                editorName: mainDom.find('.ft .QQeditor').text(),
+            };
+
+            // save to database
+            ref.child('detail').push(newsDetail);
+            console.log('save news detail: ' + newsDetail.title);
         }
+
         done();
     }
 });
-detailCrawler.queue(detailQueue.map(item => {
-    if (!item.duplicate) {
-        return item.url;
-    }
-}));
 
+listCrawler.on('drain', function () {
+    queueDetail.forEach(item => {
+        if (!item.duplicate) {
+            queueDetailFiltered.push(item.url);
+        }
+    });
 
+    console.log('111111', queueDetail.length, queueDetailFiltered.length);
+    detailCrawler.queue(queueDetailFiltered);
+});
+detailCrawler.on('drain', function () {
+    console.log('crawl news list start');
+    setTimeout(() => listCrawler.queue(queueList), 10000);
+});
