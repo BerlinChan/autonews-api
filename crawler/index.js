@@ -5,50 +5,77 @@
 
 const Crawler = require("crawler");
 const url = require('url');
-const seenreq = require('seenreq');//remove duplicate news
-const seen = new seenreq();
+const Seenreq = require('seenreq');//remove duplicate news
+const seen = new Seenreq();
 const admin = require("firebase-admin");
 const serviceAccount = require("../security/fiery-heat-7406-firebase-adminsdk-kpbna-ed5b591529.json");
 
-//firebase init
+//firebase admin init
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
     databaseURL: "https://fiery-heat-7406.firebaseio.com/"
 });
+// Get a database reference to our blog
+let db = admin.database();
+let ref = db.ref("auto-news/");
 
-const c = new Crawler({
-    maxConnections: 10,
-    skipDuplicates: true,//use [seenreq] instead
+// news list crawler
+let detailQueue = [];
+const queueList = [
+    'http://hb.qq.com/l/yc/list20130619124315.htm',// 大楚-宜昌-新闻列表
+    //'http://hb.qq.com/l/xy/list20130619124740.htm',// 大楚-襄阳-新闻列表
+];
+const listCrawler = new Crawler({
+    maxConnections: 5,
     // This will be called for each crawled page
     callback: function (error, res, done) {
         if (error) {
             console.log(error);
         } else {
-            var $ = res.$;
-            // $ is Cheerio by default
-            //a lean implementation of core jQuery designed specifically for the server
+            let $ = res.$;
 
-            var newsList = [{title: '', url: ''}];
-            var newsListDom = $(".mod.newslist li");
+            let newsListDom = $(".mod.newslist li");
             newsListDom.each(function (index) {
-                newsList.push({
+                detailQueue.push({
                     title: $(this).children('a').text(),
                     url: $(this).children('a').attr('href'),
                     date: $(this).children('span').text(),
+                    duplicate: seen.exists($(this).children('a').attr('href')),
                 });
             });
-            console.log(newsList);
         }
         done();
     }
 });
+listCrawler.queue(queueList);
 
-//remove requests are sent
-var queueList = [
-    'http://hb.qq.com/l/yc/list20130619124315.htm',// 大楚-宜昌-新闻列表
-    //'http://hb.qq.com/l/xy/list20130619124740.htm',// 大楚-襄阳-新闻列表
-];
-//console.log(seen.exists(url));//false
+// detail crawler
+const detailCrawler = new Crawler({
+    maxConnections: 5,
+    // This will be called for each crawled page
+    callback: function (error, res, done) {
+        if (error) {
+            console.log(error);
+        } else {
+            let $ = res.$;
 
-// Queue a list of URLs
-c.queue(queueList);
+            let newsListDom = $(".mod.newslist li");
+            newsListDom.each(function (index) {
+                detailQueue.push({
+                    title: $(this).children('a').text(),
+                    url: $(this).children('a').attr('href'),
+                    date: $(this).children('span').text(),
+                    duplicate: seen.exists($(this).children('a').attr('href')),
+                });
+            });
+        }
+        done();
+    }
+});
+detailCrawler.queue(detailQueue.map(item => {
+    if (!item.duplicate) {
+        return item.url;
+    }
+}));
+
+
