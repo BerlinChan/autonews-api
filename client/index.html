@@ -4,10 +4,23 @@
     <meta charset="UTF-8">
     <script src="./jquery-3.1.1.min.js"></script>
     <script src="./socket.io-1.4.5.js"></script>
+    <style>
+
+    </style>
     <title>新闻源监控</title>
 </head>
 <body>
 hello world!
+
+<ul class="news-list">
+    <li>
+        <span>{{item.origin}}</span>
+        <span>{{item.title}}</span>
+        <a :href="item.originUrl" target="_blank">{{item.title}}</a>
+        <span>{{item.autherName}}</span>
+        <span>{{item.editorName}}</span>
+    </li>
+</ul>
 
 <script>
     var socket = io();
@@ -17,6 +30,7 @@ hello world!
     });
     socket.on('addNews', function (event) {
         console.log(event.data);
+
     });
 </script>
 </body>

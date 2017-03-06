@@ -17,11 +17,13 @@ app.use(require('koa-static')('../client'));
 
 //route
 app.use(route.post('/addNews', async function (ctx) {
+    ctx.status = 200;
     ctx.req.body = await rawBody(ctx.req, {limit: '100kb', encoding: 'utf8'});
     ctx.req.body = JSON.parse(ctx.req.body);
     //emit socket event
     console.log(ctx.req.body);
     app.io.broadcast('addNews', {data: ctx.req.body});
+    ctx.body = {msg: 'success'};
 }));
 
 io.attach(app);
