@@ -52,7 +52,6 @@ const listCrawler = new Crawler({
         done();
     }
 });
-listCrawler.queue(queueList);
 
 // detail crawler
 const detailCrawler = new Crawler({
@@ -84,9 +83,9 @@ const detailCrawler = new Crawler({
 });
 
 listCrawler.on('drain', function () {
-    queueDetail.forEach(item => {
+    queueDetailFiltered = queueDetail.map(item => {
         if (!item.duplicate) {
-            queueDetailFiltered.push(item.url);
+            return item.url;
         }
     });
 
@@ -94,6 +93,11 @@ listCrawler.on('drain', function () {
     detailCrawler.queue(queueDetailFiltered);
 });
 detailCrawler.on('drain', function () {
+    queueDetail = [];
+    queueDetailFiltered = [];
     console.log('crawl news list start');
     setTimeout(() => listCrawler.queue(queueList), 10000);
 });
+
+//init
+listCrawler.queue(queueList);
