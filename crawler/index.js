@@ -73,12 +73,14 @@ const detailCrawlerCbWrapper = (parser) =>function (error, res, done) {
     done();
 };
 const initCrawler = () => {
+    console.log(' --- init and wait ', (config.CRAWL_INTERVAL / 60000).toFixed(1), 'min to restart ---');
     queueList = generateQueueList([
         dachu_dishi,
         sxwb.getRecentDateList(new Date()),
     ]);
     queueListResult = [];
     queueDetailFiltered = [];
+    setTimeout(() => listCrawler.queue(queueList), config.CRAWL_INTERVAL);
 };
 const initFirebase = () => {
     //firebase admin init
@@ -121,17 +123,12 @@ listCrawler.on('drain', function () {
     } else {
         // no new details, crawl list again
         initCrawler();
-        console.log(' --- all complete, wait ', (config.CRAWL_INTERVAL / 60000).toFixed(1), 'min to restart ---');
-        setTimeout(() => listCrawler.queue(queueList), config.CRAWL_INTERVAL);
     }
 });
 detailCrawler.on('drain', function () {
     initCrawler();
-    console.log('wait to start crawl again...');
-    setTimeout(() => listCrawler.queue(queueList), config.CRAWL_INTERVAL);
 });
 
 //init
 // initFirebase();
 initCrawler();
-listCrawler.queue(queueList);
