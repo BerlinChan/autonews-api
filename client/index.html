@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <script src="./vue.js"></script>
+    <script src="./vue.min.js"></script>
     <script src="./socket.io-1.4.5.js"></script>
     <style>
         [v-cloak] {
@@ -21,6 +21,7 @@
 
         .bottom a {
             color: #ccc;
+            font-size: 14px;
         }
 
         .bottom i.icon-love {
@@ -41,8 +42,8 @@
         该页面准实时监控 <a href="http://hb.qq.com/" target="_blank">腾讯·大楚网</a> 所有地市频道（宜昌/襄阳/黄石/十堰/孝感/荆门/荆州/黄冈/恩施/随州/潜江/仙桃）新闻更新
     </p>
 
-    <span v-if="isShowMonitoring">已连接到服务器，正在监控中……</span>
-    <span v-else style="color:red;">已断开与服务器的连接</span>
+    <span v-if="isShowMonitoring" v-cloak>已连接到服务器，正在监控中……</span>
+    <span v-else style="color:red;" v-cloak>已断开与服务器的连接</span>
     <ul class="news-list" v-cloak>
         <li v-for="item in newsList">
             <span>{{item.date}}</span>
