@@ -8,6 +8,7 @@ const Koa = require('koa');
 const IO = require('koa-socket');
 const route = require('koa-route');
 const rawBody = require('raw-body');
+const config = require('../utils/config');
 
 const app = new Koa();
 const io = new IO();
@@ -34,4 +35,4 @@ app.io.on('connection', (ctx, id) => {
     });
 });
 
-app.listen(process.env.PORT || 3000);
+app.listen(process.env.PORT || config.HTTP_PORT);

@@ -10,6 +10,7 @@ const seen = new Seenreq();
 const request = require('request-promise');
 const admin = require("firebase-admin");
 const serviceAccount = require("../security/fiery-heat-7406-firebase-adminsdk-kpbna-ed5b591529.json");
+const config = require('../utils/config');
 
 // constant values
 const QUEUE_LIST = [
@@ -48,7 +49,6 @@ const QUEUE_LIST = [
     // }
     // },// 大楚-十堰-新闻列表
 ];//新闻目录页面地址
-const INTERVAL = 60 * 1000;//开始新一轮抓取间隔时间，单位：ms
 
 // constructor
 let queueDetail,// 从 [新闻列表页] 中获取的列表
@@ -119,7 +119,7 @@ const detailCrawler = new Crawler({
             // ref.child('detail').push(newsDetail);
             await request({
                 method: 'POST',
-                url: 'http://localhost:3000/addNews',
+                url: 'http://localhost:' + config.HTTP_PORT + '/addNews',
                 headers: {'content-type': 'application/json'},
                 body: JSON.stringify(newsDetail),
             });
@@ -145,13 +145,13 @@ listCrawler.on('drain', function () {
     } else {
         // no new details, crawl list again
         initQueue();
-        setTimeout(() => listCrawler.queue(QUEUE_LIST), INTERVAL);
+        setTimeout(() => listCrawler.queue(QUEUE_LIST), config.CRAWL_INTERVAL);
     }
 });
 detailCrawler.on('drain', function () {
     initQueue();
     console.log('wait to crawl list again...');
-    setTimeout(() => listCrawler.queue(QUEUE_LIST), INTERVAL);
+    setTimeout(() => listCrawler.queue(QUEUE_LIST), config.CRAWL_INTERVAL);
 });
 
 //init

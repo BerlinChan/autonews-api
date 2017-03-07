@@ -37,9 +37,9 @@
 
 <div id="news-origin-monitor-app">
     <h3>欢迎使用【新闻源监控】</h3>
-    <div>
-        该页面监控 <a href="http://hb.qq.com/" target="_blank">腾讯·大楚网</a>所有地市频道（宜昌/襄阳/黄石/十堰/孝感/荆门/荆州/黄冈/恩施/随州/潜江/仙桃）新闻更新
-    </div>
+    <p>
+        该页面准实时监控 <a href="http://hb.qq.com/" target="_blank">腾讯·大楚网</a> 所有地市频道（宜昌/襄阳/黄石/十堰/孝感/荆门/荆州/黄冈/恩施/随州/潜江/仙桃）新闻更新
+    </p>
 
     <span v-if="isShowMonitoring">已连接到服务器，正在监控中……</span>
     <span v-else style="color:red;">已断开与服务器的连接</span>
@@ -55,7 +55,8 @@
 
     <div class="bottom">
         <span v-cloak> 客户端连接数：{{connectionCount}} |</span>
-        <span> Code whit <i class="icon-love"></i> by <a href="www.berlinchan.com">摄影师陈柏林</a></span>
+        <span> Code with <i class="icon-love"></i> by <a href="http://www.berlinchan.com"
+                                                         target="_blank">摄影师陈柏林</a></span>
     </div>
 </div>
 
