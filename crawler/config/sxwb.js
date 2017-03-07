@@ -1,9 +1,9 @@
 /**
  * Created by Berlin on 2017/3/7.
- * 腾讯大楚网 - 地市站，包括
- * 宜昌/襄阳/黄石/十堰/孝感/荆门/荆州/黄冈/恩施/随州/潜江/仙桃
+ * 三峡晚报
  */
 
+const moment = require('moment');
 const Seenreq = require('seenreq');// for remove duplicate news
 const seen = new Seenreq();
 
@@ -57,17 +57,8 @@ const detailParser = ($, res) => {
     };
 };
 
+let dateString = moment(new Date()).format('YYSS');//YYMMDD
+
 module.exports = [
-    {uri: 'http://hb.qq.com/l/yc/list20130619124315.htm', listParser: parser_common},// 大楚-宜昌-新闻列表
-    {uri: 'http://hb.qq.com/l/xy/list20130619124740.htm', listParser: parser_common},// 大楚-襄阳-新闻列表
-    {uri: 'http://hb.qq.com/l/hs/list20151231151356.htm', listParser: parser_common},// 大楚-黄石-新闻列表
-    {uri: 'http://hb.qq.com/l/dachuxiaogan/list201605493502.htm', listParser: parser_common},// 大楚-孝感-新闻列表
-    {uri: 'http://hb.qq.com/l/qj/list20161223113121.htm', listParser: parser_common},// 大楚-潜江-新闻列表
-    {uri: 'http://hb.qq.com/l/sz/suizhounews.htm', listParser: parser_common},// 大楚-随州-新闻列表
-    {uri: 'http://hb.qq.com/l/es/esyw/list20151230161913.htm', listParser: parser_common},// 大楚-恩施-新闻列表
-    {uri: 'http://hb.qq.com/l/hg/list20151231151003.htm', listParser: parser_common},// 大楚-黄冈-新闻列表
-    {uri: 'http://hb.qq.com/l/jm/jmyw/jmtt/list2015015104550.htm', listParser: parser_common},// 大楚-荆门-新闻列表
-    {uri: 'http://hb.qq.com/l/jz/jzyw/jzywlist.htm', listParser: parser_common},// 大楚-荆州-新闻列表
-    {uri: 'http://hb.qq.com/l/xt/xtyw/list20160127112918.htm', listParser: parser_common},// 大楚-仙桃-新闻列表
-    {uri: 'http://hb.qq.com/l/sy/synews/shiyan-news-list.htm', listParser: parser_shiyan},// 大楚-十堰-新闻列表
+    {uri: `http://sxwb.cnhubei.com/html/sxwb/${dateString}/index.html`, listParser: parser_common},
 ];//新闻目录页面地址
