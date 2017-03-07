@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <script src="./vue.js"></script>
@@ -14,12 +14,18 @@
 <body>
 
 <div id="news-origin-monitor-app">
-    <h3>欢迎使用【新闻源】监控系统</h3>
-    <div v-cloak>客户端连接数：{{connectionCount}}</div>
+    <h3>欢迎使用【新闻源监控】</h3>
+    <div>
+        <span>该页面监控大楚所有地市新闻更新 |</span>
+        <span v-cloak> 客户端连接数：{{connectionCount}} |</span>
+        <span> Code whit love by 摄影师陈柏林</span>
+    </div>
 
     <span v-if="isShowMonitoring">已连接到服务器，正在监控中……</span>
+    <span v-else style="color:red;">已断开与服务器的连接</span>
     <ul class="news-list" v-cloak>
         <li v-for="item in newsList">
+            <span>{{item.date}}</span>
             <span>{{item.origin}}</span>
             <a :href="item.originUrl" target="_blank">{{item.title}}</a>
             <span>{{item.authorName}}</span>
@@ -42,6 +48,9 @@
     socket.on('connections', function (event) {
         newsListApp.connectionCount = event.numConnections;
         newsListApp.isShowMonitoring = true;
+    });
+    socket.on('disconnect', function (event) {
+        newsListApp.isShowMonitoring = false;
     });
     socket.on('addNews', function (event) {
         newsListApp.newsList.unshift(event.data);

@@ -13,27 +13,47 @@ const serviceAccount = require("../security/fiery-heat-7406-firebase-adminsdk-kp
 
 // constant values
 const QUEUE_LIST = [
-    //'http://hb.qq.com/l/yc/list20130619124315.htm',// 大楚-宜昌-新闻列表
+    'http://hb.qq.com/l/yc/list20130619124315.htm',// 大楚-宜昌-新闻列表
     'http://hb.qq.com/l/xy/list20130619124740.htm',// 大楚-襄阳-新闻列表
-    //'http://hb.qq.com/l/hs/list20151231151356.htm',// 大楚-黄石-新闻列表
-    //'http://hb.qq.com/l/dachuxiaogan/list201605493502.htm',// 大楚-孝感-新闻列表
-    //'http://hb.qq.com/l/qj/list20161223113121.htm',// 大楚-潜江-新闻列表
-    //'http://hb.qq.com/l/sz/suizhounews.htm',// 大楚-随州-新闻列表
-    //'http://hb.qq.com/l/es/esyw/list20151230161913.htm',// 大楚-恩施-新闻列表
-    //'http://hb.qq.com/l/hg/list20151231151003.htm',// 大楚-黄冈-新闻列表
-    //'http://hb.qq.com/l/jm/jmyw/jmtt/list2015015104550.htm',// 大楚-荆门-新闻列表
-    //'http://hb.qq.com/l/jz/jzyw/jzywlist.htm',// 大楚-荆州-新闻列表
-    //'http://hb.qq.com/l/xt/xtyw/list20160127112918.htm',// 大楚-仙桃-新闻列表
+    'http://hb.qq.com/l/hs/list20151231151356.htm',// 大楚-黄石-新闻列表
+    'http://hb.qq.com/l/dachuxiaogan/list201605493502.htm',// 大楚-孝感-新闻列表
+    'http://hb.qq.com/l/qj/list20161223113121.htm',// 大楚-潜江-新闻列表
+    'http://hb.qq.com/l/sz/suizhounews.htm',// 大楚-随州-新闻列表
+    'http://hb.qq.com/l/es/esyw/list20151230161913.htm',// 大楚-恩施-新闻列表
+    'http://hb.qq.com/l/hg/list20151231151003.htm',// 大楚-黄冈-新闻列表
+    'http://hb.qq.com/l/jm/jmyw/jmtt/list2015015104550.htm',// 大楚-荆门-新闻列表
+    'http://hb.qq.com/l/jz/jzyw/jzywlist.htm',// 大楚-荆州-新闻列表
+    'http://hb.qq.com/l/xt/xtyw/list20160127112918.htm',// 大楚-仙桃-新闻列表
 
     //DOM 结构不一样
-    //'http://hb.qq.com/l/sy/synews/shiyan-news-list.htm',// 大楚-十堰-新闻列表
+    {
+        uri: 'http://hb.qq.com/l/sy/synews/shiyan-news-list.htm', callback: function (error, res, done) {
+        if (error) {
+            console.log(error);
+        } else {
+            let $ = res.$;
+
+            let newsListDom = $(".mod.newslist li");
+            newsListDom.each(function (index) {
+                queueDetail.push({
+                    title: $(this).children('a').text(),
+                    url: $(this).children('a').attr('href'),
+                    date: $(this).children('span').text(),
+                    origin: $('title').text(),
+                    originUrl: res.request.uri.href,
+                    duplicate: seen.exists($(this).children('a').attr('href')),
+                });
+            });        }
+        done();
+    }
+    },// 大楚-十堰-新闻列表
 ];//新闻目录页面地址
 const INTERVAL = 60 * 1000;//开始新一轮抓取间隔时间，单位：ms
 
 // constructor
 let queueDetail,// 从 [新闻列表页] 中获取的列表
     queueDetailFiltered;// 排重后用于抓取的列表
-const initFirebase = ()=> {
+const initFirebase = () => {
     //firebase admin init
     admin.initializeApp({
         credential: admin.credential.cert(serviceAccount),
@@ -43,7 +63,7 @@ const initFirebase = ()=> {
     let db = admin.database();
     let ref = db.ref("auto-news/");
 };
-const initQueue = ()=> {
+const initQueue = () => {
     queueDetail = [];
     queueDetailFiltered = [];
 };
@@ -92,6 +112,7 @@ const detailCrawler = new Crawler({
                 //content: mainDom.find('.bd #Cnt-Main-Article-QQ').html(),
                 authorName: mainDom.find('.hd .tit-bar .color-a-3').text(),
                 editorName: mainDom.find('.ft .QQeditor').text(),
+                date: mainDom.find('.hd .tit-bar .article-time').text(),
             };
 
             // save to database
