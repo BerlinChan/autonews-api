@@ -38,9 +38,12 @@
 
 <div id="news-origin-monitor-app">
     <h3>欢迎使用【新闻源监控】</h3>
-    <p>
-        该页面准实时监控 <a href="http://hb.qq.com/" target="_blank">腾讯·大楚网</a> 所有地市频道（宜昌/襄阳/黄石/十堰/孝感/荆门/荆州/黄冈/恩施/随州/潜江/仙桃）新闻更新
-    </p>
+    <div>该页面准实时监控如下新闻源</div>
+    <ul>
+        <li><a href="http://hb.qq.com/" target="_blank">腾讯·大楚网</a> 所有地市频道（宜昌/襄阳/黄石/十堰/孝感/荆门/荆州/黄冈/恩施/随州/潜江/仙桃</li>
+        <li><a href="http://sxwb.cnhubei.com/cache/paper_sxwb.aspx" target="_blank">三峡晚报</a></li>
+        <li>持续添加中……</li>
+    </ul>
 
     <span v-if="isShowMonitoring" v-cloak>已连接到服务器，正在监控中……</span>
     <span v-else style="color:red;" v-cloak>已断开与服务器的连接</span>
