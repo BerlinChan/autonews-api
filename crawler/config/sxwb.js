@@ -16,8 +16,6 @@ const parser_page = ($, res) => {
             let onclickAttr = $(this).attr('onclick');
             if (onclickAttr) {
                 queuePage.push({
-                    maxConnections: 1,
-                    rateLimit: 50000,
                     uri: res.request.uri.href.split('index')[0]
                     + onclickAttr.split('.html')[0].split('\'')[1] + '.html',
                     pageTitle: $(this).children('a').text(),
@@ -45,8 +43,6 @@ const parser_list = ($, res) => {
                 + date + '/'
                 + $(this).children('a').attr('href').split('/')[6];
             tempQueueDetail.push({
-                maxConnections: 1,
-                rateLimit: 50000,
                 title: $(this).children('a').text(),//文章标题
                 uri: url,//文章链接
                 date: moment(date, "YYYYMMDD"),//文章发布日期

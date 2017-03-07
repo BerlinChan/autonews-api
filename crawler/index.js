@@ -24,8 +24,6 @@ const generateQueueList = (configs) => {
         configs.reduce((a, b) => a.concat(b)).forEach((item, index) => {
             mergedQueue.push({
                 uri: item.uri,
-                maxConnections: item.maxConnections,
-                rateLimit: item.rateLimit,
                 callback: listCrawlerCbWrapper(item),
             });
         });
@@ -95,10 +93,12 @@ const initFirebase = () => {
 
 // news list crawler
 const listCrawler = new Crawler({
+    rateLimit: 2000,
     maxConnections: 1,
 });
 // detail crawler
 const detailCrawler = new Crawler({
+    rateLimit: 2000,
     maxConnections: 1,
 });
 
@@ -108,8 +108,6 @@ listCrawler.on('drain', function () {
         if (!item.isCrawled) {
             // not seen
             queueDetailFiltered.push({
-                maxConnections: item.maxConnections,
-                rateLimit: item.rateLimit,
                 uri: item.uri,
                 callback: detailCrawlerCbWrapper(item.detailParser),
             });
