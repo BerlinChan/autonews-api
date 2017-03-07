@@ -8,6 +8,27 @@
         [v-cloak] {
             display: none;
         }
+
+        .bottom {
+            padding: 8px 16px;
+            background-color: #fff;
+            color: #666;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+        }
+
+        .bottom a {
+            color: #999;
+        }
+
+        .bottom i.icon-love {
+            vertical-align: middle;
+            width: 16px;
+            height: 15px;
+            display: inline-block;
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAPCAMAAADarb8dAAAAZlBMVEUAAAD/Bwf/Bgb/Bgb/BAT/Bwf/Bgb/Bgb/Bwf/Bwf/BQX/Bwf/Bgb/BQX/Bgb/BQX/Bgb/BQX/BAT/BAT/Bgb/CAj/Bgb/Bwf/CAj/Bwf/BQX/Bgb/BQX/BAT/Bwf/AwP/BQX/BwdyG9tKAAAAIXRSTlMA0MCYBeke5N/MxryphH91MSkjGBTd1K2jjWZQSjkODg2xT8wMAAAAbklEQVQI112O1w6DMBTFnEFYZdPdMv7/J0nYwS9HthLpQlvIWJVQveMkN9DI0RL8/pFbUZPbcSVcViFGjzuhH4Lri4iXH1K+fvigb2eXPZjk8EcFUMvNRclMu/5KDSudcv5s2NGZPXqAUykyzcwESvoUBrGItL8AAAAASUVORK5CYII=');
+        }
     </style>
     <title>新闻源监控</title>
 </head>
@@ -16,9 +37,7 @@
 <div id="news-origin-monitor-app">
     <h3>欢迎使用【新闻源监控】</h3>
     <div>
-        <span>该页面监控大楚所有地市新闻更新 |</span>
-        <span v-cloak> 客户端连接数：{{connectionCount}} |</span>
-        <span> Code whit love by 摄影师陈柏林</span>
+        该页面监控 <a href="http://hb.qq.com/" target="_blank">腾讯·大楚网</a>所有地市频道（宜昌/襄阳/黄石/十堰/孝感/荆门/荆州/黄冈/恩施/随州/潜江/仙桃）新闻更新
     </div>
 
     <span v-if="isShowMonitoring">已连接到服务器，正在监控中……</span>
@@ -32,6 +51,11 @@
             <span>{{item.editorName}}</span>
         </li>
     </ul>
+</div>
+
+<div class="bottom">
+    <span v-cloak> 客户端连接数：{{connectionCount}} |</span>
+    <span> Code whit <i class="icon-love"></i> by <a href="www.berlinchan.com">摄影师陈柏林</a></span>
 </div>
 
 <script>

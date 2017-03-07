@@ -26,27 +26,27 @@ const QUEUE_LIST = [
     'http://hb.qq.com/l/xt/xtyw/list20160127112918.htm',// 大楚-仙桃-新闻列表
 
     //DOM 结构不一样
-    {
-        uri: 'http://hb.qq.com/l/sy/synews/shiyan-news-list.htm', callback: function (error, res, done) {
-        if (error) {
-            console.log(error);
-        } else {
-            let $ = res.$;
-
-            let newsListDom = $(".mod.newslist li");
-            newsListDom.each(function (index) {
-                queueDetail.push({
-                    title: $(this).children('a').text(),
-                    url: $(this).children('a').attr('href'),
-                    date: $(this).children('span').text(),
-                    origin: $('title').text(),
-                    originUrl: res.request.uri.href,
-                    duplicate: seen.exists($(this).children('a').attr('href')),
-                });
-            });        }
-        done();
-    }
-    },// 大楚-十堰-新闻列表
+    // {
+    //     uri: 'http://hb.qq.com/l/sy/synews/shiyan-news-list.htm', callback: function (error, res, done) {
+    //     if (error) {
+    //         console.log(error);
+    //     } else {
+    //         let $ = res.$;
+    //
+    //         let newsListDom = $(".mod.newslist li");
+    //         newsListDom.each(function (index) {
+    //             queueDetail.push({
+    //                 title: $(this).children('a').text(),
+    //                 url: $(this).children('a').attr('href'),
+    //                 date: $(this).children('span').text(),
+    //                 origin: $('title').text(),
+    //                 originUrl: res.request.uri.href,
+    //                 duplicate: seen.exists($(this).children('a').attr('href')),
+    //             });
+    //         });        }
+    //     done();
+    // }
+    // },// 大楚-十堰-新闻列表
 ];//新闻目录页面地址
 const INTERVAL = 60 * 1000;//开始新一轮抓取间隔时间，单位：ms
 
