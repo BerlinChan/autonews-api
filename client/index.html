@@ -10,16 +10,17 @@
         }
 
         .bottom {
+            font-size: 14px;
             padding: 8px 16px;
             background-color: #fff;
-            color: #666;
-            position: absolute;
+            color: #ccc;
+            position: fixed;
             bottom: 0;
             right: 0;
         }
 
         .bottom a {
-            color: #999;
+            color: #ccc;
         }
 
         .bottom i.icon-love {
@@ -51,11 +52,11 @@
             <span>{{item.editorName}}</span>
         </li>
     </ul>
-</div>
 
-<div class="bottom">
-    <span v-cloak> 客户端连接数：{{connectionCount}} |</span>
-    <span> Code whit <i class="icon-love"></i> by <a href="www.berlinchan.com">摄影师陈柏林</a></span>
+    <div class="bottom">
+        <span v-cloak> 客户端连接数：{{connectionCount}} |</span>
+        <span> Code whit <i class="icon-love"></i> by <a href="www.berlinchan.com">摄影师陈柏林</a></span>
+    </div>
 </div>
 
 <script>
