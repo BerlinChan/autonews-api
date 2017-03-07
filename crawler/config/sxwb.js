@@ -7,58 +7,77 @@ const moment = require('moment');
 const Seenreq = require('seenreq');// for remove duplicate news
 const seen = new Seenreq();
 
-// 列表解析处理器, 适用: 宜昌/襄阳/黄石/孝感/荆门/荆州/黄冈/恩施/随州/潜江/仙桃
-const parser_common = ($, res) => {
-    let newsListDom = $(".mod.newslist li");
-    let tempQueueDetail = [];
-    newsListDom.each(function (index) {
-        tempQueueDetail.push({
-            title: $(this).children('a').text(),//文章标题
-            url: $(this).children('a').attr('href'),//文章链接
-            date: $(this).children('span').text(),//文章发布日期
-            origin: $('title').text(),//文章来源
-            originUrl: res.request.uri.href,//来源链接
-            isCrawled: seen.exists($(this).children('a').attr('href')),//是否已采集
-            detailParser: detailParser,//对应[详情页]解析函数
+// page 解析处理器
+const parser_page = ($, res) => {
+    let queuePage = [];//版面队列
+    let title = $('title').text();
+    if (title == '三峡晚报') {
+        $('td.info3').each(function (index) {
+            let onclickAttr = $(this).attr('onclick');
+            if (onclickAttr) {
+                queuePage.push({
+                    maxConnections: 1,
+                    rateLimit: 20000,
+                    uri: res.request.uri.href.split('index')[0]
+                    + onclickAttr.split('.html')[0].split('\'')[1] + '.html',
+                    pageTitle: $(this).children('a').text(),
+                    origin: title,
+                    parser: parser_list,
+                });
+            }
         });
-    });
+    }
 
-    return tempQueueDetail;
+    return {
+        isAgain: true,// page 处理完再处理 list
+        queue: queuePage,
+    };
 };
-// 适用: 十堰
-const parser_shiyan = ($, res) => {
-    let newsListDom = $("ul.list01 li");
+// list parser
+const parser_list = ($, res) => {
+    let newsListDom = $("td[width=300] tr td");
     let tempQueueDetail = [];
     newsListDom.each(function (index) {
-        tempQueueDetail.push({
-            title: $(this).children('a').text(),
-            url: $(this).children('a').attr('href'),
-            date: $(this).children('span').text(),
-            origin: $('title').text(),
-            originUrl: res.request.uri.href,
-            isCrawled: seen.exists($(this).children('a').attr('href')),
-            detailParser: detailParser,
-        });
+        let onclickAttr = $(this).attr('onclick');
+        if (onclickAttr) {
+            let date = $(this).children('a').attr('href').split('/')[5];
+            let url = 'http://sxwb.cnhubei.com/html/sxwb/'
+                + date + '/'
+                + $(this).children('a').attr('href').split('/')[6];
+            tempQueueDetail.push({
+                maxConnections: 1,
+                rateLimit: 20000,
+                title: $(this).children('a').text(),//文章标题
+                uri: url,//文章链接
+                date: moment(date, "YYYYMMDD"),//文章发布日期
+                origin: $('title').text(),//文章来源
+                originUrl: res.request.uri.href,//来源链接
+                isCrawled: seen.exists(url),//是否已采集
+                detailParser: detailParser,//对应[详情页]解析函数
+            });
+        }
     });
 
     return tempQueueDetail;
 };
 // detail parser
 const detailParser = ($, res) => {
-    let mainDom = $(".main");
+    let mainDom = $("#Table17 tr");
     return {
-        title: mainDom.find('.hd h1').text(),
-        origin: mainDom.find('.hd .tit-bar .color-a-1').text(),
+        title: mainDom.eq(1).find('td').text().trim(),
+        subTitle: mainDom.eq(0).text().trim(),
+        origin: $('title').text(),
         originUrl: res.request.uri.href,
-        //content: mainDom.find('.bd #Cnt-Main-Article-QQ').html(),
+        content: mainDom.eq(4).find('td div').html(),
         authorName: mainDom.find('.hd .tit-bar .color-a-3').text(),
         editorName: mainDom.find('.ft .QQeditor').text(),
-        date: mainDom.find('.hd .tit-bar .article-time').text(),
+        date: moment(res.request.uri.href.split('/')[5], "YYYYMMDD"),
     };
 };
 
-let dateString = moment(new Date()).format('YYSS');//YYMMDD
-
-module.exports = [
-    {uri: `http://sxwb.cnhubei.com/html/sxwb/${dateString}/index.html`, listParser: parser_common},
-];//新闻目录页面地址
+module.exports = {
+    getRecentDateList: (date)=> [{
+        uri: `http://sxwb.cnhubei.com/html/sxwb/${moment(date).format('YYYYMMDD')}/index.html`,//${moment(date).format('YYYYMMDD')}
+        parser: parser_page,
+    }],
+};

@@ -14,7 +14,7 @@ const parser_common = ($, res) => {
     newsListDom.each(function (index) {
         tempQueueDetail.push({
             title: $(this).children('a').text(),//文章标题
-            url: $(this).children('a').attr('href'),//文章链接
+            uri: $(this).children('a').attr('href'),//文章链接
             date: $(this).children('span').text(),//文章发布日期
             origin: $('title').text(),//文章来源
             originUrl: res.request.uri.href,//来源链接
@@ -32,7 +32,7 @@ const parser_shiyan = ($, res) => {
     newsListDom.each(function (index) {
         tempQueueDetail.push({
             title: $(this).children('a').text(),
-            url: $(this).children('a').attr('href'),
+            uri: $(this).children('a').attr('href'),
             date: $(this).children('span').text(),
             origin: $('title').text(),
             originUrl: res.request.uri.href,
@@ -58,16 +58,16 @@ const detailParser = ($, res) => {
 };
 
 module.exports = [
-    {uri: 'http://hb.qq.com/l/yc/list20130619124315.htm', listParser: parser_common},// 大楚-宜昌-新闻列表
-    {uri: 'http://hb.qq.com/l/xy/list20130619124740.htm', listParser: parser_common},// 大楚-襄阳-新闻列表
-    {uri: 'http://hb.qq.com/l/hs/list20151231151356.htm', listParser: parser_common},// 大楚-黄石-新闻列表
-    {uri: 'http://hb.qq.com/l/dachuxiaogan/list201605493502.htm', listParser: parser_common},// 大楚-孝感-新闻列表
-    {uri: 'http://hb.qq.com/l/qj/list20161223113121.htm', listParser: parser_common},// 大楚-潜江-新闻列表
-    {uri: 'http://hb.qq.com/l/sz/suizhounews.htm', listParser: parser_common},// 大楚-随州-新闻列表
-    {uri: 'http://hb.qq.com/l/es/esyw/list20151230161913.htm', listParser: parser_common},// 大楚-恩施-新闻列表
-    {uri: 'http://hb.qq.com/l/hg/list20151231151003.htm', listParser: parser_common},// 大楚-黄冈-新闻列表
-    {uri: 'http://hb.qq.com/l/jm/jmyw/jmtt/list2015015104550.htm', listParser: parser_common},// 大楚-荆门-新闻列表
-    {uri: 'http://hb.qq.com/l/jz/jzyw/jzywlist.htm', listParser: parser_common},// 大楚-荆州-新闻列表
-    {uri: 'http://hb.qq.com/l/xt/xtyw/list20160127112918.htm', listParser: parser_common},// 大楚-仙桃-新闻列表
-    {uri: 'http://hb.qq.com/l/sy/synews/shiyan-news-list.htm', listParser: parser_shiyan},// 大楚-十堰-新闻列表
+    {uri: 'http://hb.qq.com/l/yc/list20130619124315.htm', parser: parser_common},// 大楚-宜昌-新闻列表
+    {uri: 'http://hb.qq.com/l/xy/list20130619124740.htm', parser: parser_common},// 大楚-襄阳-新闻列表
+    {uri: 'http://hb.qq.com/l/hs/list20151231151356.htm', parser: parser_common},// 大楚-黄石-新闻列表
+    {uri: 'http://hb.qq.com/l/dachuxiaogan/list201605493502.htm', parser: parser_common},// 大楚-孝感-新闻列表
+    {uri: 'http://hb.qq.com/l/qj/list20161223113121.htm', parser: parser_common},// 大楚-潜江-新闻列表
+    {uri: 'http://hb.qq.com/l/sz/suizhounews.htm', parser: parser_common},// 大楚-随州-新闻列表
+    {uri: 'http://hb.qq.com/l/es/esyw/list20151230161913.htm', parser: parser_common},// 大楚-恩施-新闻列表
+    {uri: 'http://hb.qq.com/l/hg/list20151231151003.htm', parser: parser_common},// 大楚-黄冈-新闻列表
+    {uri: 'http://hb.qq.com/l/jm/jmyw/jmtt/list2015015104550.htm', parser: parser_common},// 大楚-荆门-新闻列表
+    {uri: 'http://hb.qq.com/l/jz/jzyw/jzywlist.htm', parser: parser_common},// 大楚-荆州-新闻列表
+    {uri: 'http://hb.qq.com/l/xt/xtyw/list20160127112918.htm', parser: parser_common},// 大楚-仙桃-新闻列表
+    {uri: 'http://hb.qq.com/l/sy/synews/shiyan-news-list.htm', parser: parser_shiyan},// 大楚-十堰-新闻列表
 ];//新闻目录页面地址

@@ -4,7 +4,6 @@
  */
 
 const Crawler = require("crawler");
-const url = require('url');
 const request = require('request');
 const admin = require("firebase-admin");
 const serviceAccount = require("../security/fiery-heat-7406-firebase-adminsdk-kpbna-ed5b591529.json");
@@ -12,40 +11,43 @@ const config = require('../utils/config');
 
 // import crawler config
 const dachu_dishi = require('./config/dachu_dishi');
-const crawlerConfigs = [
-    dachu_dishi,
-];
+const sxwb = require('./config/sxwb');
+
 
 // constructor
 let queueList = [],// 待爬取的[列表页]
     queueListResult = [],// 从 [新闻列表页] 中获取的列表结果
     queueDetailFiltered = [];// 排重后用于抓取的列表
-const initQueue = () => {
-    const _mergeAllConfigs = (configs) => {
-        let mergedQueue = [];
-        if (Array.isArray(configs) && configs.length) {
-            configs.reduce((a, b) => a.concat(b)).forEach((item, index) => {
-                mergedQueue.push({
-                    uri: item.uri, callback: function (error, res, done) {
-                        if (error) {
-                            console.log(error);
-                        } else {
-                            let $ = res.$;
-                            queueListResult = queueListResult.concat(item.listParser($, res));
-                        }
-                        done();
-                    }
-                });
+const generateQueueList = (configs) => {
+    let mergedQueue = [];
+    if (Array.isArray(configs) && configs.length) {
+        configs.reduce((a, b) => a.concat(b)).forEach((item, index) => {
+            mergedQueue.push({
+                uri: item.uri,
+                maxConnections: item.maxConnections,
+                rateLimit: item.rateLimit,
+                callback: listCrawlerCbWrapper(item),
             });
-        }
+        });
+    }
 
-        return mergedQueue;
-    };
-    queueList = _mergeAllConfigs(crawlerConfigs);
+    return mergedQueue;
 };
-const resetQueueDetail = () => {
-    queueListResult = [];
-    queueDetailFiltered = [];
+const listCrawlerCbWrapper = (item) =>function (error, res, done) {
+    if (error) {
+        console.log(error);
+    } else {
+        let $ = res.$;
+
+        let tempQueueResult = item.parser($, res);
+        if (tempQueueResult.isAgain) {
+            // crawl again for page
+            listCrawler.queue(generateQueueList([tempQueueResult.queue]));
+        } else {
+            queueListResult = queueListResult.concat(tempQueueResult);
+        }
+    }
+    done();
 };
 const detailCrawlerCbWrapper = (parser) =>function (error, res, done) {
     if (error) {
@@ -68,9 +70,17 @@ const detailCrawlerCbWrapper = (parser) =>function (error, res, done) {
                 console.log(error);
             }
         });
-        console.log('save news detail: ' + newsDetail.title);
+        console.log('save news detail: ' + JSON.stringify(newsDetail.title));
     }
     done();
+};
+const initCrawler = () => {
+    queueList = generateQueueList([
+        dachu_dishi,
+        sxwb.getRecentDateList(new Date()),
+    ]);
+    queueListResult = [];
+    queueDetailFiltered = [];
 };
 const initFirebase = () => {
     //firebase admin init
@@ -97,7 +107,12 @@ listCrawler.on('drain', function () {
     queueListResult.forEach(item => {
         if (!item.isCrawled) {
             // not seen
-            queueDetailFiltered.push({uri: item.url, callback: detailCrawlerCbWrapper(item.detailParser)});
+            queueDetailFiltered.push({
+                maxConnections: item.maxConnections,
+                rateLimit: item.rateLimit,
+                uri: item.uri,
+                callback: detailCrawlerCbWrapper(item.detailParser),
+            });
         }
     });
 
@@ -107,17 +122,18 @@ listCrawler.on('drain', function () {
         detailCrawler.queue(queueDetailFiltered);
     } else {
         // no new details, crawl list again
-        resetQueueDetail();
+        initCrawler();
+        console.log(' --- all complete, wait ', (config.CRAWL_INTERVAL / 60000).toFixed(1), 'min to restart ---');
         setTimeout(() => listCrawler.queue(queueList), config.CRAWL_INTERVAL);
     }
 });
 detailCrawler.on('drain', function () {
-    resetQueueDetail();
+    initCrawler();
     console.log('wait to start crawl again...');
     setTimeout(() => listCrawler.queue(queueList), config.CRAWL_INTERVAL);
 });
 
 //init
 // initFirebase();
-initQueue();
+initCrawler();
 listCrawler.queue(queueList);
