@@ -4,6 +4,7 @@
  * 宜昌/襄阳/黄石/十堰/孝感/荆门/荆州/黄冈/恩施/随州/潜江/仙桃
  */
 
+const moment = require('moment');
 const Seenreq = require('seenreq');// for remove duplicate news
 const seen = new Seenreq();
 
@@ -53,7 +54,7 @@ const detailParser = ($, res) => {
         //content: mainDom.find('.bd #Cnt-Main-Article-QQ').html(),
         authorName: mainDom.find('.hd .tit-bar .color-a-3').text(),
         editorName: mainDom.find('.ft .QQeditor').text(),
-        date: mainDom.find('.hd .tit-bar .article-time').text(),
+        date: moment(mainDom.find('.hd .tit-bar .article-time').text()),
     };
 };
 

@@ -17,7 +17,7 @@ const parser_page = ($, res) => {
             if (onclickAttr) {
                 queuePage.push({
                     maxConnections: 1,
-                    rateLimit: 20000,
+                    rateLimit: 30000,
                     uri: res.request.uri.href.split('index')[0]
                     + onclickAttr.split('.html')[0].split('\'')[1] + '.html',
                     pageTitle: $(this).children('a').text(),
@@ -46,7 +46,7 @@ const parser_list = ($, res) => {
                 + $(this).children('a').attr('href').split('/')[6];
             tempQueueDetail.push({
                 maxConnections: 1,
-                rateLimit: 20000,
+                rateLimit: 30000,
                 title: $(this).children('a').text(),//文章标题
                 uri: url,//文章链接
                 date: moment(date, "YYYYMMDD"),//文章发布日期
@@ -77,7 +77,7 @@ const detailParser = ($, res) => {
 
 module.exports = {
     getRecentDateList: (date)=> [{
-        uri: `http://sxwb.cnhubei.com/html/sxwb/${moment(date).format('YYYYMMDD')}/index.html`,//${moment(date).format('YYYYMMDD')}
+        uri: `http://sxwb.cnhubei.com/html/sxwb/20170307/index.html`,//${moment(date).format('YYYYMMDD')}
         parser: parser_page,
     }],
 };

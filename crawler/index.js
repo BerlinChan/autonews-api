@@ -95,11 +95,11 @@ const initFirebase = () => {
 
 // news list crawler
 const listCrawler = new Crawler({
-    maxConnections: 5,
+    maxConnections: 1,
 });
 // detail crawler
 const detailCrawler = new Crawler({
-    maxConnections: 5,
+    maxConnections: 1,
 });
 
 // Crawler event
