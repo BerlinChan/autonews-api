@@ -72,7 +72,11 @@ const detailParser = ($, res) => {
 };
 
 module.exports = {
-    getRecentDateList: (date)=> [{
+    taskName: '三峡晚报',
+    taskInterval: 3 * 60000,
+    rateLimit: 2000,
+    maxConnections: 1,
+    queue: (date = new Date()) => [{
         uri: `http://sxwb.cnhubei.com/html/sxwb/${moment(date).format('YYYYMMDD')}/index.html`,//${moment(date).format('YYYYMMDD')}
         parser: parser_page,
     }],

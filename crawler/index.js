@@ -3,8 +3,8 @@
  *
  */
 
-const dachu_dishi_crawler = require("./dachu_dishi");
+const dachu_news_crawler = require("./dachu_news");
 const sxwb_crawler = require("./sxwb");
 
-dachu_dishi_crawler();
+dachu_news_crawler();
 sxwb_crawler();
