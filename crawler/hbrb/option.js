@@ -1,7 +1,7 @@
 /**
- * Created by berli on 2017/3/8.
- * 楚天都市报
- * http://ctdsb.cnhubei.com/cache/paper_ctdsb.aspx
+ * Created by berlin on 2017/3/8.
+ * 湖北日报
+ * http://hbrb.cnhubei.com/cache/paper_hbrb.aspx
  */
 
 const S = require('string');
@@ -13,7 +13,7 @@ const seen = new Seenreq();
 const parser_page = ($, res) => {
     let queuePage = [];//版面队列
     let title = $('title').text();
-    if (title == '楚天都市报') {
+    if (title == '湖北日报') {
         $('tr td.info3').each(function (index) {
             let onclickAttr = $(this).attr('onclick');
             if (onclickAttr) {
@@ -39,8 +39,8 @@ const parser_list = ($, res) => {
     newsListDom.each(function (index) {
         let onclickAttr = $(this).attr('onclick');
         if (onclickAttr) {
-            let date = S(onclickAttr).between('ctdsb/', '/ctdsb').s;
-            let url = 'http://ctdsb.cnhubei.com/HTML/ctdsb/'
+            let date = S(onclickAttr).between('hbrb/', '/hbrb').s;
+            let url = 'http://hbrb.cnhubei.com/HTML/hbrb/'
                 + date + '/'
                 + S(onclickAttr).between(date + '/', '\',\'').s;
             tempQueueDetail.push({
@@ -62,9 +62,9 @@ const parser_list = ($, res) => {
 const detailParser = ($, res) => {
     let mainDom = $("#Table17 tr");
     return {
-        title: mainDom.eq(1).find('td').text().trim(),
-        subTitle: mainDom.eq(2).find('td').text().trim(),
-        origin: '楚天都市报',
+        title: mainDom.eq(0).find('td').text().trim(),
+        subTitle: mainDom.eq(1).find('td').text().trim(),
+        origin: '湖北日报',
         originUrl: res.request.uri.href,
         content: mainDom.eq(4).children('font').html(),
         authorName: '',
@@ -75,12 +75,12 @@ const detailParser = ($, res) => {
 };
 
 module.exports = {
-    taskName: '楚天都市报',
+    taskName: '湖北日报',
     taskInterval: 3 * 60000,
     rateLimit: 1500,
     maxConnections: 1,
     queue: (date = new Date()) => [{
-        uri: `http://ctdsb.cnhubei.com/HTML/ctdsb/${moment(date).format('YYYYMMDD')}/`,//${moment(date).format('YYYYMMDD')}
+        uri: `http://hbrb.cnhubei.com/HTML/hbrb/${moment(date).format('YYYYMMDD')}/`,//${moment(date).format('YYYYMMDD')}
         parser: parser_page,
     }],
 };

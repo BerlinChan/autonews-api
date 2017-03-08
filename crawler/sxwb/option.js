@@ -1,6 +1,7 @@
 /**
  * Created by Berlin on 2017/3/7.
  * 三峡晚报
+ * http://sxwb.cnhubei.com/cache/paper_sxwb.aspx
  */
 
 const moment = require('moment');
@@ -45,7 +46,8 @@ const parser_list = ($, res) => {
             tempQueueDetail.push({
                 title: $(this).children('a').text(),//文章标题
                 uri: url,//文章链接
-                date: moment(date, "YYYYMMDD"),//文章发布日期
+                date: res.headers.date,//文章发布日期
+                crawledDate: new Date(),//抓取日期
                 origin: $('title').text(),//文章来源
                 originUrl: res.request.uri.href,//来源链接
                 isCrawled: seen.exists(url),//是否已采集
@@ -61,13 +63,14 @@ const detailParser = ($, res) => {
     let mainDom = $("#Table17 tr");
     return {
         title: mainDom.eq(1).find('td').text().trim(),
-        subTitle: mainDom.eq(0).text().trim(),
+        subTitle: mainDom.eq(2).text().trim(),
         origin: $('title').text(),
         originUrl: res.request.uri.href,
-        content: mainDom.eq(4).find('td div').html(),
-        authorName: mainDom.find('.hd .tit-bar .color-a-3').text(),
-        editorName: mainDom.find('.ft .QQeditor').text(),
-        date: moment(res.request.uri.href.split('/')[5], "YYYYMMDD"),
+        content: mainDom.eq(4).children('font').html(),
+        authorName: '',
+        editorName: '',
+        date: res.headers.date,
+        crawledDate: new Date(),//抓取日期
     };
 };
 
