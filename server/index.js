@@ -26,6 +26,7 @@ app.use(route.post('/addNews', async function (ctx) {
 }));
 
 io.attach(app);
+io.set('origins', 'http://www.berlin.com');
 
 // socketIO events
 app.io.on('connection', (ctx, id) => {
