@@ -8,9 +8,11 @@ const sxwb_crawler = require("./sxwb");
 const ctdsb_crawler = require("./ctdsb");
 const hbrb_crawler = require("./hbrb");
 const ctjb_crawler = require("./ctjb");
+const ctkb_crawler = require("./ctkb");
 
 //dachu_news_crawler();
 // sxwb_crawler();
 // ctdsb_crawler();
 //hbrb_crawler();
-ctjb_crawler();
+//ctjb_crawler();
+ctkb_crawler();
