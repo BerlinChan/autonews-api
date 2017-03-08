@@ -74,8 +74,8 @@ const detailParser = ($, res) => {
 
 module.exports = {
     taskName: '楚天都市报',
-    taskInterval: .1 * 60000,
-    rateLimit: 1000,
+    taskInterval: 3 * 60000,
+    rateLimit: 1500,
     maxConnections: 1,
     queue: (date = new Date()) => [{
         uri: `http://ctdsb.cnhubei.com/HTML/ctdsb/${moment(date).format('YYYYMMDD')}/`,//${moment(date).format('YYYYMMDD')}
