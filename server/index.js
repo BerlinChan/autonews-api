@@ -6,6 +6,7 @@
 
 const Koa = require('koa');
 const IO = require('koa-socket');
+const cors = require('kcors');
 const route = require('koa-route');
 const rawBody = require('raw-body');
 const config = require('../utils/config');
@@ -14,6 +15,9 @@ const app = new Koa();
 const io = new IO();
 
 app.use(require('koa-static')('../client'));
+app.use(cors({
+    origin: 'www.berlinchan.com',
+}));
 
 //route
 app.use(route.post('/addNews', async function (ctx) {
@@ -26,7 +30,6 @@ app.use(route.post('/addNews', async function (ctx) {
 }));
 
 io.attach(app);
-io.set('origins', 'http://www.berlin.com');
 
 // socketIO events
 app.io.on('connection', (ctx, id) => {
