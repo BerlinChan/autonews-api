@@ -66,7 +66,7 @@ const detailParser = ($, res) => {
         subTitle: mainDom.eq(2).find('td').text().trim(),
         origin: '楚天都市报',
         originUrl: res.request.uri.href,
-        content: mainDom.eq(4).children('font').html(),
+        content: mainDom.eq(4).children('#copytext').html(),
         authorName: '',
         editorName: '',
         date: res.headers.date,

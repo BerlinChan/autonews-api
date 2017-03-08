@@ -1,9 +1,10 @@
 /**
- * Created by Berlin on 2017/3/7.
- * 三峡晚报
- * http://sxwb.cnhubei.com/cache/paper_sxwb.aspx
+ * Created by berlin on 2017/3/8.
+ * 楚天金报
+ * http://ctjb.cnhubei.com/cache/paper_ctjb.aspx
  */
 
+const S = require('string');
 const moment = require('moment');
 const Seenreq = require('seenreq');// for remove duplicate news
 const seen = new Seenreq();
@@ -12,13 +13,12 @@ const seen = new Seenreq();
 const parser_page = ($, res) => {
     let queuePage = [];//版面队列
     let title = $('title').text();
-    if (title == '三峡晚报') {
-        $('td.info3').each(function (index) {
+    if (title == '楚天金报') {
+        $('tr td.info3').each(function (index) {
             let onclickAttr = $(this).attr('onclick');
             if (onclickAttr) {
                 queuePage.push({
-                    uri: res.request.uri.href.split('index')[0]
-                    + onclickAttr.split('.html')[0].split('\'')[1] + '.html',
+                    uri: res.request.uri.href + S(onclickAttr).between('(\'', '\',').s,
                     pageTitle: $(this).children('a').text(),
                     origin: title,
                     parser: parser_list,
@@ -39,10 +39,10 @@ const parser_list = ($, res) => {
     newsListDom.each(function (index) {
         let onclickAttr = $(this).attr('onclick');
         if (onclickAttr) {
-            let date = $(this).children('a').attr('href').split('/')[5];
-            let url = 'http://sxwb.cnhubei.com/html/sxwb/'
+            let date = S(onclickAttr).between('ctjb/', '/ctjb').s;
+            let url = 'http://ctjb.cnhubei.com/HTML/ctjb/'
                 + date + '/'
-                + $(this).children('a').attr('href').split('/')[6];
+                + S(onclickAttr).between(date + '/', '\',\'').s;
             tempQueueDetail.push({
                 title: $(this).children('a').text(),//文章标题
                 uri: url,//文章链接
@@ -63,8 +63,8 @@ const detailParser = ($, res) => {
     let mainDom = $("#Table17 tr");
     return {
         title: mainDom.eq(1).find('td').text().trim(),
-        subTitle: mainDom.eq(2).text().trim(),
-        origin: $('title').text(),
+        subTitle: mainDom.eq(2).find('td').text().trim(),
+        origin: '楚天金报',
         originUrl: res.request.uri.href,
         content: mainDom.eq(4).children('#copytext').html(),
         authorName: '',
@@ -75,12 +75,12 @@ const detailParser = ($, res) => {
 };
 
 module.exports = {
-    taskName: '三峡晚报',
+    taskName: '楚天金报',
     taskInterval: 3 * 60000,
-    rateLimit: 2000,
+    rateLimit: 1500,
     maxConnections: 1,
     queue: (date = new Date()) => [{
-        uri: `http://sxwb.cnhubei.com/html/sxwb/${moment(date).format('YYYYMMDD')}/index.html`,//${moment(date).format('YYYYMMDD')}
+        uri: `http://ctjb.cnhubei.com/HTML/ctjb/${moment(date).format('YYYYMMDD')}/`,//${moment(date).format('YYYYMMDD')}
         parser: parser_page,
     }],
 };
