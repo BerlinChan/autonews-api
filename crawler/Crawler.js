@@ -67,7 +67,7 @@ module.exports = (option) => {
         done();
     };
     const start = () => {
-        console.log(' --- init and wait ' + option.taskName + ' ' + ((option.taskInterval || config.CRAWL_INTERVAL) / 60000).toFixed(1), 'min to restart ---');
+        console.log(` --- wait ${option.taskName} start in ${((option.taskInterval || config.CRAWL_INTERVAL) / 60000).toFixed(1)}min ---`);
         queueList = generateQueueList([
             typeof option.queue == 'function' ? option.queue() : option.queue,
         ]);
