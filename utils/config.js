@@ -5,5 +5,5 @@
 
 module.exports = {
     HTTP_PORT: 3090,//HTTP server port
-    CRAWL_INTERVAL: 3000 * 60000, //开始新一轮抓取间隔时间，单位：ms
+    CRAWL_INTERVAL: 3 * 60000, //开始新一轮抓取间隔时间，单位：ms
 };
