@@ -5,24 +5,24 @@ class  <%= pascalEntityName %> extends Component
 {
   constructor(props) {
       super(props);
-
 }
 
   componentDidMount()
   {
   this.props.fetch<%= pascalEntityName %>();
   }
+
   render()
   {
     return(
-      <Card >
-   hello world
-      </Card>
+      <div>
+   hello <%= pascalEntityName %>
+      </div>
     )
   }
 }
 
-<%= pascalEntityName %>.propTypes = {
-};
+<%= pascalEntityName %>.propTypes = {};
+<%= pascalEntityName %>.defaultProps = {};
 
 export default <%= pascalEntityName %>

@@ -21,7 +21,7 @@ function fetch<%= pascalEntityName %>() {
 
 export const actions = {
   fetch<%= pascalEntityName %>,
-}
+};
 
 // Action Handlers
 const ACTION_HANDLERS = {
