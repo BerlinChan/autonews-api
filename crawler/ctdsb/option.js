@@ -63,7 +63,6 @@ const parser_list = ($, res) => {
 const detailParser = ($, res) => {
     let mainDom = $("#Table17 tr");
     let titleIndex0 = mainDom.eq(0).find('td').text().trim();
-    console.log(234234,JSON.stringify(res.headers['last-modified']))
     return {
         title: titleIndex0 ? titleIndex0 : mainDom.eq(1).text().trim(),
         subTitle: titleIndex0 ? mainDom.eq(1).text().trim() : mainDom.eq(2).text().trim(),
