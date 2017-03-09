@@ -3,6 +3,28 @@
 .body {
   .header {
   }
+  .content {
+  }
+
   .footer {
+    text-align: right;
+    font-size: 14px;
+    padding: 8px 16px;
+    background-color: #fff;
+    color: #ccc;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    a {
+      color: #ccc;
+      font-size: 14px;
+    }
+    i.iconLove {
+      vertical-align: middle;
+      width: 16px;
+      height: 15px;
+      display: inline-block;
+      background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAPCAMAAADarb8dAAAAZlBMVEUAAAD/Bwf/Bgb/Bgb/BAT/Bwf/Bgb/Bgb/Bwf/Bwf/BQX/Bwf/Bgb/BQX/Bgb/BQX/Bgb/BQX/BAT/BAT/Bgb/CAj/Bgb/Bwf/CAj/Bwf/BQX/Bgb/BQX/BAT/Bwf/AwP/BQX/BwdyG9tKAAAAIXRSTlMA0MCYBeke5N/MxryphH91MSkjGBTd1K2jjWZQSjkODg2xT8wMAAAAbklEQVQI112O1w6DMBTFnEFYZdPdMv7/J0nYwS9HthLpQlvIWJVQveMkN9DI0RL8/pFbUZPbcSVcViFGjzuhH4Lri4iXH1K+fvigb2eXPZjk8EcFUMvNRclMu/5KDSudcv5s2NGZPXqAUykyzcwESvoUBrGItL8AAAAASUVORK5CYII=');
+    }
   }
 }

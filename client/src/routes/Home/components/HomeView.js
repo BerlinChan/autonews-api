@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import cls from './HomeView.scss'
+import {Row, Col, Card} from 'antd';
 
 class HomeView extends Component {
   constructor(props) {
@@ -9,12 +10,24 @@ class HomeView extends Component {
   render() {
     return (
       <div className={cls.home}>
-        <h4>Welcome!</h4>
-        Scroll down to see the bottom right gray button.
+        <Row gutter={16}>
+          <Col span={8} className={cls.card}>
+            <Card title="Card title">
+              <p>Card content</p>
+            </Card>
+          </Col>
+          <Col span={8}>
+            <Card title="Card title">
+              <p>Card content</p>
+            </Card></Col>
+          <Col span={8}>
+            <Card title="Card title">
+              <p>Card content</p>
+            </Card></Col>
+        </Row>
       </div>
     );
   }
-
 }
 
 export default HomeView
