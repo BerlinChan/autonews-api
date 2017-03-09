@@ -56,7 +56,7 @@
         <li v-for="item in newsList">
             <span>{{item.date}}</span>
             <span>{{item.origin}}</span>
-            <a :href="item.originUrl" target="_blank">{{item.title}} {{item.subTitle}}</a>
+            <a :href="item.url" target="_blank">{{item.title}} {{item.subTitle}}</a>
             <span>{{item.authorName}}</span>
             <span>{{item.editorName}}</span>
         </li>

@@ -11,15 +11,18 @@ class CoreLayout extends Component {
     return (
       <Layout className={cls.body}>
         <Header className={cls.header}>
-          <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']} style={{lineHeight: '64px'}}>
+          <div className={cls.logo}>【新闻源监控】</div>
+          <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']}
+                style={{lineHeight: '64px', fontSize: '14px'}}>
             <Menu.Item key="1"><Link to="/">监控</Link></Menu.Item>
-            <Menu.Item key="2">筛选(待开发)</Menu.Item>
-            <Menu.Item key="3">编辑(待开发)</Menu.Item>
-            <Menu.Item key="4">转载(待开发)</Menu.Item>
-            <Menu.Item key="5">统计(待开发)</Menu.Item>
-            <Menu.Item key="6">设置(待开发)</Menu.Item>
-            <Menu.Item key="7">反馈(待开发)</Menu.Item>
-            <Menu.Item key="8"><Link to="/about">关于</Link></Menu.Item>
+            <Menu.Item key="2" disabled>筛选(待开发)</Menu.Item>
+            <Menu.Item key="3" disabled>编辑(待开发)</Menu.Item>
+            <Menu.Item key="4" disabled>转载(待开发)</Menu.Item>
+            <Menu.Item key="5" disabled>统计(待开发)</Menu.Item>
+            <Menu.Item key="6" disabled>交流(待开发)</Menu.Item>
+            <Menu.Item key="7" disabled>设置(待开发)</Menu.Item>
+            <Menu.Item key="8" disabled>反馈(待开发)</Menu.Item>
+            <Menu.Item key="9"><Link to="/about">关于</Link></Menu.Item>
           </Menu>
         </Header>
 

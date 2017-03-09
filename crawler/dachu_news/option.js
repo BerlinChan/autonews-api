@@ -7,6 +7,7 @@
 const moment = require('moment');
 const Seenreq = require('seenreq');// for remove duplicate news
 const seen = new Seenreq();
+const taskName = '腾讯大楚网';
 
 // 列表解析处理器, 适用: 要闻/宜昌/襄阳/黄石/孝感/荆门/荆州/黄冈/恩施/随州/潜江/仙桃
 const parser_common = ($, res) => {
@@ -17,7 +18,7 @@ const parser_common = ($, res) => {
             title: $(this).children('a').text(),//文章标题
             uri: $(this).children('a').attr('href'),//文章链接
             date: $(this).children('span').text(),//文章发布日期
-            origin: $('title').text(),//文章来源
+            origin: taskName,//文章来源
             originUrl: res.request.uri.href,//来源链接
             isCrawled: seen.exists($(this).children('a').attr('href')),//是否已采集
             detailParser: detailParser,//对应[详情页]解析函数
@@ -35,7 +36,7 @@ const parser_shiyan = ($, res) => {
             title: $(this).children('a').text(),
             uri: $(this).children('a').attr('href'),
             date: $(this).children('span').text(),
-            origin: $('title').text(),
+            origin: taskName,
             originUrl: res.request.uri.href,
             isCrawled: seen.exists($(this).children('a').attr('href')),
             detailParser: detailParser,
@@ -49,17 +50,19 @@ const detailParser = ($, res) => {
     let mainDom = $(".main");
     return {
         title: mainDom.find('.hd h1').text(),
-        origin: mainDom.find('.hd .tit-bar .color-a-1').text(),
-        originUrl: res.request.uri.href,
-        //content: mainDom.find('.bd #Cnt-Main-Article-QQ').html(),
+        url: res.request.uri.href,
+        subCategory: mainDom.find('.hd .tit-bar .color-a-1').text(),//子分类、子栏目、子版面、子频道
+        origin: taskName,//来源
+        content: mainDom.find('.bd #Cnt-Main-Article-QQ').html(),//正文内容
         authorName: mainDom.find('.hd .tit-bar .color-a-3').text(),
         editorName: mainDom.find('.ft .QQeditor').text(),
-        date: moment(mainDom.find('.hd .tit-bar .article-time').text()),
+        date: moment(mainDom.find('.hd .tit-bar .article-time').text()),//发布日期
+        crawledDate: new Date(),//抓取日期
     };
 };
 
 module.exports = {
-    taskName: '腾讯大楚网-新闻',
+    taskName: taskName,
     taskInterval: 3 * 60000,
     rateLimit: 0,
     maxConnections: 5,

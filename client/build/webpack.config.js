@@ -24,7 +24,6 @@ const webpackConfig = {
 // Entry Points
 // ------------------------------------
 const APP_ENTRY_PATHS = [
-//  'bootstrap-loader',
   paths.client('main.js')
 ]
 

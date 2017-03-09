@@ -7,6 +7,7 @@
 const moment = require('moment');
 const Seenreq = require('seenreq');// for remove duplicate news
 const seen = new Seenreq();
+const taskName = '三峡晚报';
 
 // page 解析处理器
 const parser_page = ($, res) => {
@@ -20,7 +21,7 @@ const parser_page = ($, res) => {
                     uri: res.request.uri.href.split('index')[0]
                     + onclickAttr.split('.html')[0].split('\'')[1] + '.html',
                     pageTitle: $(this).children('a').text(),
-                    origin: title,
+                    origin: taskName,
                     parser: parser_list,
                 });
             }
@@ -48,7 +49,7 @@ const parser_list = ($, res) => {
                 uri: url,//文章链接
                 date: res.headers['last-modified'],//文章发布日期
                 crawledDate: new Date(),//抓取日期
-                origin: $('title').text(),//文章来源
+                origin: taskName,//文章来源
                 originUrl: res.request.uri.href,//来源链接
                 isCrawled: seen.exists(url),//是否已采集
                 detailParser: detailParser,//对应[详情页]解析函数
@@ -65,8 +66,9 @@ const detailParser = ($, res) => {
     return {
         title: titleIndex0 ? titleIndex0 : mainDom.eq(1).text().trim(),
         subTitle: titleIndex0 ? mainDom.eq(1).text().trim() : mainDom.eq(2).text().trim(),
-        origin: $('title').text(),
-        originUrl: res.request.uri.href,
+        url: res.request.uri.href,
+        subCategory: '',//子分类、子栏目、子版面
+        origin: taskName,
         content: mainDom.eq(4).children('#copytext').html(),
         authorName: '',
         editorName: '',
@@ -76,7 +78,7 @@ const detailParser = ($, res) => {
 };
 
 module.exports = {
-    taskName: '三峡晚报',
+    taskName: taskName,
     taskInterval: 3 * 60000,
     rateLimit: 2000,
     maxConnections: 1,

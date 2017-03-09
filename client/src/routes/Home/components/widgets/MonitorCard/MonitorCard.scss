@@ -1,0 +1,12 @@
+@charset "UTF-8";
+
+.monitorCard {
+  :global {
+    .ant-card-body {
+      padding: 0;
+      .ant-table-small {
+        border: 0 none;
+      }
+    }
+  }
+}
