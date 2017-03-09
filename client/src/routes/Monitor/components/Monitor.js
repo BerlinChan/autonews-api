@@ -1,11 +1,16 @@
 import React, {Component, PropTypes,} from 'react'
-import cls from './HomeView.scss'
+import cls from './Monitor.scss'
 import {Row, Col,} from 'antd';
 import MonitorCard from './widgets/MonitorCard/MonitorCard'
 
-class HomeView extends Component {
+
+class Monitor extends Component {
   constructor(props) {
     super(props);
+  }
+
+  componentDidMount() {
+    this.props.fetchMonitor();
   }
 
   render() {
@@ -31,10 +36,10 @@ class HomeView extends Component {
   }
 }
 
-HomeView.propTypes = {
+Monitor.propTypes = {
   allDataSource: PropTypes.array.isRequired,
 };
-HomeView.defaultProps = {
+Monitor.defaultProps = {
   allDataSource: [
     {
       title: 'title',
@@ -48,7 +53,6 @@ HomeView.defaultProps = {
       crawledDate: new Date(),//抓取日期
     },
   ],
-
   monitors: [
     {origin: '楚天都市报',},
     {origin: '湖北日报',},
@@ -60,4 +64,4 @@ HomeView.defaultProps = {
   ],
 };
 
-export default HomeView
+export default Monitor

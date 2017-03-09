@@ -31,7 +31,7 @@ class MonitorCard extends Component {
             extra={
               <div>
                 <Switch checked disabled checkedChildren={'开'} unCheckedChildren={'关'}/>
-                <Badge count={434} showZero overflowCount={999}
+                <Badge count={this.props.dataSource.length} showZero overflowCount={999}
                        style={{backgroundColor: '#fff', color: '#999', boxShadow: '0 0 0 1px #d9d9d9 inset'}}/>
               </div>
             }>
