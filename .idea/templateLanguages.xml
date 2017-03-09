@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="TemplateDataLanguageMappings">
+    <file url="file://$PROJECT_DIR$/client" dialect="JSX Harmony" />
+    <file url="file://$PROJECT_DIR$/crawler" dialect="ECMAScript 6" />
+    <file url="file://$PROJECT_DIR$/security" dialect="ECMAScript 6" />
+    <file url="file://$PROJECT_DIR$/server" dialect="ECMAScript 6" />
+    <file url="file://$PROJECT_DIR$/utils" dialect="ECMAScript 6" />
+  </component>
+</project>

@@ -14,7 +14,7 @@ const config = require('../utils/config');
 const app = new Koa();
 const io = new IO();
 
-app.use(require('koa-static')('../client'));
+app.use(require('koa-static')('../client/old'));
 app.use(cors({
     origin: 'www.berlinchan.com',
 }));
