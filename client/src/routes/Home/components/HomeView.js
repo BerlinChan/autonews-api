@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, {Component, PropTypes,} from 'react'
 import cls from './HomeView.scss'
 import {Row, Col,} from 'antd';
 import MonitorCard from './widgets/MonitorCard/MonitorCard'
@@ -31,7 +31,24 @@ class HomeView extends Component {
   }
 }
 
+HomeView.propTypes = {
+  allDataSource: PropTypes.array.isRequired,
+};
 HomeView.defaultProps = {
+  allDataSource: [
+    {
+      title: 'title',
+      url: 'url',
+      subCategory: 'subCategory',//子分类、子栏目、子版面、子频道
+      origin: 'origin',//来源
+      content: 'content',//正文内容
+      authorName: 'authorName',
+      editorName: 'editorName',
+      date: new Date(),
+      crawledDate: new Date(),//抓取日期
+    },
+  ],
+
   monitors: [
     {origin: '楚天都市报',},
     {origin: '湖北日报',},
