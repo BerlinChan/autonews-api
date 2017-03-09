@@ -14,11 +14,11 @@ import <%= pascalEntityName %> from '../<%= dumbPath %>/<%= pascalEntityName %>'
 
 const mapActionCreators = {
   ...<%= camelEntityName %>Actions
-}
+};
 
 const mapStateToProps = (state) => ({
   <%= realEntityName %>:state.<%= realEntityName %>
-})
+});
 
 /*  Note: mapStateToProps is where you should use `reselect` to create selectors, ie:
 
