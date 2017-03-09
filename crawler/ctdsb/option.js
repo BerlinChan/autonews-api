@@ -46,7 +46,7 @@ const parser_list = ($, res) => {
             tempQueueDetail.push({
                 title: $(this).children('a').text(),//文章标题
                 uri: url,//文章链接
-                date: res.headers.date,//文章发布日期
+                date: res.headers['last-modified'],//文章发布日期
                 crawledDate: new Date(),//抓取日期
                 origin: $('title').text(),//文章来源
                 originUrl: res.request.uri.href,//来源链接
@@ -61,22 +61,24 @@ const parser_list = ($, res) => {
 // detail parser
 const detailParser = ($, res) => {
     let mainDom = $("#Table17 tr");
+    let titleIndex0 = mainDom.eq(0).find('td').text().trim();
+    console.log(234234,JSON.stringify(res.headers['last-modified']))
     return {
-        title: mainDom.eq(1).find('td').text().trim(),
-        subTitle: mainDom.eq(2).find('td').text().trim(),
+        title: titleIndex0 ? titleIndex0 : mainDom.eq(1).text().trim(),
+        subTitle: titleIndex0 ? mainDom.eq(1).text().trim() : mainDom.eq(2).text().trim(),
         origin: '楚天都市报',
         originUrl: res.request.uri.href,
         content: mainDom.eq(4).children('#copytext').html(),
         authorName: '',
         editorName: '',
-        date: res.headers.date,
+        date: res.headers['last-modified'],
         crawledDate: new Date(),//抓取日期
     };
 };
 
 module.exports = {
     taskName: '楚天都市报',
-    taskInterval: 3 * 60000,
+    taskInterval: .1 * 60000,
     rateLimit: 1500,
     maxConnections: 1,
     queue: (date = new Date()) => [{

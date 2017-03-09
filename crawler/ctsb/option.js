@@ -46,7 +46,7 @@ const parser_list = ($, res) => {
             tempQueueDetail.push({
                 title: $(this).children('a').text(),//文章标题
                 uri: url,//文章链接
-                date: res.headers.date,//文章发布日期
+                date: res.headers['last-modified'],//文章发布日期
                 crawledDate: new Date(),//抓取日期
                 origin: $('title').text(),//文章来源
                 originUrl: res.request.uri.href,//来源链接
@@ -69,7 +69,7 @@ const detailParser = ($, res) => {
         content: mainDom.eq(4).children('#copytext').html(),
         authorName: '',
         editorName: '',
-        date: res.headers.date,
+        date: res.headers['last-modified'],
         crawledDate: new Date(),//抓取日期
     };
 };
