@@ -290,66 +290,6 @@ Monitor.defaultProps = {
       ],
     },
     '5': {
-      origin: '楚天时报',
-      news: [
-        {
-          title: 'title',
-          url: 'url',
-          subCategory: 'subCategory',//子分类、子栏目、子版面、子频道
-          origin: 'origin',//来源
-          content: 'content',//正文内容
-          authorName: 'authorName',
-          editorName: 'editorName',
-          date: new Date(),
-          crawledDate: new Date(),//抓取日期
-        },
-        {
-          title: 'title',
-          url: 'url',
-          subCategory: 'subCategory',//子分类、子栏目、子版面、子频道
-          origin: 'origin',//来源
-          content: 'content',//正文内容
-          authorName: 'authorName',
-          editorName: 'editorName',
-          date: new Date(),
-          crawledDate: new Date(),//抓取日期
-        },
-        {
-          title: 'title',
-          url: 'url',
-          subCategory: 'subCategory',//子分类、子栏目、子版面、子频道
-          origin: 'origin',//来源
-          content: 'content',//正文内容
-          authorName: 'authorName',
-          editorName: 'editorName',
-          date: new Date(),
-          crawledDate: new Date(),//抓取日期
-        },
-        {
-          title: 'title',
-          url: 'url',
-          subCategory: 'subCategory',//子分类、子栏目、子版面、子频道
-          origin: 'origin',//来源
-          content: 'content',//正文内容
-          authorName: 'authorName',
-          editorName: 'editorName',
-          date: new Date(),
-          crawledDate: new Date(),//抓取日期
-        },
-        {
-          title: 'title',
-          url: 'url',
-          subCategory: 'subCategory',//子分类、子栏目、子版面、子频道
-          origin: 'origin',//来源
-          content: 'content',//正文内容
-          authorName: 'authorName',
-          editorName: 'editorName',
-          date: new Date(),
-          crawledDate: new Date(),//抓取日期
-        },
-      ],
-    },
-    '6': {
       origin: '楚天金报',
       news: [
         {
@@ -409,8 +349,68 @@ Monitor.defaultProps = {
         },
       ],
     },
-    '7': {
+    '6': {
       origin: '腾讯大楚网',
+      news: [
+        {
+          title: 'title',
+          url: 'url',
+          subCategory: 'subCategory',//子分类、子栏目、子版面、子频道
+          origin: 'origin',//来源
+          content: 'content',//正文内容
+          authorName: 'authorName',
+          editorName: 'editorName',
+          date: new Date(),
+          crawledDate: new Date(),//抓取日期
+        },
+        {
+          title: 'title',
+          url: 'url',
+          subCategory: 'subCategory',//子分类、子栏目、子版面、子频道
+          origin: 'origin',//来源
+          content: 'content',//正文内容
+          authorName: 'authorName',
+          editorName: 'editorName',
+          date: new Date(),
+          crawledDate: new Date(),//抓取日期
+        },
+        {
+          title: 'title',
+          url: 'url',
+          subCategory: 'subCategory',//子分类、子栏目、子版面、子频道
+          origin: 'origin',//来源
+          content: 'content',//正文内容
+          authorName: 'authorName',
+          editorName: 'editorName',
+          date: new Date(),
+          crawledDate: new Date(),//抓取日期
+        },
+        {
+          title: 'title',
+          url: 'url',
+          subCategory: 'subCategory',//子分类、子栏目、子版面、子频道
+          origin: 'origin',//来源
+          content: 'content',//正文内容
+          authorName: 'authorName',
+          editorName: 'editorName',
+          date: new Date(),
+          crawledDate: new Date(),//抓取日期
+        },
+        {
+          title: 'title',
+          url: 'url',
+          subCategory: 'subCategory',//子分类、子栏目、子版面、子频道
+          origin: 'origin',//来源
+          content: 'content',//正文内容
+          authorName: 'authorName',
+          editorName: 'editorName',
+          date: new Date(),
+          crawledDate: new Date(),//抓取日期
+        },
+      ],
+    },
+    '7': {
+      origin: '楚天时报',
       news: [
         {
           title: 'title',
@@ -475,9 +475,9 @@ Monitor.defaultProps = {
     '2': {origin: '湖北日报',},
     '3': {origin: '三峡晚报',},
     '4': {origin: '楚天快报',},
-    '5': {origin: '楚天时报',},
-    '6': {origin: '楚天金报',},
-    '7': {origin: '腾讯大楚网',},
+    '5': {origin: '楚天金报',},
+    '6': {origin: '腾讯大楚网',},
+    '7': {origin: '楚天时报',},
   },
 };
 

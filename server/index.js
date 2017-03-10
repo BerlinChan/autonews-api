@@ -14,7 +14,7 @@ const config = require('../utils/config');
 const app = new Koa();
 const io = new IO();
 
-app.use(require('koa-static')('../client/old'));
+app.use(require('koa-static')('../client/dist'));
 app.use(cors({
     origin: 'www.berlinchan.com',
 }));
@@ -31,9 +31,9 @@ app.use(route.post('/addNews', async function (ctx) {
         '2': {key: '2', origin: '湖北日报',},
         '3': {key: '3', origin: '三峡晚报',},
         '4': {key: '4', origin: '楚天快报',},
-        '5': {key: '5', origin: '楚天时报',},
-        '6': {key: '6', origin: '楚天金报',},
-        '7': {key: '7', origin: '腾讯大楚网',},
+        '5': {key: '6', origin: '楚天金报',},
+        '6': {key: '7', origin: '腾讯大楚网',},
+        '7': {key: '5', origin: '楚天时报',},
     };
     let key = '';
     for (let i in monitorConfig) {
@@ -64,9 +64,9 @@ app.io.on('connection', (ctx, id) => {
                 '2': {origin: '湖北日报',},
                 '3': {origin: '三峡晚报',},
                 '4': {origin: '楚天快报',},
-                '5': {origin: '楚天时报',},
-                '6': {origin: '楚天金报',},
-                '7': {origin: '腾讯大楚网',},
+                '5': {origin: '楚天金报',},
+                '6': {origin: '腾讯大楚网',},
+                '7': {origin: '楚天时报',},
             }
         });
 });
