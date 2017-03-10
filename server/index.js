@@ -31,7 +31,7 @@ app.use(route.post('/addNews', async function (ctx) {
 
 io.attach(app);
 
-// socketIO events
+// koa-socket events
 app.io.on('connection', (ctx, id) => {
     console.log('connect client, id: ', id);
     app.io.broadcast('connections', {
@@ -39,12 +39,13 @@ app.io.on('connection', (ctx, id) => {
     });
 });
 
-// handle redux actions
+// SocketIO events handler
 app._io.on('connection', (socket) => {
-    socket.on('reduxAction', (action) => {
+    // redux actions handler
+    socket.on('action', (action) => {
         if (action.type === 'socket/Monitor_EMIT_REQUESTED') {
             console.log('Got hello data!', action.msg);
-            socket.emit('reduxAction', {type: 'Monitor_EMIT_RECEIVED', msg: 'good day!'});
+            socket.emit('action', {type: 'Monitor_EMIT_RECEIVED', msg: 'good day!'});
         }
     });
 });

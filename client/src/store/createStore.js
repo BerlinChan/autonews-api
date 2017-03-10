@@ -7,13 +7,8 @@ import createSocketIoMiddleware from 'redux-socket.io';
 import io from 'socket.io-client';
 import config from '../utils/config'
 function optimisticExecute(action, emit, next, dispatch) {
-  emit('reduxAction', action);
-  //next(action);
-  const optimisticAction = {
-    ...action,
-    type: 'socket/' + action.type.split('/')[1],
-  };
-  //dispatch(optimisticAction);
+  emit('action', action);
+  next(action);
 }
 let socket = io(config.API_SERVER);
 
@@ -21,7 +16,7 @@ export default (initialState = {}, history) => {
   // ======================================================
   // Middleware Configuration
   // ======================================================
-  const socketIoMiddleware = createSocketIoMiddleware(socket, "socket/", {execute: optimisticExecute});
+  const socketIoMiddleware = createSocketIoMiddleware(socket, "socket/");
   const sagaMiddleware = createSagaMiddleware();
   const middleware = [socketIoMiddleware, sagaMiddleware, routerMiddleware(history)];
 

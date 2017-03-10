@@ -44,8 +44,6 @@ const ACTION_HANDLERS = {
 
 // Reducer
 const initialState = Immutable.Map({
-  gender: Immutable.List(),
-  businessCountry: Immutable.List(),
   token: undefined,
   userInfo: Immutable.Map()
 });

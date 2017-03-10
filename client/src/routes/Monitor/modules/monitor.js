@@ -11,7 +11,7 @@ const Monitor_FETCH_REQUESTED = 'Monitor_FETCH_REQUESTED';
 const Monitor_FETCH_SUCCESSED = 'Monitor_FETCH_SUCCESSED';
 const Monitor_FETCH_FAILURE = 'Monitor_FETCH_FAILURE';
 const Monitor_EMIT_REQUESTED = 'socket/Monitor_EMIT_REQUESTED';
-const Monitor_EMIT_RECEIVED = 'Monitor_EMIT_RECEIVED';
+const Monitor_EMIT_SUCCESSED = 'socket/Monitor_EMIT_RECEIVED';
 
 
 // Actions
@@ -38,11 +38,11 @@ const ACTION_HANDLERS = {
   [Monitor_FETCH_SUCCESSED]: (state, payload) => state.setIn(['isFetching'], false),
   [Monitor_FETCH_FAILURE]: (state, action) => state.setIn(['isFetching'], false),
   [Monitor_EMIT_REQUESTED]: (state, action) => {
-    console.log(1111, action.msg);
+    console.log('Monitor_EMIT_REQUESTED', action.msg);
     return state;
   },
-  [Monitor_EMIT_RECEIVED]: (state, action) => {
-    console.log(2222, action.msg);
+  [Monitor_EMIT_SUCCESSED]: (state, action) => {
+    console.log('Monitor_EMIT_SUCCESSED', action.msg);
     return state;
   },
 };
@@ -77,13 +77,13 @@ function* watchFetchMonitor() {
 function* watchEmitReq() {
   while (true) {
     yield take(Monitor_EMIT_REQUESTED);
-    console.log('emit fire')
+    console.log('Monitor_EMIT_REQUESTED saga')
   }
 }
 function* watchReceived() {
   while (true) {
-    const {msg} = yield take(Monitor_EMIT_RECEIVED);
-    console.log(234234234, msg);
+    const {msg} = yield take(Monitor_EMIT_SUCCESSED);
+    console.log('Monitor_EMIT_SUCCESSED saga', msg);
   }
 }
 
