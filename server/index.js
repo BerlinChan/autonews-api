@@ -31,9 +31,8 @@ app.use(route.post('/addNews', async function (ctx) {
 
 io.attach(app);
 
-// koa-socket events
+// koa-socket events, 新版client上线后移除
 app.io.on('connection', (ctx, id) => {
-    console.log('connect client, id: ', id);
     app.io.broadcast('connections', {
         numConnections: app.io.connections.size,
     });
@@ -41,11 +40,17 @@ app.io.on('connection', (ctx, id) => {
 
 // SocketIO events handler
 app._io.on('connection', (socket) => {
+    console.log('connect client: ', socket.id);
+    socket.emit('action', {type: 'socket/Global_SET_clientCount', data: app.io.connections.size});
     // redux actions handler
     socket.on('action', (action) => {
-        if (action.type === 'socket/Monitor_EMIT_REQUESTED') {
-            console.log('Got hello data!', action.msg);
-            socket.emit('action', {type: 'Monitor_EMIT_RECEIVED', msg: 'good day!'});
+        switch (action.type) {
+            case 'socket/Monitor_EMIT_REQUESTED':
+                socket.emit('action', {type: 'Monitor_EMIT_RECEIVED', msg: 'good day!'});
+                break;
+            case '':
+                break;
+            default:
         }
     });
 });

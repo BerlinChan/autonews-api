@@ -18,16 +18,15 @@ class Monitor extends Component {
 
     return (
       <div className={cls.monitor}>
-        <div onClick={() => this.props.emitMsg('Hi, socketIO')}>emit a event</div>
 
         {/*monitor dashboard*/}
-        {Array.from({length: Math.floor(this.props.monitors.length / 3 + 1)}, () => 'berlin').map((item, rowIndex) => {
+        {Array.from({length: Math.floor(Object.keys(this.props.monitorOptions).length / 3 + 1)}, () => 'berlin').map((item, rowIndex) => {
           return (
             <Row gutter={16} className={cls.rowMargin} key={rowIndex}>
               {Array.from({length: columnNum}, () => 'berlin').map((item, index) => {
                 return (
                   <Col span={8} key={index}>
-                    <MonitorCard {...this.props.monitors[rowIndex * 3 + index]}/>
+                    <MonitorCard {...this.props.monitorOptions[(Object.keys(this.props.monitorOptions))[rowIndex * 3 + index]]}/>
                   </Col>
                 );
               })}
@@ -40,10 +39,11 @@ class Monitor extends Component {
 }
 
 Monitor.propTypes = {
-  allDataSource: PropTypes.array.isRequired,
+  newsList: PropTypes.array.isRequired,
+  monitorOptions: PropTypes.object,
 };
 Monitor.defaultProps = {
-  allDataSource: [
+  newsList: [
     {
       title: 'title',
       url: 'url',
@@ -56,15 +56,15 @@ Monitor.defaultProps = {
       crawledDate: new Date(),//抓取日期
     },
   ],
-  monitors: [
-    {origin: '楚天都市报',},
-    {origin: '湖北日报',},
-    {origin: '三峡晚报',},
-    {origin: '楚天快报',},
-    {origin: '楚天时报',},
-    {origin: '楚天金报',},
-    {origin: '腾讯大楚网',},
-  ],
+  monitorOptions: {
+    '1': {origin: '楚天都市报',},
+    '2': {origin: '湖北日报',},
+    '3': {origin: '三峡晚报',},
+    '4': {origin: '楚天快报',},
+    '5': {origin: '楚天时报',},
+    '6': {origin: '楚天金报',},
+    '7': {origin: '腾讯大楚网',},
+  },
 };
 
 export default Monitor

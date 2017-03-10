@@ -10,47 +10,36 @@ import config from 'utils/config'
 const Monitor_FETCH_REQUESTED = 'Monitor_FETCH_REQUESTED';
 const Monitor_FETCH_SUCCESSED = 'Monitor_FETCH_SUCCESSED';
 const Monitor_FETCH_FAILURE = 'Monitor_FETCH_FAILURE';
-const Monitor_EMIT_REQUESTED = 'socket/Monitor_EMIT_REQUESTED';
-const Monitor_EMIT_SUCCESSED = 'socket/Monitor_EMIT_RECEIVED';
+
+const Monitor_ON_Socket_Connection = 'socket/Monitor_ON_Socket_Connection';
+const Monitor_Socket_News_Added = 'socket/Monitor_News_Added';
 
 
 // Actions
-function fetchMonitor() {
+function fetchMonitor(monitorOptions) {
   return {
-    type: Monitor_FETCH_REQUESTED
-  }
-}
-function emitMsg(msg) {
-  return {
-    type: Monitor_EMIT_REQUESTED,
-    msg,
+    type: Monitor_FETCH_REQUESTED,
+    monitorOptions,
   }
 }
 
 export const actions = {
   fetchMonitor,
-  emitMsg,
 };
 
 // Action Handlers
 const ACTION_HANDLERS = {
   [Monitor_FETCH_REQUESTED]: (state) => state.setIn(['isFetching'], true),
-  [Monitor_FETCH_SUCCESSED]: (state, payload) => state.setIn(['isFetching'], false),
+  [Monitor_FETCH_SUCCESSED]: (state, action) => state.setIn(['isFetching'], false)
+    .set('monitorOptions', Immutable.fromJS(action.monitorOptions)),
   [Monitor_FETCH_FAILURE]: (state, action) => state.setIn(['isFetching'], false),
-  [Monitor_EMIT_REQUESTED]: (state, action) => {
-    console.log('Monitor_EMIT_REQUESTED', action.msg);
-    return state;
-  },
-  [Monitor_EMIT_SUCCESSED]: (state, action) => {
-    console.log('Monitor_EMIT_SUCCESSED', action.msg);
-    return state;
-  },
 };
 
 // Reducer
 const initialState = Immutable.Map({
   isFetching: false,
-  list: Immutable.fromJS([{key: '001'},]),
+  newsList: Immutable.List(),
+  monitorOptions: Immutable.fromJS({}),
 });
 export default function monitorReducer(state = initialState, action) {
   const handler = ACTION_HANDLERS[action.type];
@@ -62,34 +51,21 @@ export default function monitorReducer(state = initialState, action) {
 // Sagas
 function* watchFetchMonitor() {
   while (true) {
-
-    yield take(Monitor_FETCH_REQUESTED);
-    // let {data, err} = yield call(asyncWait)
-    // if (!err)
+    const {}=yield take(Monitor_FETCH_REQUESTED);
 
     yield put({type: 'Monitor_FETCH_SUCCESSED'});
-    // else {
-    //
-    //   yield put({type: 'Monitor_FETCH_FAILURE', error: err.toString()})
-    // }
+    yield put({type: Monitor_ON_Socket_Connection});
   }
 }
-function* watchEmitReq() {
+function* watchSocketNewsAdded() {
   while (true) {
-    yield take(Monitor_EMIT_REQUESTED);
-    console.log('Monitor_EMIT_REQUESTED saga')
-  }
-}
-function* watchReceived() {
-  while (true) {
-    const {msg} = yield take(Monitor_EMIT_SUCCESSED);
-    console.log('Monitor_EMIT_SUCCESSED saga', msg);
+    const {news} = yield take(Monitor_Socket_News_Added);
+
   }
 }
 
 
 export const sagas = [
   watchFetchMonitor,
-  watchEmitReq,
-  watchReceived,
+  watchSocketNewsAdded,
 ];

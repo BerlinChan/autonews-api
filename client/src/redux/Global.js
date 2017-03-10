@@ -6,9 +6,9 @@ import cookie from 'react-cookie'
 
 // Constants
 const CHANGE_LANGUAGE = 'CHANGE_LANGUAGE';
-const GLOBAL_SET_TOKEN = 'GLOBAL_SET_TOKEN';
 const GLOBAL_SET_USERINFO = 'GLOBAL_SET_USERINFO';
 const GLOBAL_USERINFO_FETCH_REQUESTED = 'GLOBAL_USERINFO_FETCH_REQUESTED';
+const Global_SET_clientCount = 'socket/Global_SET_clientCount';
 
 
 function changeLanguage(value) {
@@ -32,20 +32,17 @@ export const actions = {
 
 // Action Handlers
 const ACTION_HANDLERS = {
-  [GLOBAL_SET_TOKEN]: (state, payload) => {
-    cookie.save('token', payload.token, {path: '/'});
-    return state.setIn(['token'], payload.token)
-  },
+  [Global_SET_clientCount]: (state, action) => state.set('clientCount', action.data),
   [GLOBAL_SET_USERINFO]: (state, payload) => {
     cookie.save('userInfo', payload.data, {path: '/'});
-    return state.setIn(['userInfo'], Immutable.fromJS(payload.data))
+    return state.setIn(['userInfo'], Immutable.fromJS(payload.data));
   }
 };
 
 // Reducer
 const initialState = Immutable.Map({
-  token: undefined,
-  userInfo: Immutable.Map()
+  clientCount: 0,//客户端连接数
+  userInfo: Immutable.Map(),
 });
 export default function globalReducer(state = initialState, action) {
   const handler = ACTION_HANDLERS[action.type];

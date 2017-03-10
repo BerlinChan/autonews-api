@@ -13,11 +13,11 @@ import <%= pascalEntityName %> from '../<%= dumbPath %>/<%= pascalEntityName %>'
     implementing our wrapper around increment; the component doesn't care   */
 
 const mapActionCreators = {
-  ...<%= camelEntityName %>Actions
+  ...<%= camelEntityName %>Actions,
 };
 
 const mapStateToProps = (state) => ({
-  <%= realEntityName %>:state.<%= realEntityName %>
+  <%= realEntityName %>:state.<%= realEntityName %>,
 });
 
 /*  Note: mapStateToProps is where you should use `reselect` to create selectors, ie:
