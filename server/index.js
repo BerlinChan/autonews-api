@@ -26,33 +26,61 @@ app.use(route.post('/addNews', async function (ctx) {
     ctx.req.body = JSON.parse(ctx.req.body);
     ctx.body = {msg: 'success'};
     //broadcast socket event
-    app.io.broadcast('addNews', {data: ctx.req.body});
+    const monitorConfig = {
+        '1': {key: '1', origin: '楚天都市报',},
+        '2': {key: '2', origin: '湖北日报',},
+        '3': {key: '3', origin: '三峡晚报',},
+        '4': {key: '4', origin: '楚天快报',},
+        '5': {key: '5', origin: '楚天时报',},
+        '6': {key: '6', origin: '楚天金报',},
+        '7': {key: '7', origin: '腾讯大楚网',},
+    };
+    let key = '';
+    for (let i in monitorConfig) {
+        if (monitorConfig[i].origin == ctx.req.body.origin) {
+            key = i;
+            break;
+        }
+    }
+    let tempData = {key: key, origin: monitorConfig[key], news: ctx.req.body};
+    app.io.broadcast('action',
+        {type: 'socket/Monitor_ON_Socket_News_Added', data: tempData});
 }));
 
 io.attach(app);
 
-// koa-socket events, 新版client上线后移除
+// koa-socket events
 app.io.on('connection', (ctx, id) => {
-    app.io.broadcast('connections', {
-        numConnections: app.io.connections.size,
-    });
+    console.log('connect client: ', id);
+    //广播客户端连接数
+    app.io.broadcast('action',
+        {type: 'socket/Global_SET_clientCount', data: app.io.connections.size});
+    //给 sender 发送 init monitor 配置
+    app.io.broadcast('action',
+        {
+            type: 'socket/Monitor_ON_initMonitorConfigs',
+            data: {
+                '1': {origin: '楚天都市报',},
+                '2': {origin: '湖北日报',},
+                '3': {origin: '三峡晚报',},
+                '4': {origin: '楚天快报',},
+                '5': {origin: '楚天时报',},
+                '6': {origin: '楚天金报',},
+                '7': {origin: '腾讯大楚网',},
+            }
+        });
 });
 
-// SocketIO events handler
-app._io.on('connection', (socket) => {
-    console.log('connect client: ', socket.id);
-    socket.emit('action', {type: 'socket/Global_SET_clientCount', data: app.io.connections.size});
-    // redux actions handler
-    socket.on('action', (action) => {
-        switch (action.type) {
-            case 'socket/Monitor_EMIT_REQUESTED':
-                socket.emit('action', {type: 'Monitor_EMIT_RECEIVED', msg: 'good day!'});
-                break;
-            case '':
-                break;
-            default:
-        }
-    });
+// redux actions handler
+app.io.on('action', (action) => {
+    switch (action.type) {
+        case 'socket/demo':
+            console.log(action.msg);
+            app.io.broadcast('action',
+                {type: 'Monitor_EMIT_RECEIVED', msg: 'good day!'});
+            break;
+        default:
+    }
 });
 
 

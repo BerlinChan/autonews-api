@@ -26,16 +26,15 @@ class MonitorCard extends Component {
     ];
 
     return (
-
       <Card title={this.props.origin} className={cls.monitorCard}
             extra={
               <div>
                 <Switch checked disabled checkedChildren={'开'} unCheckedChildren={'关'}/>
-                <Badge count={this.props.dataSource.length} showZero overflowCount={999}
+                <Badge count={Object.keys(this.props.news).length} showZero overflowCount={999}
                        style={{backgroundColor: '#fff', color: '#999', boxShadow: '0 0 0 1px #d9d9d9 inset'}}/>
               </div>
             }>
-        <Table columns={columns} dataSource={this.props.dataSource}
+        <Table columns={columns} dataSource={this.props.news}
                pagination={false} size="small" bordered={false} scroll={{y: 240}}/>
       </Card>
     );
@@ -44,11 +43,11 @@ class MonitorCard extends Component {
 
 MonitorCard.propTypes = {
   origin: PropTypes.string.isRequired,
-  dataSource: PropTypes.array.isRequired,
+  news: PropTypes.array,
 };
 MonitorCard.defaultProps = {
   origin: '楚天都市报',
-  dataSource: [
+  news: [
     {
       title: 'title',
       url: 'url',

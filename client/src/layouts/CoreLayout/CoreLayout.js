@@ -32,7 +32,7 @@ class CoreLayout extends Component {
         </Content>
 
         <Footer className={cls.footer}>
-          <span>服务器在线/离线 |</span>
+          <span>服务器在线/离线 | </span>
           <span>有 {this.props.global.get('clientCount')} 位小编在线 |</span>
           <span> Code with <i className={cls.iconLove}/> by&nbsp;
             <a href="http://www.berlinchan.com" target="_blank">摄影师陈柏林</a>

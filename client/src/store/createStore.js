@@ -50,10 +50,9 @@ export default (initialState = {}, history) => {
   };
   const sagas = require('redux/Global').sagas;
   injectSagas(store, {key: 'global', sagas});
-  injectSagas(store, {
-    key: 'monitor',
-    sagas: require('../routes/Monitor/modules/monitor').sagas,
-  });
+  injectSagas(store,
+    {key: 'monitor', sagas: require('../routes/Monitor/modules/monitor').sagas}
+  );
 
   if (module.hot) {
     module.hot.accept('./reducers', () => {
