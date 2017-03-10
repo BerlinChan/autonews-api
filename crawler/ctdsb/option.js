@@ -79,7 +79,7 @@ const detailParser = ($, res) => {
 
 module.exports = {
     taskName: taskName,
-    taskInterval: .1 * 60000,
+    taskInterval: 3 * 60000,
     rateLimit: 1500,
     maxConnections: 1,
     queue: (date = new Date()) => [{

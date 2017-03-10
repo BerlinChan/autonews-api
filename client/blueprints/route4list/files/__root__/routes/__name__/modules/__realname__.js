@@ -17,7 +17,7 @@ function fetch<%= pascalEntityName %>() {
   return {
   type: <%= pascalEntityName %>_FETCH_REQUESTED
 }
-};
+}
 
 export const actions = {
   fetch<%= pascalEntityName %>,
@@ -36,9 +36,9 @@ const initialState = Immutable.Map({
   list: Immutable.fromJS([{key: '001'},]),
 });
 export default function <%= camelEntityName %>Reducer (state = initialState, action) {
-  const handler = ACTION_HANDLERS[action.type]
+  const handler = ACTION_HANDLERS[action.type];
 
-  return handler ? handler(state, action) : state
+  return handler ? handler(state, action) : state;
 }
 
 

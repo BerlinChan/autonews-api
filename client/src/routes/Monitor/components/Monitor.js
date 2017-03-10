@@ -14,14 +14,17 @@ class Monitor extends Component {
   }
 
   render() {
-    let rows = new Array(Math.floor(this.props.monitors.length / 3 + 1));
+    const columnNum = 3;//新闻监视器 card 列数
 
     return (
       <div className={cls.monitor}>
-        {[1, 2, 3].map((item, rowIndex) => {
+        <div onClick={() => this.props.emitMsg('Hi, socketIO')}>emit a event</div>
+
+        {/*monitor dashboard*/}
+        {Array.from({length: Math.floor(this.props.monitors.length / 3 + 1)}, () => 'berlin').map((item, rowIndex) => {
           return (
             <Row gutter={16} className={cls.rowMargin} key={rowIndex}>
-              {[1, 2, 3].map((item, index) => {
+              {Array.from({length: columnNum}, () => 'berlin').map((item, index) => {
                 return (
                   <Col span={8} key={index}>
                     <MonitorCard {...this.props.monitors[rowIndex * 3 + index]}/>

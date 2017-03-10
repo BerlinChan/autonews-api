@@ -39,4 +39,15 @@ app.io.on('connection', (ctx, id) => {
     });
 });
 
+// handle redux actions
+app._io.on('connection', (socket) => {
+    socket.on('reduxAction', (action) => {
+        if (action.type === 'socket/Monitor_EMIT_REQUESTED') {
+            console.log('Got hello data!', action.msg);
+            socket.emit('reduxAction', {type: 'Monitor_EMIT_RECEIVED', msg: 'good day!'});
+        }
+    });
+});
+
+
 app.listen(process.env.PORT || config.HTTP_PORT);
