@@ -3,12 +3,18 @@ import {routerMiddleware} from 'react-router-redux'
 import createSagaMiddleware from 'redux-saga'
 import makeRootReducer from './reducers'
 import {injectSagas} from './sagas'
+import createSocketIoMiddleware from 'redux-socket.io';
+import io from 'socket.io-client';
+import config from '../utils/config'
+let socket = io(config.SOCKET_SERVER);
+
 export default (initialState = {}, history) => {
   // ======================================================
   // Middleware Configuration
   // ======================================================
+  const socketIoMiddleware = createSocketIoMiddleware(socket, "socket/");
   const sagaMiddleware = createSagaMiddleware()
-  const middleware = [sagaMiddleware, routerMiddleware(history)]
+  const middleware = [socketIoMiddleware, sagaMiddleware, routerMiddleware(history)]
 
   // ======================================================
   // Store Enhancers
