@@ -51,20 +51,20 @@ const detailParser = ($, res) => {
     return {
         title: mainDom.find('.hd h1').text(),
         url: res.request.uri.href,
-        subCategory: mainDom.find('.hd .tit-bar .color-a-1').text(),//子分类、子栏目、子版面、子频道
+        //subCategory: mainDom.find('.hd .tit-bar .color-a-1').text(),//子分类、子栏目、子版面、子频道
         origin: taskName,//来源
-        content: mainDom.find('.bd #Cnt-Main-Article-QQ').html(),//正文内容
-        authorName: mainDom.find('.hd .tit-bar .color-a-3').text(),
-        editorName: mainDom.find('.ft .QQeditor').text(),
+        //content: mainDom.find('.bd #Cnt-Main-Article-QQ').html(),//正文内容
+        //authorName: mainDom.find('.hd .tit-bar .color-a-3').text(),
+        //editorName: mainDom.find('.ft .QQeditor').text(),
         date: moment(mainDom.find('.hd .tit-bar .article-time').text()),//发布日期
-        crawledDate: new Date(),//抓取日期
+        //crawledDate: new Date(),//抓取日期
     };
 };
 
 module.exports = {
     taskName: taskName,
     taskInterval: 3 * 60000,
-    rateLimit: 0,
+    rateLimit: 1000,
     maxConnections: 5,
     queue: [
         {uri: 'http://hb.qq.com/l/news/list20130625101341.htm', parser: parser_common},// 大楚-要闻列表

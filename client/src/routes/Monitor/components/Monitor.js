@@ -19,7 +19,6 @@ class Monitor extends Component {
 
     return (
       <div className={cls.monitor}>
-        <div onClick={() => this.props.demo('hello!')}>emit</div>
 
         {/*monitor dashboard*/}
         {Array.from({length: Math.floor(Object.keys(monitor.toJS().monitorConfigs).length / 3 + 1)}, () => 'berlin').map((item, rowIndex) => {

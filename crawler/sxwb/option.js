@@ -69,7 +69,7 @@ const detailParser = ($, res) => {
         url: res.request.uri.href,
         subCategory: '',//子分类、子栏目、子版面
         origin: taskName,
-        content: mainDom.eq(4).children('#copytext').html(),
+        //content: mainDom.eq(4).children('#copytext').html(),
         authorName: '',
         editorName: '',
         date: res.headers['last-modified'],

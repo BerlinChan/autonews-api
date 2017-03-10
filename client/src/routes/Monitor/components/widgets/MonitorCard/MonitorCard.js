@@ -16,12 +16,14 @@ class MonitorCard extends Component {
       {
         title: '时间',
         dataIndex: 'date',
+        width: '28%',
         render: (text, record, index) => moment(record.date).format('MM-DD hh:mm:ss'),
       },
       {
         title: '标题',
         dataIndex: 'title',
-        render: (text, record, index) => <a href={record.url} target="_blank">{record.title}</a>
+        width: '72%',
+        render: (text, record, index) => <a href={record.url} target="_blank">{record.title + record.subTitle}</a>
       },
     ];
 

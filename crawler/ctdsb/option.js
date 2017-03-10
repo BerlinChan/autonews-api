@@ -67,13 +67,13 @@ const detailParser = ($, res) => {
         title: titleIndex0 ? titleIndex0 : mainDom.eq(1).text().trim(),
         subTitle: titleIndex0 ? mainDom.eq(1).text().trim() : mainDom.eq(2).text().trim(),
         url: res.request.uri.href,
-        subCategory: '',//子分类、子栏目、子版面
+        //subCategory: '',//子分类、子栏目、子版面
         origin: taskName,
-        content: mainDom.eq(4).children('#copytext').html(),
-        authorName: '',
-        editorName: '',
+        //content: mainDom.eq(4).children('#copytext').html(),
+        //authorName: '',
+        //editorName: '',
         date: res.headers['last-modified'],
-        crawledDate: new Date(),//抓取日期
+        //crawledDate: new Date(),//抓取日期
     };
 };
 
