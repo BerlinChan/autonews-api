@@ -9,6 +9,7 @@ const CHANGE_LANGUAGE = 'CHANGE_LANGUAGE';
 const GLOBAL_SET_USERINFO = 'GLOBAL_SET_USERINFO';
 const GLOBAL_USERINFO_FETCH_REQUESTED = 'GLOBAL_USERINFO_FETCH_REQUESTED';
 const Global_SET_clientCount = 'socket/Global_SET_clientCount';
+const Global_SET_SOCKET_STATUS = 'socket/Global_SET_SOCKET_STATUS';
 
 
 function changeLanguage(value) {
@@ -36,12 +37,14 @@ const ACTION_HANDLERS = {
   [GLOBAL_SET_USERINFO]: (state, payload) => {
     cookie.save('userInfo', payload.data, {path: '/'});
     return state.setIn(['userInfo'], Immutable.fromJS(payload.data));
-  }
+  },
+  [Global_SET_SOCKET_STATUS]: (state, action) => state.set('socketConnectStatus', action.data),
 };
 
 // Reducer
 const initialState = Immutable.Map({
   clientCount: 0,//客户端连接数
+  socketConnectStatus: 'disconnect',
   userInfo: Immutable.Map(),
 });
 export default function globalReducer(state = initialState, action) {

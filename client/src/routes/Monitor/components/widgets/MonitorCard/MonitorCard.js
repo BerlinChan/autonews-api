@@ -38,7 +38,7 @@ class MonitorCard extends Component {
               </div>
             }>
         <Table columns={columns} dataSource={this.props.news}
-               pagination={false} size="small" bordered={false} scroll={{y: 240}}/>
+               pagination={false} size="small" bordered={false} scroll={{y: 220}}/>
       </Card>
     );
   }

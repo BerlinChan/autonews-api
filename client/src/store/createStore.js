@@ -6,10 +6,6 @@ import {injectSagas} from './sagas'
 import createSocketIoMiddleware from 'redux-socket.io';
 import io from 'socket.io-client';
 import config from '../utils/config'
-function optimisticExecute(action, emit, next, dispatch) {
-  emit('action', action);
-  next(action);
-}
 let socket = io(config.API_SERVER);
 
 export default (initialState = {}, history) => {
@@ -54,9 +50,13 @@ export default (initialState = {}, history) => {
     {key: 'monitor', sagas: require('../routes/Monitor/modules/monitor').sagas}
   );
 
+  // 监听 socket 连接状态
+  socket.on('disconnect', () => store.dispatch({type: 'socket/Global_SET_SOCKET_STATUS', data: 'disconnect'}));
+  socket.on('connect', () => store.dispatch({type: 'socket/Global_SET_SOCKET_STATUS', data: 'connect'}));
+
   if (module.hot) {
     module.hot.accept('./reducers', () => {
-      const reducers = require('./reducers').default
+      const reducers = require('./reducers').default;
       store.replaceReducer(reducers(store.asyncReducers))
     })
   }
