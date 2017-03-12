@@ -50,8 +50,8 @@ const detailParser = ($, res) => {
     let mainDom = $(".main");
     return {
         title: mainDom.find('.hd h1').text(),
-        url: res.request.uri.href,
         //subCategory: mainDom.find('.hd .tit-bar .color-a-1').text(),//子分类、子栏目、子版面、子频道
+        url: res.request.uri.href,
         origin: taskName,//来源
         //content: mainDom.find('.bd #Cnt-Main-Article-QQ').html(),//正文内容
         //authorName: mainDom.find('.hd .tit-bar .color-a-3').text(),
