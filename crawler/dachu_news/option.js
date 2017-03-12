@@ -15,12 +15,15 @@ const parser_common = ($, res) => {
     let tempQueueDetail = [];
     newsListDom.each(function (index) {
         tempQueueDetail.push({
+            _id:'',//list document 唯一id
             title: $(this).children('a').text(),//文章标题
             uri: $(this).children('a').attr('href'),//文章链接
-            date: $(this).children('span').text(),//文章发布日期
-            origin: taskName,//文章来源
-            originUrl: res.request.uri.href,//来源链接
+            date: $(this).children('span').text(),//文章发布日期时间戳
+            origin: taskName,//文章来源、出处
+            originId:'',//指向 origin collection 中对应的 document id
+            originUrl: res.request.uri.href,//来源、出处链接
             isCrawled: seen.exists($(this).children('a').attr('href')),//是否已采集
+            //parser: parser_list,//下一步爬取的解析器，非undefined时，detailParser无作用。如本解析对象为【版面】，下一步解析对象为【文章列表】，再次为【文章详情】
             detailParser: detailParser,//对应[详情页]解析函数
         });
     });
@@ -49,15 +52,19 @@ const parser_shiyan = ($, res) => {
 const detailParser = ($, res) => {
     let mainDom = $(".main");
     return {
-        title: mainDom.find('.hd h1').text(),
-        //subCategory: mainDom.find('.hd .tit-bar .color-a-1').text(),//子分类、子栏目、子版面、子频道
-        url: res.request.uri.href,
-        origin: taskName,//来源
+        _id: '',//文章唯一 document id
+        title: mainDom.find('.hd h1').text(),//文章标题
+        subTitle: mainDom.eq(2).find('td').text().trim(),//文章副标题
+        //category: mainDom.find('.hd .tit-bar .color-a-1').text(),//文章分类、子栏目、子版面、子频道
+        tags: [],//文章标签、关键词
+        url: res.request.uri.href,//文章地址
         //content: mainDom.find('.bd #Cnt-Main-Article-QQ').html(),//正文内容
-        //authorName: mainDom.find('.hd .tit-bar .color-a-3').text(),
-        //editorName: mainDom.find('.ft .QQeditor').text(),
-        date: moment(mainDom.find('.hd .tit-bar .article-time').text()),//发布日期
-        //crawledDate: new Date(),//抓取日期
+        //authorName: mainDom.find('.hd .tit-bar .color-a-3').text(),//作者名
+        //editorName: mainDom.find('.ft .QQeditor').text(),//编辑姓名
+        date: moment(mainDom.find('.hd .tit-bar .article-time').text()),//文章发布日期时间戳
+        //crawledDate: new Date(),//抓取日期时间戳
+        origin: taskName,//来源、出处名
+        originId:'',//指向 origin collection 中对应的 document id
     };
 };
 
