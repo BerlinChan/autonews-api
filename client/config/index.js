@@ -37,7 +37,7 @@ const config = {
   compiler_hash_type: 'hash',
   compiler_fail_on_warning: false,
   compiler_quiet: false,
-  compiler_public_path: './',
+  compiler_public_path: '/autonews/',
   compiler_stats: {
     chunks: false,
     chunkModules: false,
@@ -88,7 +88,7 @@ config.globals = {
   '__TEST__': config.env === 'test',
   '__DEBUG__': config.env === 'development' && !argv.no_debug,
   '__COVERAGE__': !argv.watch && config.env === 'test',
-  '__BASENAME__': JSON.stringify(process.env.BASENAME || './')
+  '__BASENAME__': JSON.stringify(process.env.BASENAME || '/autonews/')
 }
 
 // ------------------------------------
