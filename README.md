@@ -9,11 +9,13 @@
 
 ## 目录说明
     root
-    |--client           Web客户端
-    |--crawler          爬虫
-    |--security         证书／密钥
-    |--server           HTTP服务
-    |--utils            全局配置／库文件
+    |--functions            firebase functions
+    |--public               http root
+    |--server               HTTP服务
+    |--src                  源代码
+        |--client           Web客户端
+        |--crawler          爬虫
+        |--utils            全局配置／库文件/证书／密钥
     
 ## 数据结构
 设计中，以`大楚网`爬虫为蓝本来设计，然后将结构说明记录至此

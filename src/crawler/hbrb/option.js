@@ -62,9 +62,10 @@ const parser_list = ($, res) => {
 // detail parser
 const detailParser = ($, res) => {
     let mainDom = $("#Table17 tr");
+    let titleIndex0 = mainDom.eq(0).find('td').text().trim();
     return {
-        title: mainDom.eq(0).find('td').text().trim(),
-        subTitle: mainDom.eq(1).find('td').text().trim(),
+        title: titleIndex0 ? titleIndex0 : mainDom.eq(1).text().trim(),
+        subTitle: titleIndex0 ? mainDom.eq(1).text().trim() : mainDom.eq(2).text().trim(),
         url: res.request.uri.href,
         // subCategory: '',//子分类、子栏目、子版面
         origin: taskName,

@@ -12,9 +12,9 @@ const ctkb_crawler = require("./ctkb");
 const ctsb_crawler = require("./ctsb");
 
 dachu_news_crawler();
-sxwb_crawler();
-ctdsb_crawler();
-hbrb_crawler();
-ctjb_crawler();
-ctkb_crawler();
-ctsb_crawler();
+// sxwb_crawler();
+// ctdsb_crawler();
+// hbrb_crawler();
+// ctjb_crawler();
+// ctkb_crawler();
+// ctsb_crawler();
