@@ -2,7 +2,7 @@ import 'whatwg-fetch';
 import {push} from 'react-router-redux'
 import store from 'store/createStore'
 import cookie from 'react-cookie'
-import config from 'utils/config'
+import config from './config'
 /**
  * Parses the JSON returned by a network request
  *

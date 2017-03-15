@@ -3,7 +3,6 @@ import Immutable from 'immutable'
 import request from 'utils/request'
 import {startSubmit, stopSubmit} from 'redux-form'
 import {message, notification} from 'antd';
-import config from 'utils/config'
 
 
 // Constants

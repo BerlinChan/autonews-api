@@ -9,12 +9,12 @@ const IO = require('koa-socket');
 const cors = require('kcors');
 const route = require('koa-route');
 const rawBody = require('raw-body');
-const config = require('../utils/config');
+const config = require('../src/utils/config');
 
 const app = new Koa();
 const io = new IO();
 
-app.use(require('koa-static')('../client/dist'));
+app.use(require('koa-static')('../public'));
 app.use(cors({
     origin: 'www.berlinchan.com',
 }));

@@ -1,7 +1,7 @@
 import {take, put, select, call} from 'redux-saga/effects'
 import Immutable from 'immutable'
 import request from 'utils/request'
-import config from 'utils/config'
+import config from '../utils/config'
 import cookie from 'react-cookie'
 
 // Constants
