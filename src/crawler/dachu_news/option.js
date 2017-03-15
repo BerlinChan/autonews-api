@@ -61,16 +61,16 @@ const parser_shiyan = ($, res) => {
 const detailParser = ($, res) => {
     let mainDom = $(".main");
     return {
-        _id: '',//文章唯一 document id
+        _id: '',//文章唯一 document id，与对应 list id 相同
         title: mainDom.find('.hd h1').text(),//文章标题
         subTitle: mainDom.eq(2).find('td').text().trim(),//文章副标题
         category: mainDom.find('.hd .tit-bar .color-a-1').text(),//文章分类、子栏目、子版面、子频道
         tags: [],//文章标签、关键词
         url: res.request.uri.href,//文章地址
-        //content: mainDom.find('.bd #Cnt-Main-Article-QQ').html(),//正文内容
+        content: mainDom.find('.bd #Cnt-Main-Article-QQ').html(),//正文内容
         authorName: mainDom.find('.hd .tit-bar .color-a-3').text(),//作者名
         editorName: mainDom.find('.ft .QQeditor').text(),//编辑姓名
-        date: moment(mainDom.find('.hd .tit-bar .article-time').text()),//文章发布日期时间戳
+        date: new Date(mainDom.find('.hd .tit-bar .article-time').text()),//文章发布日期时间戳
         crawledDate: new Date(),//抓取日期时间戳
         origin: origin.name,//来源、出处名
         origin_id: origin.id,//指向 origin collection 中对应的 document id
@@ -79,22 +79,22 @@ const detailParser = ($, res) => {
 
 module.exports = {
     taskName: origin.name,
-    taskInterval: 3 * 60000,
+    taskInterval: .01 * 60000,
     rateLimit: 1000,
     maxConnections: 5,
     queue: [
         {uri: 'http://hb.qq.com/l/news/list20130625101341.htm', parser: parser_common},// 大楚-要闻列表
-        {uri: 'http://hb.qq.com/l/yc/list20130619124315.htm', parser: parser_common},// 大楚-宜昌-新闻列表
-        {uri: 'http://hb.qq.com/l/xy/list20130619124740.htm', parser: parser_common},// 大楚-襄阳-新闻列表
-        {uri: 'http://hb.qq.com/l/hs/list20151231151356.htm', parser: parser_common},// 大楚-黄石-新闻列表
-        {uri: 'http://hb.qq.com/l/dachuxiaogan/list201605493502.htm', parser: parser_common},// 大楚-孝感-新闻列表
-        {uri: 'http://hb.qq.com/l/qj/list20161223113121.htm', parser: parser_common},// 大楚-潜江-新闻列表
-        {uri: 'http://hb.qq.com/l/sz/suizhounews.htm', parser: parser_common},// 大楚-随州-新闻列表
-        {uri: 'http://hb.qq.com/l/es/esyw/list20151230161913.htm', parser: parser_common},// 大楚-恩施-新闻列表
-        {uri: 'http://hb.qq.com/l/hg/list20151231151003.htm', parser: parser_common},// 大楚-黄冈-新闻列表
-        {uri: 'http://hb.qq.com/l/jm/jmyw/jmtt/list2015015104550.htm', parser: parser_common},// 大楚-荆门-新闻列表
-        {uri: 'http://hb.qq.com/l/jz/jzyw/jzywlist.htm', parser: parser_common},// 大楚-荆州-新闻列表
-        {uri: 'http://hb.qq.com/l/xt/xtyw/list20160127112918.htm', parser: parser_common},// 大楚-仙桃-新闻列表
-        {uri: 'http://hb.qq.com/l/sy/synews/shiyan-news-list.htm', parser: parser_shiyan},// 大楚-十堰-新闻列表
+        // {uri: 'http://hb.qq.com/l/yc/list20130619124315.htm', parser: parser_common},// 大楚-宜昌-新闻列表
+        // {uri: 'http://hb.qq.com/l/xy/list20130619124740.htm', parser: parser_common},// 大楚-襄阳-新闻列表
+        // {uri: 'http://hb.qq.com/l/hs/list20151231151356.htm', parser: parser_common},// 大楚-黄石-新闻列表
+        // {uri: 'http://hb.qq.com/l/dachuxiaogan/list201605493502.htm', parser: parser_common},// 大楚-孝感-新闻列表
+        // {uri: 'http://hb.qq.com/l/qj/list20161223113121.htm', parser: parser_common},// 大楚-潜江-新闻列表
+        // {uri: 'http://hb.qq.com/l/sz/suizhounews.htm', parser: parser_common},// 大楚-随州-新闻列表
+        // {uri: 'http://hb.qq.com/l/es/esyw/list20151230161913.htm', parser: parser_common},// 大楚-恩施-新闻列表
+        // {uri: 'http://hb.qq.com/l/hg/list20151231151003.htm', parser: parser_common},// 大楚-黄冈-新闻列表
+        // {uri: 'http://hb.qq.com/l/jm/jmyw/jmtt/list2015015104550.htm', parser: parser_common},// 大楚-荆门-新闻列表
+        // {uri: 'http://hb.qq.com/l/jz/jzyw/jzywlist.htm', parser: parser_common},// 大楚-荆州-新闻列表
+        // {uri: 'http://hb.qq.com/l/xt/xtyw/list20160127112918.htm', parser: parser_common},// 大楚-仙桃-新闻列表
+        // {uri: 'http://hb.qq.com/l/sy/synews/shiyan-news-list.htm', parser: parser_shiyan},// 大楚-十堰-新闻列表
     ],
 };//新闻目录页面地址
