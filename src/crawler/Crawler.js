@@ -40,6 +40,7 @@ module.exports = (option) => {
                 listCrawler.queue(generateQueueList([tempQueueResult.queue]));
             } else {
                 //save to database
+                let newListRef = {};
                 tempQueueResult.queue.forEach((item, index) => {
                     let newListItemRef = db.ref('list').push();
                     item._id = newListItemRef.key;//待detail push入库时，用作_id
@@ -52,7 +53,7 @@ module.exports = (option) => {
                         origin_id: item.origin_id,//指向 origin collection 中对应的 document id
                         originUrl: item.originUrl,//来源、出处链接
                     };
-                    db.ref('list').child(item._id).set(newListItemRef);
+                    newListRef[item._id] = newListItemRef;
 
                     //通知web客户端
                     request({
@@ -68,6 +69,8 @@ module.exports = (option) => {
                         }
                     });
                 });
+                db.ref('list').set(newListRef);
+
 
                 queueListResult = queueListResult.concat(tempQueueResult.queue);
             }
