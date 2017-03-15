@@ -20,7 +20,7 @@ app.use(cors({
 }));
 
 //route
-app.use(route.post('/addNews', async function (ctx) {
+app.use(route.post('/listItem_added', async function (ctx) {
     ctx.status = 200;
     ctx.req.body = await rawBody(ctx.req, {limit: '100kb', encoding: 'utf8'});
     ctx.req.body = JSON.parse(ctx.req.body);

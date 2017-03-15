@@ -1,69 +1,33 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta charset="utf-8">
-    <title>Welcome to Firebase Hosting</title>
-    <style media="screen">
-      body {
-        font-family: Roboto, Arial, sans-serif;
-        background: #ECEFF1;
-        color: rgba(0,0,0,0.87);
-      }
+    <title>Auto News</title>
+</head>
+<body>
+<div>
+    <h1>连接firebase数据库测试</h1>
 
-      a {
-        color: rgb(3,155,229);
-      }
+</div>
 
-      #message {
-        max-width: 400px;
-        margin: 40px auto;
-        box-shadow: 0 1px 3px 0 rgba(0,0,0,0.2),0 1px 1px 0 rgba(0,0,0,0.14),0 2px 1px -1px rgba(0,0,0,0.12);
-        border-radius: 2px;
-        background: white;
-        padding: 16px 24px;
-      }
+<script src="https://www.gstatic.com/firebasejs/3.7.1/firebase.js"></script>
+<script>
+    // Set the configuration for your app
+    var config = {
+        apiKey: 'AIzaSyAOs__NiYRgR7luImccJvac3cN5wUMBdrU',
+        authDomain: 'fiery-heat-7406.firebaseapp.com',
+        databaseURL: 'https://fiery-heat-7406.firebaseio.com/',
+        storageBucket: ""
+    };
+    firebase.initializeApp(config);
 
-      #message h1 {
-        font-size: 22px;
-        font-weight: 500;
-        text-align: center;
-        margin: 0 0 16px;
-      }
+    // Get a reference to the database service
+    var database = firebase.database();
 
-      #message p {
-        font-weight: 300;
-        line-height: 150%;
-      }
+    database.ref('list').on('child_added', function (snapshot) {
+        console.log(snapshot.val().date, snapshot.val().title);
+    });
 
-      #message ul {
-        list-style: none;
-        margin: 16px 0 0;
-        padding: 0;
-        text-align: center;
-      }
-
-      #message li a {
-        display: inline-block;
-        padding: 8px;
-        text-transform: uppercase;
-        text-decoration: none;
-        font-weight: 500;
-        background: rgb(3,155,229);
-        color: white;
-        border: 1px solid rgb(3,155,229);
-        border-radius: 3px;
-        font-size: 14px;
-        box-shadow: 0 2px 5px 0 rgba(0,0,0,.26);
-      }
-    </style>
-  </head>
-  <body>
-    <div id="message">
-      <h1>Welcome to Firebase Hosting</h1>
-      <p>You're seeing this because you've successfully setup Firebase Hosting. Now it's time to go build something extraordinary!</p>
-      <ul>
-        <li><a target="_blank" href="https://firebase.google.com/docs/hosting/">Open Hosting Documentation</a></li>
-      </ul>
-    </div>
-  </body>
+</script>
+</body>
 </html>

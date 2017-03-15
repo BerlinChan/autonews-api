@@ -14,7 +14,6 @@ module.exports = (option) => {
         queueListResult = [],// 从 [新闻列表页] 中获取的列表结果
         queueDetailFiltered = [];// 排重后用于抓取的列表
 
-
     // 生成后并后的 list 抓取队列
     const generateQueueList = (configs) => {
         let mergedQueue = [];
@@ -40,6 +39,7 @@ module.exports = (option) => {
                 // crawl again for page
                 listCrawler.queue(generateQueueList([tempQueueResult.queue]));
             } else {
+                //save to database
                 tempQueueResult.queue.forEach((item, index) => {
                     let newListItemRef = db.ref('list').push();
                     item._id = newListItemRef.key;//待detail push入库时，用作_id
@@ -53,7 +53,22 @@ module.exports = (option) => {
                         originUrl: item.originUrl,//来源、出处链接
                     };
                     db.ref('list').child(item._id).set(newListItemRef);
+
+                    //通知web客户端
+                    request({
+                        method: 'POST',
+                        url: 'http://localhost:' + config.HTTP_PORT + '/listItem_added',
+                        headers: {'content-type': 'application/json'},
+                        body: JSON.stringify(item),
+                    }, function callback(error, response, body) {
+                        if (!error && response.statusCode == 200) {
+
+                        } else {
+                            console.log(error);
+                        }
+                    });
                 });
+
                 queueListResult = queueListResult.concat(tempQueueResult.queue);
             }
         }
@@ -83,18 +98,7 @@ module.exports = (option) => {
                     origin_id: newsDetail.origin_id,//指向 origin collection 中对应的 document id
                 }
             );
-            request({
-                method: 'POST',
-                url: 'http://localhost:' + config.HTTP_PORT + '/addNews',
-                headers: {'content-type': 'application/json'},
-                body: JSON.stringify(newsDetail),
-            }, function callback(error, response, body) {
-                if (!error && response.statusCode == 200) {
 
-                } else {
-                    console.log(error);
-                }
-            });
             console.log('save news detail: ' + JSON.stringify(newsDetail.title));
         }
         done();
