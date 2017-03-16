@@ -1,6 +1,7 @@
 import {connect} from 'react-redux'
 import {actions as monitorActions} from '../modules/monitor'
 import Global from '../../../redux/Global'
+import {firebaseConnect, isLoaded, isEmpty, dataToJS} from 'react-redux-firebase'
 
 /*  This is a container component. Notice it does not contain any JSX,
  nor does it import React. This component is **only** responsible for
@@ -20,6 +21,7 @@ const mapActionCreators = {
 const mapStateToProps = (state) => ({
   monitor: state.monitor,
   global: state.global,
+  origin: dataToJS(state.firebase, '/origin'),
 });
 
 /*  Note: mapStateToProps is where you should use `reselect` to create selectors, ie:
@@ -36,4 +38,4 @@ const mapStateToProps = (state) => ({
  Selectors are composable. They can be used as input to other selectors.
  https://github.com/reactjs/reselect    */
 
-export default connect(mapStateToProps, mapActionCreators)(Monitor)
+export default connect(mapStateToProps, mapActionCreators)(firebaseConnect(['/origin'])(Monitor))
