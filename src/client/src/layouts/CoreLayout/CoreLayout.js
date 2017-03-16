@@ -26,12 +26,15 @@ class CoreLayout extends Component {
 
         <Footer className={cls.footer}>
           <span>
+            实时监控服务:
             {this.props.global.get('socketConnectStatus') == 'disconnect' ?
-              <span style={{color: '#e66'}}>已离线</span> : <span>已连接服务器</span>}
-            &nbsp;|&nbsp;
-          </span>
-          <span>有 {this.props.global.get('clientCount')} 位小编在线 |</span>
-          <span> Code with <i className={cls.iconLove}/> by&nbsp;
+              <span className={cls.warning}>停机</span> : <span>运行中</span>}
+          </span>&nbsp;|&nbsp;
+          <span>
+            数据库: 连接／<span  className={cls.warning}>断开</span>
+          </span>&nbsp;|&nbsp;
+          <span>有 {this.props.global.get('clientCount')} 位小编在线</span>&nbsp;|&nbsp;
+          <span>Code with <i className={cls.iconLove}/> by&nbsp;
             <a href="http://www.berlinchan.com" target="_blank">摄影师陈柏林</a>
           </span>
         </Footer>

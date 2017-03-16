@@ -45,7 +45,9 @@ class Monitor extends Component {
 
         {/*monitor dashboard*/}
         <ResponsiveReactGridLayout className={cls.rowMargin} layouts={layouts}
-                                   breakpoints={{md: 996}} cols={{md: 12}}>
+                                   breakpoints={{lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0}}
+                                   cols={{lg: 12, md: 10, sm: 6, xs: 4, xxs: 2}}
+                                   autoSize={true} draggableHandle="">
           {Array.from({length: monitorLength}, () => 'berlin').map((item, index) => {
               if (monitorLength > index) {
                 let currentKey = Object.keys(monitor.toJS().monitorConfigs)[index];
