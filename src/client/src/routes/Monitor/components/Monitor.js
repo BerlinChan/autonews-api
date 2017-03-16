@@ -5,6 +5,8 @@ import MonitorCard from './widgets/MonitorCard/MonitorCard'
 import '../../../../node_modules/react-grid-layout/css/styles.css'
 import '../../../../node_modules/react-resizable/css/styles.css'
 import {Responsive, WidthProvider} from 'react-grid-layout';
+import {firebase} from 'react-redux-firebase'
+
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
 class Monitor extends Component {
@@ -17,7 +19,8 @@ class Monitor extends Component {
   }
 
   render() {
-    const {monitor}=this.props;
+    const {monitor, origin}=this.props;
+    console.log('origin', origin);
     const monitorLength = Object.keys(monitor.toJS().monitorConfigs).length;//monitor 个数
     const columnNum = 3;//新闻监视器 card 列数
     const rowNum = Math.floor(Object.keys(monitor.toJS().monitorConfigs).length / 3 + 1);//新闻监视器 card 行数
