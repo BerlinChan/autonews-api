@@ -6,7 +6,6 @@ import {injectSagas} from './sagas'
 import createSocketIoMiddleware from 'redux-socket.io';
 import io from 'socket.io-client';
 import config from '../utils/config'
-import {reactReduxFirebase, firebaseStateReducer} from 'react-redux-firebase'
 let socket = io(config.API_SERVER);
 
 export default (initialState = {}, history) => {
@@ -15,11 +14,7 @@ export default (initialState = {}, history) => {
   // ======================================================
   const socketIoMiddleware = createSocketIoMiddleware(socket, "socket/");
   const sagaMiddleware = createSagaMiddleware();
-  const middleware = [
-    socketIoMiddleware,
-    sagaMiddleware,
-    routerMiddleware(history),
-  ];
+  const middleware = [socketIoMiddleware, sagaMiddleware, routerMiddleware(history)];
 
   // ======================================================
   // Store Enhancers
@@ -39,7 +34,6 @@ export default (initialState = {}, history) => {
     makeRootReducer(),
     initialState,
     compose(
-      reactReduxFirebase(config.firebase, {userProfile: 'users'}),
       applyMiddleware(...middleware),
       ...enhancers
     )

@@ -77,8 +77,6 @@ async function insertDetail(id, detailItem) {
     console.log('insert detail: ' + detailItem.title + (detailItem.subTitle ? detailItem.subTitle : ''));
 }
 
-// db.create("requestedUrl", {capped: true, size: 209715200});//记录已请求url collection，大小：200MB
-// db.get('requestedUrl').index({'url': 1});//建立索引
 
 //database init
 /*
@@ -93,6 +91,8 @@ async function insertDetail(id, detailItem) {
  {key: 'ctsb', name: '楚天时报',}
  ]
  );
+ db.create("requestedUrl", {capped: true, size: 209715200});//记录已请求url collection，大小：200MB
+ db.get('requestedUrl').index({'url': 1});//建立索引
  */
 
 module.exports = {
