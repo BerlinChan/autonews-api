@@ -4,59 +4,67 @@
  * 湖北要闻/宜昌/襄阳/黄石/十堰/孝感/荆门/荆州/黄冈/恩施/随州/潜江/仙桃
  */
 
+const {isDuplicate} = require('../dbConnection');
 const moment = require('moment');
-const Seenreq = require('seenreq');// for remove duplicate news
-const seen = new Seenreq();
-const origin = {id: 'txdcw', name: '腾讯大楚网'};
+const origin = {key: 'txdcw', name: '腾讯大楚网'};
 
 // 列表解析处理器, 适用: 要闻/宜昌/襄阳/黄石/孝感/荆门/荆州/黄冈/恩施/随州/潜江/仙桃
-const parser_common = ($, res) => {
+async function parser_common($, res) {
     let newsListDom = $(".mod.newslist li");
     let tempQueueDetail = [];
-    newsListDom.each(function (index) {
-        tempQueueDetail.push({
-            _id: '',//list document 唯一id
-            title: $(this).children('a').text(),//文章标题
-            uri: $(this).children('a').attr('href'),//文章链接
-            date: $(this).children('span').text(),//文章发布日期时间戳
-            origin: origin.name,//文章来源、出处
-            origin_id: origin.id,//指向 origin collection 中对应的 document id
-            originUrl: res.request.uri.href,//来源、出处链接
-            isCrawled: seen.exists($(this).children('a').attr('href')),//是否已采集
-            parser: undefined,//下一步爬取的解析器，isAgain为true时，detailParser无作用。如本解析对象为【版面】，下一步解析对象为【文章列表】，再次为【文章详情】
-            detailParser: detailParser,//对应[详情页]解析函数
-        });
+    await newsListDom.each(function (index) {
+        isDuplicate($(this).children('a').attr('href'))
+            .then(isDuplicate => {
+                if (!isDuplicate) {
+                    let temp = {
+                        _id: '',//list document 唯一id
+                        title: $(this).children('a').text(),//文章标题
+                        uri: $(this).children('a').attr('href'),//文章链接
+                        date: $(this).children('span').text(),//文章发布日期时间戳
+                        origin_name: origin.name,//文章来源、出处
+                        origin_key: origin.key,//指向 origin collection 中对应的 document id
+                        parser: undefined,//下一步爬取的解析器，isAgain为true时，detailParser无作用。如本解析对象为【版面】，下一步解析对象为【文章列表】，再次为【文章详情】
+                        detailParser: detailParser,//对应[详情页]解析函数
+                    };
+                    tempQueueDetail.push(temp);
+                    console.log('temp', temp);
+                }
+            });
     });
+    await console.log(1111, tempQueueDetail)
 
     return {
         isAgain: false,// page 处理完再处理 list
-        queue: tempQueueDetail,
+        queue: await tempQueueDetail,
     };
-};
+}
 // 适用: 十堰
-const parser_shiyan = ($, res) => {
+function parser_shiyan($, res) {
     let newsListDom = $("ul.list01 li");
     let tempQueueDetail = [];
     newsListDom.each(function (index) {
-        tempQueueDetail.push({
-            _id: '',//list document 唯一id
-            title: $(this).children('a').text(),
-            uri: $(this).children('a').attr('href'),
-            date: $(this).children('span').text(),
-            origin: origin.name,
-            origin_id: origin.id,//指向 origin collection 中对应的 document id
-            originUrl: res.request.uri.href,
-            isCrawled: seen.exists($(this).children('a').attr('href')),
-            parser: undefined,
-            detailParser: detailParser,
-        });
+        isDuplicate($(this).children('a').attr('href'))
+            .then(isDuplicate => {
+                if (isDuplicate) {
+                    tempQueueDetail.push({
+                        _id: '',//list document 唯一id
+                        title: $(this).children('a').text(),
+                        uri: $(this).children('a').attr('href'),
+                        date: $(this).children('span').text(),
+                        origin_name: origin.name,
+                        origin_key: origin.key,//指向 origin collection 中对应的 document id
+                        parser: undefined,
+                        detailParser: detailParser,
+                    })
+                }
+            });
     });
 
     return {
         isAgain: false,// page 处理完再处理 list
         queue: tempQueueDetail,
     };
-};
+}
 // detail parser
 const detailParser = ($, res) => {
     let mainDom = $(".main");
@@ -72,8 +80,8 @@ const detailParser = ($, res) => {
         editorName: mainDom.find('.ft .QQeditor').text(),//编辑姓名
         date: new Date(mainDom.find('.hd .tit-bar .article-time').text()),//文章发布日期时间戳
         crawledDate: new Date(),//抓取日期时间戳
-        origin: origin.name,//来源、出处名
-        origin_id: origin.id,//指向 origin collection 中对应的 document id
+        origin_name: origin.name,//来源、出处名
+        origin_key: origin.key,//指向 origin collection 中对应的 document id
     };
 };
 
