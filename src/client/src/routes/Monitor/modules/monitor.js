@@ -3,7 +3,7 @@ import Immutable from 'immutable'
 import request from 'utils/request'
 import {startSubmit, stopSubmit} from 'redux-form'
 import {message, notification} from 'antd';
-
+import config from '../../../utils/config'
 
 // Constants
 const Monitor_FETCH_REQUESTED = 'Monitor_FETCH_REQUESTED';
@@ -12,7 +12,6 @@ const Monitor_FETCH_FAILURE = 'Monitor_FETCH_FAILURE';
 
 const Monitor_ON_Socket_News_Added = 'socket/Monitor_ON_Socket_News_Added';
 const Monitor_ON_initMonitorConfigs = 'socket/Monitor_ON_initMonitorConfigs';
-const Monitor_demo = 'socket/demo'
 
 // Actions
 function fetchMonitor() {
@@ -20,22 +19,16 @@ function fetchMonitor() {
     type: Monitor_FETCH_REQUESTED,
   }
 }
-function demo(msg) {
-  return {
-    type: Monitor_demo,
-    msg,
-  }
-}
 
 export const actions = {
   fetchMonitor,
-  demo,
 };
 
 // Action Handlers
 const ACTION_HANDLERS = {
   [Monitor_FETCH_REQUESTED]: (state) => state.setIn(['isFetching'], true),
-  [Monitor_FETCH_SUCCESSED]: (state, action) => state.setIn(['isFetching'], false),
+  [Monitor_FETCH_SUCCESSED]: (state, action) => state.set('isFetching', false)
+    .set('origin', Immutable.fromJS(action.data)),
   [Monitor_FETCH_FAILURE]: (state, action) => state.setIn(['isFetching'], false),
   [Monitor_ON_Socket_News_Added]: (state, action) => {
     let newList = state.getIn(['newsList', action.data.key, 'news']).toJS();
@@ -173,6 +166,7 @@ const initialState = Immutable.Map({
     '6': {origin: '腾讯大楚网',},
     '7': {origin: '楚天时报',},
   }),
+  origin: Immutable.List(),
 });
 export default function monitorReducer(state = initialState, action) {
   const handler = ACTION_HANDLERS[action.type];
@@ -186,7 +180,19 @@ function* watchFetchMonitor() {
   while (true) {
     const {}=yield take(Monitor_FETCH_REQUESTED);
 
-    yield put({type: 'Monitor_FETCH_SUCCESSED'});
+    let {data, err} = yield call(request,
+      config.API_SERVER + `getOrigin`,
+    );
+
+    if (!err) {
+      yield put({type: 'Monitor_FETCH_SUCCESSED', data: data.data});
+    } else {
+      let errBody = yield err.response.json();
+      notification.error({
+        message: 'Error',
+        description: errBody.msg,
+      });
+    }
   }
 }
 function* watchSocketNewsAdded() {

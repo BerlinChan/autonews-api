@@ -26,7 +26,7 @@ async function parser_common($, res) {
                         _id: '',//list document 唯一id
                         title: currentListDom.children('a').text(),//文章标题
                         uri: currentListDom.children('a').attr('href'),//文章链接
-                        date: new Date(currentListDom.children('span').text()),//文章发布日期时间戳
+                        date: new Date(moment(currentListDom.children('span').text(), 'MM月DD HH:mm')),//文章发布日期时间戳
                         origin_name: origin.name,//文章来源、出处
                         origin_key: origin.key,//指向 origin collection 中对应的 document id
                         parser: undefined,//下一步爬取的解析器，isAgain为true时，detailParser无作用。如本解析对象为【版面】，下一步解析对象为【文章列表】，再次为【文章详情】
@@ -62,7 +62,7 @@ async function parser_shiyan($, res) {
                     _id: '',//list document 唯一id
                     title: currentListDom.children('a').text(),//文章标题
                     uri: currentListDom.children('a').attr('href'),//文章链接
-                    date: new Date(currentListDom.children('span').text()),//文章发布日期时间戳
+                    date: new Date(moment(currentListDom.children('span').text(), 'MM月DD HH:mm')),//文章发布日期时间戳
                     origin_name: origin.name,//文章来源、出处
                     origin_key: origin.key,//指向 origin collection 中对应的 document id
                     parser: undefined,//下一步爬取的解析器，isAgain为true时，detailParser无作用。如本解析对象为【版面】，下一步解析对象为【文章列表】，再次为【文章详情】
@@ -101,7 +101,7 @@ const detailParser = ($, res) => {
 
 module.exports = {
     taskName: origin.name,
-    taskInterval: .01 * 60000,
+    taskInterval: 3 * 60000,
     rateLimit: 1000,
     maxConnections: 5,
     queue: [

@@ -10,16 +10,37 @@ const cors = require('kcors');
 const route = require('koa-route');
 const rawBody = require('raw-body');
 const config = require('../src/utils/config');
+const {getOrigin}=require('./dao');
 
 const app = new Koa();
 const io = new IO();
 
+//static serve
 app.use(require('koa-static')('../public'));
-app.use(cors({
-    origin: 'www.berlinchan.com',
-}));
+
+// Origin verification generator
+function* verifyOrigin(ctx) {
+    // Get requesting origin hostname
+    let origin = ctx.headers.origin;
+
+    // List of valid origins
+    let validOrigins = ['http://www.berlinchan.com', 'http://localhost:3091'];
+
+    // Make sure it's a valid origin
+    if (validOrigins.indexOf(origin) != -1) {
+        // Set the header to the requested origin
+        ctx.set('Access-Control-Allow-Origin', origin);
+    }
+}
+app.use(cors({origin: '*'}));
 
 //route
+app.use(route.get('/getOrigin', async function (ctx) {
+    await getOrigin().then(doc => {
+        ctx.status = 200;
+        ctx.body = {data: doc, msg: 'success'}
+    });
+}));
 app.use(route.post('/listItem_added', async function (ctx) {
     ctx.status = 200;
     ctx.req.body = await rawBody(ctx.req, {limit: '100kb', encoding: 'utf8'});
@@ -50,7 +71,7 @@ app.use(route.post('/listItem_added', async function (ctx) {
 io.attach(app);
 
 // koa-socket events
-app.io.on('connection', (ctx, id) => {
+app.io.on('connection', async(ctx, id) => {
     console.log('connect client: ', id);
     //广播客户端连接数
     app.io.broadcast('action',

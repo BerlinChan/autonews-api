@@ -3,7 +3,6 @@ import {routerReducer as router} from 'react-router-redux'
 import {reducer as formReducer} from 'redux-form'
 import global from 'redux/Global'
 import monitor from '../routes/Monitor/modules/monitor'
-import {firebaseStateReducer as firebase} from 'react-redux-firebase'
 
 export const makeRootReducer = (asyncReducers) => {
   return combineReducers({
@@ -11,7 +10,6 @@ export const makeRootReducer = (asyncReducers) => {
     form: formReducer,
     router,
     global,
-    firebase,
     monitor,
     ...asyncReducers
   })
