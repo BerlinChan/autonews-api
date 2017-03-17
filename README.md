@@ -3,9 +3,10 @@
 用于新闻抓取并实时推送到Web客户端，目前主要收集湖北省内报纸与大型门户网站新闻。
 
 ## 运行
-运行爬虫：`node crawler/index.js`
-
-运行HTTP服务：`node server/index.js`
+- run mongoDB: `mongod --config /usr/local/etc/mongod.conf`
+- init db: `node src/crawler/dbInit.js`
+- 运行爬虫：`node src/crawler/index.js`
+- 运行HTTP服务：`node server/index.js`
 
 ## 目录说明
     root
