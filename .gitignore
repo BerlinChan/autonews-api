@@ -88,5 +88,4 @@ typings/
 .env
 
 
-/client/node_modules/
-/client/dist/
+/public/
