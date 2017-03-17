@@ -38,7 +38,9 @@ class MonitorCard extends Component {
                 <i className={cls.iconMove + ' move-cursor'} title="Move"/>
               </div>
             }>
+        {/* TODO: scroll height responsive*/}
         <Table columns={columns} dataSource={this.props.list} scroll={{y: 220}}
+               className={(this.props.list.length == 0) ? cls.noData : ''}
                pagination={false} size="small" bordered={false}/>
       </Card>
     );

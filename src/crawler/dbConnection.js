@@ -49,6 +49,7 @@ async function insertList(list = []) {
                 url: item.uri,
                 date: item.date,
                 origin_key: item.origin_key,
+                key: item.id,
             }),
         }, function callback(error, response, body) {
             if (!error && response.statusCode == 200) {
@@ -82,23 +83,6 @@ async function insertDetail(id, detailItem) {
     console.log('insert detail: ' + detailItem.title + (detailItem.subTitle ? detailItem.subTitle : ''));
 }
 
-
-//database init
-/*
- db.get('origin').insert(
- [
- {key: 'ctdsb', name: '楚天都市报',},
- {key: 'hbrb', name: '湖北日报',},
- {key: 'sxwb', name: '三峡晚报',},
- {key: 'ctkb', name: '楚天快报',},
- {key: 'ctjb', name: '楚天金报',},
- {key: 'txdcw', name: '腾讯大楚网',},
- {key: 'ctsb', name: '楚天时报',}
- ]
- );
- db.create("requestedUrl", {capped: true, size: 209715200});//记录已请求url collection，大小：200MB
- db.get('requestedUrl').index({'url': 1});//建立索引
- */
 
 module.exports = {
     db: db,

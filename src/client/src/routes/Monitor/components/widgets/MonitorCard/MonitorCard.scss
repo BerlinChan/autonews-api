@@ -10,6 +10,13 @@
     background-image: url(../../assets/icon_Move2.png);
     cursor: move;
   }
+  .noData {
+    :global {
+      .ant-table-body {
+        min-height: 190px;
+      }
+    }
+  }
 
   :global {
     .ant-card-extra {
@@ -21,7 +28,7 @@
         border: 0 none;
       }
     }
-    .ant-table-body{
+    .ant-table-body {
       min-height: 220px;
     }
   }

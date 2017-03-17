@@ -10,7 +10,7 @@ const cors = require('kcors');
 const route = require('koa-route');
 const rawBody = require('raw-body');
 const config = require('../src/utils/config');
-const {getOrigin}=require('./DAO');
+const {getOrigin, getSpecificList}=require('./DAO');
 
 const app = new Koa();
 const io = new IO();
@@ -33,6 +33,12 @@ io.attach(app);
 //route
 app.use(route.get('/getOrigin', async function (ctx) {
     await getOrigin().then(doc => {
+        ctx.status = 200;
+        ctx.body = {data: doc, msg: 'success'}
+    });
+}));
+app.use(route.get('/getSpecificList', async function (ctx) {
+    await getSpecificList().then(doc => {
         ctx.status = 200;
         ctx.body = {data: doc, msg: 'success'}
     });
