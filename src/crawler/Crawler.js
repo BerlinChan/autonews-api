@@ -6,6 +6,7 @@
 const Crawler = require("crawler");
 const request = require('request');
 const config = require('../utils/config');
+const monk = require('monk');
 const db = require('./dbConnection');
 
 module.exports = (option) => {
@@ -40,12 +41,11 @@ module.exports = (option) => {
                 listCrawler.queue(generateQueueList([tempQueueResult.queue]));
             } else {
                 //save to database
-                let newListRef = {};
+                let newListRef = [];
                 tempQueueResult.queue.forEach((item, index) => {
-                    let newListItemRef = db.ref('list').push();
-                    item._id = newListItemRef.key;//待detail push入库时，用作_id
-                    newListItemRef = {
-                        _id: item._id,//list document 唯一id
+                    let id = monk.id();
+                    let newListItemRef = {
+                        _id: id,//list document 唯一id
                         title: item.title,//文章标题
                         url: item.uri,//文章链接
                         date: item.date,//文章发布日期时间戳
@@ -53,7 +53,8 @@ module.exports = (option) => {
                         origin_id: item.origin_id,//指向 origin collection 中对应的 document id
                         originUrl: item.originUrl,//来源、出处链接
                     };
-                    newListRef[item._id] = newListItemRef;
+                    item.id = id;//待detail push入库时，用作_id
+                    newListRef.push(newListItemRef);
 
                     //通知web客户端
                     request({
@@ -69,15 +70,14 @@ module.exports = (option) => {
                         }
                     });
                 });
-                db.ref('list').set(newListRef);
-
+                db.get('list').insert(newListRef);
 
                 queueListResult = queueListResult.concat(tempQueueResult.queue);
             }
         }
         done();
     };
-    const detailCrawlerCbWrapper = (parser, _id) => function (error, res, done) {
+    const detailCrawlerCbWrapper = (parser, id) => function (error, res, done) {
         if (error) {
             console.log(error);
         } else {
@@ -85,8 +85,8 @@ module.exports = (option) => {
             let newsDetail = parser($, res);
 
             // save to database
-            db.ref('detail').child(_id).set({
-                    _id: _id,//文章唯一 document id
+            db.get('detail').insert({
+                    _id: id,//文章唯一 document id
                     title: newsDetail.title,//文章标题
                     subTitle: newsDetail.subTitle,//文章副标题
                     category: newsDetail.category,//文章分类、子栏目、子版面、子频道
@@ -136,7 +136,7 @@ module.exports = (option) => {
                 // not seen
                 queueDetailFiltered.push({
                     uri: item.uri,
-                    callback: detailCrawlerCbWrapper(item.detailParser, item._id),
+                    callback: detailCrawlerCbWrapper(item.detailParser, item.id),
                 });
             }
         });
