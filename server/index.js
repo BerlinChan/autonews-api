@@ -28,6 +28,8 @@ function verifyOrigin(ctx) {
 }
 app.use(cors({origin: verifyOrigin}));
 
+io.attach(app);
+
 //route
 app.use(route.get('/getOrigin', async function (ctx) {
     await getOrigin().then(doc => {
@@ -45,28 +47,12 @@ app.use(route.post('/listItem_added', async function (ctx) {
         {type: 'socket_Monitor_ON_News_Added', data: ctx.req.body});
 }));
 
-io.attach(app);
-
 // koa-socket events
 app.io.on('connection', async(ctx, id) => {
     console.log('connect client: ', id);
     //广播客户端连接数
     app.io.broadcast('action',
         {type: 'socket_Global_SET_clientCount', data: app.io.connections.size});
-    //给 sender 发送 init monitor 配置
-    app.io.broadcast('action',
-        {
-            type: 'socket_Monitor_ON_initMonitorConfigs',
-            data: {
-                '1': {origin: '楚天都市报',},
-                '2': {origin: '湖北日报',},
-                '3': {origin: '三峡晚报',},
-                '4': {origin: '楚天快报',},
-                '5': {origin: '楚天金报',},
-                '6': {origin: '腾讯大楚网',},
-                '7': {origin: '楚天时报',},
-            }
-        });
 });
 
 // redux actions handler

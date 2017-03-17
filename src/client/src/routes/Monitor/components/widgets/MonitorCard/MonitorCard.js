@@ -29,16 +29,16 @@ class MonitorCard extends Component {
     ];
 
     return (
-      <Card title={this.props.origin} className={cls.monitorCard}
+      <Card title={this.props.origin_name} className={cls.monitorCard}
             extra={
               <div>
-                <Badge count={Object.keys(this.props.news).length} showZero overflowCount={999}
+                <Badge count={this.props.list.length} showZero overflowCount={999}
                        style={{backgroundColor: '#fff', color: '#999'}}/>
                 <Switch checked disabled checkedChildren={'开'} unCheckedChildren={'关'}/>
                 <i className={cls.iconMove + ' move-cursor'} title="Move"/>
               </div>
             }>
-        <Table columns={columns} dataSource={this.props.news}
+        <Table columns={columns} dataSource={this.props.list} scroll={{y: 220}}
                pagination={false} size="small" bordered={false}/>
       </Card>
     );
@@ -46,24 +46,21 @@ class MonitorCard extends Component {
 }
 
 MonitorCard.propTypes = {
-  origin: PropTypes.string.isRequired,
-  news: PropTypes.array,
+  origin_key: PropTypes.string,
+  origin_name: PropTypes.string.isRequired,
+  list: PropTypes.array,
 };
 MonitorCard.defaultProps = {
-  origin: '楚天都市报',
-  news: [
+  origin_key: '',
+  origin_name: '楚天都市报',
+  list: [
     {
       title: 'title',
       url: 'url',
-      subCategory: 'subCategory',//子分类、子栏目、子版面、子频道
-      origin: 'origin',//来源
-      content: 'content',//正文内容
-      authorName: 'authorName',
-      editorName: 'editorName',
+      origin_key: 'origin',//来源
       date: new Date(),
-      crawledDate: new Date(),//抓取日期
     },
-  ],
+  ]
 };
 
 export default MonitorCard;
