@@ -9,14 +9,16 @@ const {Header, Content, Footer} = Layout;
 
 class CoreLayout extends Component {
   render() {
+
     return (
       <Layout className={cls.body}>
         <Header className={cls.header}>
           <div className={cls.logo}><a href="http://autonews.berlinchan.com/">【新闻源监控】</a></div>
-          <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']}
+          <Menu theme="dark" mode="horizontal" selectedKeys={[this.props.location.pathname]}
                 style={{lineHeight: '64px', fontSize: '14px'}}>
-            <Menu.Item key="1"><Link to="/">监控</Link></Menu.Item>
-            <Menu.Item key="2"><Link to="/about">关于</Link></Menu.Item>
+            <Menu.Item key="/"><Link to="/">当日监控</Link></Menu.Item>
+            {/*<Menu.Item key="query"><Link to="/">往期查询</Link></Menu.Item>*/}
+            <Menu.Item key="about"><Link to="/about">关于</Link></Menu.Item>
           </Menu>
         </Header>
 
@@ -26,12 +28,12 @@ class CoreLayout extends Component {
 
         <Footer className={cls.footer}>
           <span>
-            实时监控服务:
+            监控服务:&nbsp;
             {this.props.global.get('socketConnectStatus') == 'disconnect' ?
               <span className={cls.warning}>停机</span> : <span>运行中</span>}
           </span>&nbsp;|&nbsp;
           <span>
-            数据库: 连接／<span  className={cls.warning}>断开</span>
+            数据库: 连接／<span className={cls.warning}>断开</span>
           </span>&nbsp;|&nbsp;
           <span>有 {this.props.global.get('clientCount')} 位小编在线</span>&nbsp;|&nbsp;
           <span>Code with <i className={cls.iconLove}/> by&nbsp;
