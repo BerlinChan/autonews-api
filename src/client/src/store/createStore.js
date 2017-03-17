@@ -12,7 +12,7 @@ export default (initialState = {}, history) => {
   // ======================================================
   // Middleware Configuration
   // ======================================================
-  const socketIoMiddleware = createSocketIoMiddleware(socket, "socket/");
+  const socketIoMiddleware = createSocketIoMiddleware(socket, "socket_");
   const sagaMiddleware = createSagaMiddleware();
   const middleware = [socketIoMiddleware, sagaMiddleware, routerMiddleware(history)];
 
@@ -51,8 +51,8 @@ export default (initialState = {}, history) => {
   );
 
   // 监听 socket 连接状态
-  socket.on('disconnect', () => store.dispatch({type: 'socket/Global_SET_SOCKET_STATUS', data: 'disconnect'}));
-  socket.on('connect', () => store.dispatch({type: 'socket/Global_SET_SOCKET_STATUS', data: 'connect'}));
+  socket.on('disconnect', () => store.dispatch({type: 'socket_Global_SET_SOCKET_STATUS', data: 'disconnect'}));
+  socket.on('connect', () => store.dispatch({type: 'socket_Global_SET_SOCKET_STATUS', data: 'connect'}));
 
   if (module.hot) {
     module.hot.accept('./reducers', () => {

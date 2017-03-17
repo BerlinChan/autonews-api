@@ -10,8 +10,8 @@ const Monitor_FETCH_REQUESTED = 'Monitor_FETCH_REQUESTED';
 const Monitor_FETCH_SUCCESSED = 'Monitor_FETCH_SUCCESSED';
 const Monitor_FETCH_FAILURE = 'Monitor_FETCH_FAILURE';
 
-const Monitor_ON_Socket_News_Added = 'socket/Monitor_ON_Socket_News_Added';
-const Monitor_ON_initMonitorConfigs = 'socket/Monitor_ON_initMonitorConfigs';
+const socket_Monitor_ON_News_Added = 'socket_Monitor_ON_News_Added';
+const socket_Monitor_ON_initMonitorConfigs = 'socket_Monitor_ON_initMonitorConfigs';
 
 // Actions
 function fetchMonitor() {
@@ -30,13 +30,13 @@ const ACTION_HANDLERS = {
   [Monitor_FETCH_SUCCESSED]: (state, action) => state.set('isFetching', false)
     .set('origin', Immutable.fromJS(action.data)),
   [Monitor_FETCH_FAILURE]: (state, action) => state.setIn(['isFetching'], false),
-  [Monitor_ON_Socket_News_Added]: (state, action) => {
+  [socket_Monitor_ON_News_Added]: (state, action) => {
     let newList = state.getIn(['newsList', action.data.key, 'news']).toJS();
     newList.unshift(action.data.news);
 
     return state.setIn(['newsList', action.data.key, 'news'], Immutable.List(newList));
   },
-  [Monitor_ON_initMonitorConfigs]: (state, action) => state.set('monitorConfigs', Immutable.fromJS(action.data)),
+  [socket_Monitor_ON_initMonitorConfigs]: (state, action) => state.set('monitorConfigs', Immutable.fromJS(action.data)),
 };
 
 // Reducer
@@ -197,7 +197,7 @@ function* watchFetchMonitor() {
 }
 function* watchSocketNewsAdded() {
   while (true) {
-    const {news} = yield take(Monitor_ON_Socket_News_Added);
+    const {news} = yield take(socket_Monitor_ON_News_Added);
 
   }
 }

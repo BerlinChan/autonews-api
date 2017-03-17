@@ -44,7 +44,12 @@ async function insertList(list = []) {
             method: 'POST',
             url: 'http://localhost:' + config.HTTP_PORT + '/listItem_added',
             headers: {'content-type': 'application/json'},
-            body: JSON.stringify(item),
+            body: JSON.stringify({
+                title: item.title,
+                url: item.uri,
+                date: item.date,
+                origin_key: item.origin_key,
+            }),
         }, function callback(error, response, body) {
             if (!error && response.statusCode == 200) {
 
