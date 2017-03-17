@@ -1,12 +1,28 @@
 @charset "UTF-8";
 
 .monitorCard {
+  i.iconMove {
+    margin-left: 8px;
+    display: inline-block;
+    vertical-align: middle;
+    width: 10px;
+    height: 18px;
+    background-image: url(../../assets/icon_Move2.png);
+    cursor: move;
+  }
+
   :global {
+    .ant-card-extra {
+      right: 10px;
+    }
     .ant-card-body {
       padding: 0;
       .ant-table-small {
         border: 0 none;
       }
+    }
+    .ant-table-body{
+      min-height: 260px;
     }
   }
 }

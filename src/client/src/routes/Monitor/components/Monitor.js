@@ -25,17 +25,50 @@ class Monitor extends Component {
     const columnNum = 3;//新闻监视器 card 列数
     const rowNum = Math.floor(Object.keys(monitor.toJS().monitorConfigs).length / 3 + 1);//新闻监视器 card 行数
     // layout is an array of objects, see the demo for more complete usage
-    let layouts = {md: []};
+    let layouts = {lg: [], md: [], sm: [], xs: [], xxs: []};
     for (let row = 0; row < rowNum; row++) {
       for (let col = 0; col < columnNum; col++) {
-        let width = 4, height = 2;
+        let width = {lg: 4, md: 4, sm: 3, xs: 4, xxs: 2};
+        let height = 2;
         let configIndex = row * columnNum + col;
         if (monitorLength > configIndex) {
+          layouts.lg.push({
+            i: Object.keys(monitor.toJS().newsList)[row * columnNum + col],
+            x: col * width.lg,
+            y: row * height,
+            w: width.lg,
+            h: height,
+            minW: 3
+          });
           layouts.md.push({
             i: Object.keys(monitor.toJS().newsList)[row * columnNum + col],
-            x: col * width,
+            x: col * width.md,
             y: row * height,
-            w: width,
+            w: width.md,
+            h: height,
+            minW: 3
+          });
+          layouts.sm.push({
+            i: Object.keys(monitor.toJS().newsList)[row * columnNum + col],
+            x: col * width.sm,
+            y: row * height,
+            w: width.sm,
+            h: height,
+            minW: 3
+          });
+          layouts.xs.push({
+            i: Object.keys(monitor.toJS().newsList)[row * columnNum + col],
+            x: col * width.xs,
+            y: row * height,
+            w: width.xs,
+            h: height,
+            minW: 3
+          });
+          layouts.xxs.push({
+            i: Object.keys(monitor.toJS().newsList)[row * columnNum + col],
+            x: col * width.xxs,
+            y: row * height,
+            w: width.xxs,
             h: height,
             minW: 3
           });
@@ -47,10 +80,9 @@ class Monitor extends Component {
       <div className={cls.monitor}>
 
         {/*monitor dashboard*/}
-        <ResponsiveReactGridLayout className={cls.rowMargin} layouts={layouts}
+        <ResponsiveReactGridLayout className={cls.rowMargin} layouts={layouts} draggableHandle=".move-cursor"
                                    breakpoints={{lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0}}
-                                   cols={{lg: 12, md: 10, sm: 6, xs: 4, xxs: 2}}
-                                   autoSize={true} draggableHandle="">
+                                   cols={{lg: 12, md: 12, sm: 6, xs: 4, xxs: 2}}>
           {Array.from({length: monitorLength}, () => 'berlin').map((item, index) => {
               if (monitorLength > index) {
                 let currentKey = Object.keys(monitor.toJS().monitorConfigs)[index];

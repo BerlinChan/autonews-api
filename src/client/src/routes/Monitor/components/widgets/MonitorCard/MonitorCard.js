@@ -32,13 +32,14 @@ class MonitorCard extends Component {
       <Card title={this.props.origin} className={cls.monitorCard}
             extra={
               <div>
-                <Switch checked disabled checkedChildren={'开'} unCheckedChildren={'关'}/>
                 <Badge count={Object.keys(this.props.news).length} showZero overflowCount={999}
-                       style={{backgroundColor: '#fff', color: '#999', boxShadow: '0 0 0 1px #d9d9d9 inset'}}/>
+                       style={{backgroundColor: '#fff', color: '#999'}}/>
+                <Switch checked disabled checkedChildren={'开'} unCheckedChildren={'关'}/>
+                <i className={cls.iconMove + ' move-cursor'} title="Move"/>
               </div>
             }>
         <Table columns={columns} dataSource={this.props.news}
-               pagination={false} size="small" bordered={false} scroll={{y: 220}}/>
+               pagination={false} size="small" bordered={false}/>
       </Card>
     );
   }
