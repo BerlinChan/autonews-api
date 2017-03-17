@@ -10,59 +10,73 @@ const origin = {key: 'txdcw', name: '腾讯大楚网'};
 
 // 列表解析处理器, 适用: 要闻/宜昌/襄阳/黄石/孝感/荆门/荆州/黄冈/恩施/随州/潜江/仙桃
 async function parser_common($, res) {
-    let newsListDom = $(".mod.newslist li");
-    let tempQueueDetail = [];
-    await newsListDom.each(function (index) {
-        isDuplicate($(this).children('a').attr('href'))
-            .then(isDuplicate => {
+    let newsListDom = $(".mod.newslist li"),
+        urlList = [],
+        filteredQueueDetail = [];
+
+    newsListDom.each(function (index) {
+        urlList.push($(this).children('a').attr('href'));
+    });
+
+    await isDuplicate(urlList).then(isDuplicateResult => {
+            isDuplicateResult.forEach((isDuplicate, index) => {
                 if (!isDuplicate) {
-                    let temp = {
+                    let currentListDom = newsListDom.eq(index);
+                    let tempListItem = {
                         _id: '',//list document 唯一id
-                        title: $(this).children('a').text(),//文章标题
-                        uri: $(this).children('a').attr('href'),//文章链接
-                        date: $(this).children('span').text(),//文章发布日期时间戳
+                        title: currentListDom.children('a').text(),//文章标题
+                        uri: currentListDom.children('a').attr('href'),//文章链接
+                        date: new Date(currentListDom.children('span').text()),//文章发布日期时间戳
                         origin_name: origin.name,//文章来源、出处
                         origin_key: origin.key,//指向 origin collection 中对应的 document id
                         parser: undefined,//下一步爬取的解析器，isAgain为true时，detailParser无作用。如本解析对象为【版面】，下一步解析对象为【文章列表】，再次为【文章详情】
                         detailParser: detailParser,//对应[详情页]解析函数
                     };
-                    tempQueueDetail.push(temp);
-                    console.log('temp', temp);
+
+                    filteredQueueDetail.push(tempListItem);
                 }
-            });
-    });
-    await console.log(1111, tempQueueDetail)
+            })
+        }
+    );
 
     return {
         isAgain: false,// page 处理完再处理 list
-        queue: await tempQueueDetail,
+        queue: filteredQueueDetail,
     };
 }
 // 适用: 十堰
-function parser_shiyan($, res) {
-    let newsListDom = $("ul.list01 li");
-    let tempQueueDetail = [];
+async function parser_shiyan($, res) {
+    let newsListDom = $("ul.list01 li"),
+        urlList = [],
+        filteredQueueDetail = [];
+
     newsListDom.each(function (index) {
-        isDuplicate($(this).children('a').attr('href'))
-            .then(isDuplicate => {
-                if (isDuplicate) {
-                    tempQueueDetail.push({
-                        _id: '',//list document 唯一id
-                        title: $(this).children('a').text(),
-                        uri: $(this).children('a').attr('href'),
-                        date: $(this).children('span').text(),
-                        origin_name: origin.name,
-                        origin_key: origin.key,//指向 origin collection 中对应的 document id
-                        parser: undefined,
-                        detailParser: detailParser,
-                    })
-                }
-            });
+        urlList.push($(this).children('a').attr('href'));
+    });
+
+    await isDuplicate(urlList).then(isDuplicateResult => {
+        isDuplicateResult.forEach((isDuplicate, index) => {
+            if (!isDuplicate) {
+                let currentListDom = newsListDom.eq(index);
+                let tempListItem = {
+                    _id: '',//list document 唯一id
+                    title: currentListDom.children('a').text(),//文章标题
+                    uri: currentListDom.children('a').attr('href'),//文章链接
+                    date: new Date(currentListDom.children('span').text()),//文章发布日期时间戳
+                    origin_name: origin.name,//文章来源、出处
+                    origin_key: origin.key,//指向 origin collection 中对应的 document id
+                    parser: undefined,//下一步爬取的解析器，isAgain为true时，detailParser无作用。如本解析对象为【版面】，下一步解析对象为【文章列表】，再次为【文章详情】
+                    detailParser: detailParser,//对应[详情页]解析函数
+                };
+
+                filteredQueueDetail.push(tempListItem);
+            }
+        });
     });
 
     return {
         isAgain: false,// page 处理完再处理 list
-        queue: tempQueueDetail,
+        queue: filteredQueueDetail,
     };
 }
 // detail parser

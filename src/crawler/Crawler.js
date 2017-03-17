@@ -27,20 +27,19 @@ module.exports = (option) => {
 
         return mergedQueue;
     };
-    const listCrawlerCbWrapper = (item) => async function (error, res, done) {
+    const listCrawlerCbWrapper = (item) => function (error, res, done) {
         if (error) {
             console.log(error);
         } else {
             let $ = res.$;
 
-            await item.parser($, res).then(listResult => {
-                console.log('listResult', listResult)
-                if (listResult.isAgain) {
+            item.parser($, res).then(tempQueueResult => {
+                if (tempQueueResult.isAgain) {
                     // crawl again for page
-                    listCrawler.queue(generateQueueList([listResult.queue]));
-                } else if (listResult.queue.length) {
+                    listCrawler.queue(generateQueueList([tempQueueResult.queue]));
+                } else if (tempQueueResult.queue.length) {
                     // remove duplicate & generate detail queue
-                    listResult.queue.forEach(item => {
+                    tempQueueResult.queue.forEach(item => {
                         item.id = monk.id();//生成 id, 待 detail 入库时与之 _id 对应
                         queueDetail.push({
                             uri: item.uri,
@@ -49,7 +48,7 @@ module.exports = (option) => {
                     });
 
                     //insert to db
-                    insertList(listResult.queue);
+                    insertList(tempQueueResult.queue);
                 }
             });
         }

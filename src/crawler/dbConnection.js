@@ -10,19 +10,21 @@ const request = require('request');// for send a request to HTTP server, push li
 const Seenreq = require('seenreq');// for remove duplicate
 const seen = new Seenreq();
 
-async function isDuplicate(url) {
+//返回一个数组，每个元素为bool类型，代表是否为duplicate
+async function isDuplicate(urlList) {
+    const _isDuplicate = async(url) => {
+        let normalizedUrl = seen.normalize(url);
+        let isDuplicate = false;
+        await db.get('requestedUrl').findOne({url: normalizedUrl}).then(doc => isDuplicate = !!doc);
+        return isDuplicate;
+    };
+    let promises = urlList.map((url) => _isDuplicate(url));
+
+    return await Promise.all(promises);
+}
+async function insertUrlToDuplicateCollection(url) {
     let normalizedUrl = seen.normalize(url);
-    let isDuplicate = false;
-    await db.get('requestedUrl').findOne({url: normalizedUrl}).then(doc => {
-        if (doc) {
-            //exist
-            isDuplicate = true;
-        } else {
-            db.get('requestedUrl').insert({url: normalizedUrl});
-            isDuplicate = false;
-        }
-    });
-    return isDuplicate;
+    await db.get('requestedUrl').insert({url: normalizedUrl});
 }
 async function insertList(list = []) {
     let newListRef = [];
@@ -70,6 +72,7 @@ async function insertDetail(id, detailItem) {
             origin_key: detailItem.origin_key,//指向 origin collection 中对应的 document id
         }
     );
+    insertUrlToDuplicateCollection(detailItem.url);
 
     console.log('insert detail: ' + detailItem.title + (detailItem.subTitle ? detailItem.subTitle : ''));
 }
@@ -95,6 +98,7 @@ async function insertDetail(id, detailItem) {
 module.exports = {
     db: db,
     isDuplicate: isDuplicate,//检查url是否被抓取过
+    insertUrlToDuplicateCollection: insertUrlToDuplicateCollection,//检查url是否被抓取过
     insertList: insertList,//插入 list item 到 list collection
     insertDetail: insertDetail,//插入 detail item 到 detail collection
 };
