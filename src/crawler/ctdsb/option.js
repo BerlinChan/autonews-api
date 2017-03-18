@@ -18,7 +18,8 @@ const parser_page = async($, res) => {
             let onclickAttr = $(this).attr('onclick');
             if (onclickAttr) {
                 queuePage.push({
-                    uri: res.request.uri.href + S(onclickAttr).between('(\'', '\',').s,
+                    uri: res.request.uri.href.split('index')[0]
+                    + S(onclickAttr).between('(\'', '\',').s,
                     pageTitle: $(this).children('a').text(),
                     origin: origin.name,
                     parser: parser_list,
@@ -42,24 +43,24 @@ const parser_list = async($, res) => {
     newsListDom.each(function (index) {
         let onclickAttr = $(this).attr('onclick');
         if (onclickAttr) {
-            let date = S(onclickAttr).between('ctdsb/', '/ctdsb').s;
+            let date = S(res.request.uri.href).between('html/ctdsb/', '/').s;
             let url = 'http://ctdsb.cnhubei.com/HTML/ctdsb/'
-                + date + '/'
-                + S(onclickAttr).between(date + '/', '\',\'').s;
+                + date
+                + S(onclickAttr).between(date, 'html').s + 'html';
             urlList.push(url);
             filteredDomIndex.push(index);
         }
     });
 
     await isDuplicate(urlList).then(isDuplicateResult => {
-            isDuplicateResult.forEach((isDuplicate, index) => {
-                if (!isDuplicate) {
-                    let currentListDom = newsListDom.eq(filteredDomIndex[index]);
+            filteredDomIndex.forEach((item, index) => {
+                if (!isDuplicateResult[index]) {
+                    let currentListDom = newsListDom.eq(item);
                     let onclickAttr = currentListDom.attr('onclick');
-                    let date = S(onclickAttr).between('ctdsb/', '/ctdsb').s;
+                    let date = S(res.request.uri.href).between('html/ctdsb/', '/').s;
                     let url = 'http://ctdsb.cnhubei.com/HTML/ctdsb/'
-                        + date + '/'
-                        + S(onclickAttr).between(date + '/', '\',\'').s;
+                        + date
+                        + S(onclickAttr).between(date, 'html').s + 'html';
 
                     let tempListItem = {
                         _id: '',//list document 唯一id
@@ -74,7 +75,7 @@ const parser_list = async($, res) => {
 
                     filteredQueueDetail.push(tempListItem);
                 }
-            })
+            });
         }
     );
 
@@ -86,12 +87,13 @@ const parser_list = async($, res) => {
 // detail parser
 const detailParser = ($, res) => {
     let mainDom = $("#Table17 tr");
+    let topDom = $('#Table16 tr').eq(0).children('td');
     let titleIndex0 = mainDom.eq(0).find('td').text().trim();
     return {
         _id: '',//文章唯一 document id，与对应 list id 相同
         title: titleIndex0 ? titleIndex0 : mainDom.eq(1).text().trim(),//文章标题
         subTitle: titleIndex0 ? mainDom.eq(1).text().trim() : mainDom.eq(2).text().trim(),//文章副标题
-        category: '',//文章分类、子栏目、子版面、子频道
+        category: topDom.eq(0).text() + topDom.eq(2).text(),//文章分类、子栏目、子版面、子频道
         tags: [],//文章标签、关键词
         url: res.request.uri.href,//文章地址
         content: mainDom.eq(4).children('#copytext').html(),//正文内容
@@ -110,7 +112,7 @@ module.exports = {
     rateLimit: 1200,
     maxConnections: 1,
     queue: (date = new Date()) => [{
-        uri: `http://ctdsb.cnhubei.com/HTML/ctdsb/${moment(date).format('YYYYMMDD')}/`,
+        uri: `http://ctdsb.cnhubei.com/HTML/ctdsb/${moment(date).format('YYYYMMDD')}/index.html`,
         parser: parser_page,
     }],
 };
