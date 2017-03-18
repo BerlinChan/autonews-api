@@ -28,6 +28,9 @@
         border: 0 none;
       }
     }
+    .ant-table-header table {
+      border-bottom: 0 none;
+    }
     .ant-table-body {
       min-height: 220px;
     }

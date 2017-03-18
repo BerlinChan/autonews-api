@@ -91,7 +91,6 @@ module.exports = (option) => {
 // Crawler event
     listCrawler.on('drain', function () {
         console.log(`start crawl ${option.taskName}, queue: ${queueDetail.length}`);
-        console.log('queueDetail', queueDetail.length, 'detailCrawler', detailCrawler.queueSize);
         if (queueDetail.length) {
             // have new details, crawl them
             detailCrawler.queue(queueDetail);
