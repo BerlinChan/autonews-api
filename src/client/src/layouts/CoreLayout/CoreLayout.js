@@ -32,9 +32,6 @@ class CoreLayout extends Component {
             {this.props.global.get('socketConnectStatus') == 'disconnect' ?
               <span className={cls.warning}>停机</span> : <span>运行中</span>}
           </span>&nbsp;|&nbsp;
-          <span>
-            数据库: 连接／<span className={cls.warning}>断开</span>
-          </span>&nbsp;|&nbsp;
           <span>有 {this.props.global.get('clientCount')} 位小编在线</span>&nbsp;|&nbsp;
           <span>Code with <i className={cls.iconLove}/> by&nbsp;
             <a href="http://www.berlinchan.com" target="_blank">摄影师陈柏林</a>

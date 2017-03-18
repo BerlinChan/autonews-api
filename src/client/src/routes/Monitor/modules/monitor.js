@@ -4,6 +4,7 @@ import request from 'utils/request'
 import {startSubmit, stopSubmit} from 'redux-form'
 import {message, notification} from 'antd';
 import config from '../../../utils/config'
+import moment from 'moment'
 
 // Constants
 const Monitor_FETCH_REQUESTED = 'Monitor_FETCH_REQUESTED';
@@ -178,7 +179,7 @@ function* watchFetchMonitor() {
 
     //fetch today news list
     const newsList = yield call(request,
-      config.API_SERVER + `getSpecificList?beginDate=1&endDate=2&origin_key=txdcw`,
+      config.API_SERVER + `getSpecificList?beginDate=${new Date(moment().format('YYYY-MM-DD'))}&endDate=${new Date(moment().add({days: 1}).format('YYYY-MM-DD'))}&origin_key=ctdsb,ctjb,ctkb,ctsb,txdcw,hbrb,sxwb`,
     );
     if (!newsList.err) {
       yield put({type: 'Monitor_PUSH_newsList', data: newsList.data.data});

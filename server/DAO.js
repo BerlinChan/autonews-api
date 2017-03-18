@@ -11,10 +11,14 @@ const moment = require('moment');
 function getOrigin() {
     return db.get('origin').find({});
 }
-//按(开始时间: date，结束时间: date，origin_key: string||array)查询list
-function getSpecificList(beginDate = new Date(moment().format('YYYY-MM-DD')), endDate = new Date(moment().format('YYYY-MM-DD')), origin_key='hbrb') {
+//按(开始时间: date，结束时间: date，origin_key: string)查询list
+function getSpecificList(beginDate = new Date(moment().format('YYYY-MM-DD')), endDate = new Date(moment().format('YYYY-MM-DD')), origin_key = 'ctdsb,ctjb,ctkb,ctsb,txdcw,hbrb,sxwb') {
+    let origin_key_array = origin_key.split(',');
     return db.get('list').find(
-        {"date": {$gte: new Date('2017-03-18T01:30:00.000Z')}},
+        {
+            "date": {$gte: beginDate, $lt: endDate},
+            "origin_key": {$in: origin_key_array}
+        },
         {sort: {'date': -1}},
         '-origin_name'// ['-origin_name','-title']
     );
