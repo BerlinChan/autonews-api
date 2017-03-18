@@ -17,4 +17,4 @@ ctkb_crawler();
 ctsb_crawler();
 dachu_news_crawler();
 hbrb_crawler();
-sxwb_crawler();
+// sxwb_crawler();

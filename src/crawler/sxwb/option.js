@@ -4,6 +4,7 @@
  * http://sxwb.cnhubei.com/cache/paper_sxwb.aspx
  */
 
+const S = require('string');
 const moment = require('moment');
 const {isDuplicate} = require('../dbConnection');
 const origin = {key: 'sxwb', name: '三峡晚报'};
@@ -105,8 +106,8 @@ const detailParser = ($, res) => {
 
 module.exports = {
     taskName: origin.name,
-    taskInterval: 3 * 60000,
-    rateLimit: 2000,
+    taskInterval: 4 * 60000,
+    rateLimit: 3000,
     maxConnections: 1,
     queue: (date = new Date()) => [{
         uri: `http://sxwb.cnhubei.com/html/sxwb/${moment(date).format('YYYYMMDD')}/index.html`,//${moment(date).format('YYYYMMDD')}
