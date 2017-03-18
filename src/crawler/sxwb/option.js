@@ -54,7 +54,7 @@ const parser_list = async($, res) => {
 
     await isDuplicate(urlList).then(isDuplicateResult => {
             filteredDomIndex.forEach((item, index) => {
-                if (!isDuplicateResult[index] || true) {
+                if (!isDuplicateResult[index]) {
                     let currentListDom = newsListDom.eq(item);
                     let onclickAttr = currentListDom.attr('onclick');
                     let date = S(res.request.uri.href).between('html/sxwb/', '/').s;
@@ -93,7 +93,7 @@ const detailParser = ($, res) => {
         _id: '',//文章唯一 document id，与对应 list id 相同
         title: titleIndex0 ? titleIndex0 : mainDom.eq(1).text().trim(),//文章标题
         subTitle: titleIndex0 ? mainDom.eq(1).text().trim() : mainDom.eq(2).text().trim(),//文章副标题
-        category: topDom.eq(0).text() + '-' + topDom.eq(2).text(),//文章分类、子栏目、子版面、子频道
+        category: topDom.eq(0).text() + topDom.eq(2).text(),//文章分类、子栏目、子版面、子频道
         tags: [],//文章标签、关键词
         url: res.request.uri.href,//文章地址
         content: mainDom.eq(4).find('#copytext').html(),//正文内容
@@ -108,11 +108,11 @@ const detailParser = ($, res) => {
 
 module.exports = {
     taskName: origin.name,
-    taskInterval: .01 * 60000,
-    rateLimit: 1600,
+    taskInterval: 3 * 60000,
+    rateLimit: 2000,
     maxConnections: 1,
     queue: (date = new Date()) => [{
-        uri: `http://sxwb.cnhubei.com/html/sxwb/${moment('2017-03-18').format('YYYYMMDD')}/index.html`,//${moment(date).format('YYYYMMDD')}
+        uri: `http://sxwb.cnhubei.com/html/sxwb/${moment(date).format('YYYYMMDD')}/index.html`,//${moment(date).format('YYYYMMDD')}
         parser: parser_page,
     }],
 };
