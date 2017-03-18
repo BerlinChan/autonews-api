@@ -178,7 +178,7 @@ function* watchFetchMonitor() {
 
     //fetch today news list
     const newsList = yield call(request,
-      config.API_SERVER + `getSpecificList`,
+      config.API_SERVER + `getSpecificList?endDate=2&origin_key=txdcw`,
     );
     if (!newsList.err) {
       yield put({type: 'Monitor_PUSH_newsList', data: newsList.data.data});
