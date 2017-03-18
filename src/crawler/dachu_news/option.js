@@ -82,21 +82,46 @@ async function parser_shiyan($, res) {
 }
 // detail parser
 const detailParser = ($, res) => {
-    let mainDom = $(".main");
+    if (!!$('body#P-QQ').children('div#Main-P-QQ')) {
+        //为高清大图模版
+        return hdImgTemplateParse($, res);
+    } else {
+        let mainDom = $(".main");
+        return {
+            _id: '',//文章唯一 document id，与对应 list id 相同
+            title: mainDom.find('.hd h1').text(),//文章标题
+            subTitle: mainDom.eq(2).find('td').text().trim(),//文章副标题
+            category: mainDom.find('.hd .tit-bar .color-a-1').text(),//文章分类、子栏目、子版面、子频道
+            tags: [],//文章标签、关键词
+            url: res.request.uri.href,//文章地址
+            content: mainDom.find('.bd #Cnt-Main-Article-QQ').html(),//正文内容
+            authorName: mainDom.find('.hd .tit-bar .color-a-3').text(),//作者名
+            editorName: mainDom.find('.ft .QQeditor').text(),//编辑姓名
+            date: new Date(mainDom.find('.hd .tit-bar .article-time').text()),//文章发布日期时间戳
+            crawledDate: new Date(),//抓取日期时间戳
+            origin_name: origin.name,//来源、出处名
+            origin_key: origin.key,//指向 origin collection 中对应的 document id
+        };
+    }
+};
+// 高清大图 detail 模版, 如 http://hb.qq.com/a/20170308/043790.htm
+const hdImgTemplateParse = ($, res) => {
+    let mainDom = $(".main#Main-P-QQ");
     return {
         _id: '',//文章唯一 document id，与对应 list id 相同
-        title: mainDom.find('.hd h1').text(),//文章标题
-        subTitle: mainDom.eq(2).find('td').text().trim(),//文章副标题
-        category: mainDom.find('.hd .tit-bar .color-a-1').text(),//文章分类、子栏目、子版面、子频道
+        title: mainDom.children('.title h1').text(),//文章标题
+        subTitle: '',//文章副标题
+        category: '',//文章分类、子栏目、子版面、子频道
         tags: [],//文章标签、关键词
         url: res.request.uri.href,//文章地址
-        content: mainDom.find('.bd #Cnt-Main-Article-QQ').html(),//正文内容
-        authorName: mainDom.find('.hd .tit-bar .color-a-3').text(),//作者名
-        editorName: mainDom.find('.ft .QQeditor').text(),//编辑姓名
-        date: new Date(mainDom.find('.hd .tit-bar .article-time').text()),//文章发布日期时间戳
+        content: mainDom.find('#Main-A #picWrap img').html()
+        + mainDom.find('#InfoWrap #infoTxtWrap #infoTxt').text(),//正文内容
+        authorName: '',//作者名
+        editorName: '',//编辑姓名
+        date: new Date(mainDom.find('#InfoWrap #infoTxtWrap #time_source span').eq(0).text()),//文章发布日期时间戳
         crawledDate: new Date(),//抓取日期时间戳
-        origin_name: origin.name,//来源、出处名
-        origin_key: origin.key,//指向 origin collection 中对应的 document id
+        origin_name: mainDom.find('#InfoWrap #infoTxtWrap #time_source span').eq(1).text(),//来源、出处名
+        origin_key: '',//指向 origin collection 中对应的 document id
     };
 };
 
