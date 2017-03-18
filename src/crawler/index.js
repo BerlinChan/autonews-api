@@ -11,10 +11,10 @@ const ctjb_crawler = require("./ctjb");
 const ctkb_crawler = require("./ctkb");
 const ctsb_crawler = require("./ctsb");
 
-dachu_news_crawler();
 ctdsb_crawler();
 ctjb_crawler();
-// sxwb_crawler();
-// hbrb_crawler();
-// ctkb_crawler();
-// ctsb_crawler();
+ctkb_crawler();
+ctsb_crawler();
+dachu_news_crawler();
+hbrb_crawler();
+sxwb_crawler();
