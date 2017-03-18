@@ -14,6 +14,7 @@ async function parser_common($, res) {
         urlList = [],
         filteredQueueDetail = [];
 
+    //准备待排重的 url 列表
     newsListDom.each(function (index) {
         urlList.push($(this).children('a').attr('href'));
     });
@@ -40,7 +41,7 @@ async function parser_common($, res) {
     );
 
     return {
-        isAgain: false,// page 处理完再处理 list
+        isAgain: false,// list 处理结束
         queue: filteredQueueDetail,
     };
 }
@@ -75,7 +76,7 @@ async function parser_shiyan($, res) {
     });
 
     return {
-        isAgain: false,// page 处理完再处理 list
+        isAgain: false,// list 处理结束
         queue: filteredQueueDetail,
     };
 }
