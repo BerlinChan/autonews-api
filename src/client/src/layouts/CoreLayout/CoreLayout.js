@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Layout, Menu} from 'antd';
+import {Layout, Menu, Icon, Dropdown} from 'antd';
 import '../../styles/core.scss'
 import cls from'./CoreLayout.scss'
 import {Link} from 'react-router'
@@ -8,18 +8,34 @@ import {connect} from 'react-redux'
 const {Header, Content, Footer} = Layout;
 
 class CoreLayout extends Component {
+  constructor(props) {
+    super(props);
+    this.getMenu = this.getMenu.bind(this);
+  }
+
+  getMenu(mode = "vertical") {
+    return (
+      <Menu theme="dark" mode={mode} selectedKeys={[this.props.location.pathname]} className={cls.menu}>
+        <Menu.Item key="/"><Link to="/">当日监控</Link></Menu.Item>
+        <Menu.Item key="pastInquery"><Link to="/pastInquery">往期查询(开发中)</Link></Menu.Item>
+        <Menu.Item key="about"><Link to="/about">关于</Link></Menu.Item>
+      </Menu>
+    );
+  }
+
   render() {
 
     return (
       <Layout className={cls.body}>
         <Header className={cls.header}>
           <div className={cls.logo}><a href="http://autonews.berlinchan.com/">【新闻源监控】</a></div>
-          <Menu theme="dark" mode="horizontal" selectedKeys={[this.props.location.pathname]}
-                style={{lineHeight: '64px', fontSize: '14px'}}>
-            <Menu.Item key="/"><Link to="/">当日监控</Link></Menu.Item>
-            <Menu.Item key="pastInquery"><Link to="/pastInquery">往期查询(开发中)</Link></Menu.Item>
-            <Menu.Item key="about"><Link to="/about">关于</Link></Menu.Item>
-          </Menu>
+
+          <div className={cls.horizontalMenu}>
+            {this.getMenu('horizontal')}
+          </div>
+          <Dropdown overlay={this.getMenu('vertical')} placement="bottomRight">
+            <Icon type="bars" style={{color: '#fff'}} className={cls.verticalMenu}/>
+          </Dropdown>
         </Header>
 
         <Content className={cls.content}>
