@@ -14,14 +14,14 @@ export default (store) => ({
     ], (require) => {
       /*  Webpack - use require callback to define
           dependencies for bundling   */
-      const <%= camelEntityName %> = require('./<%= smartPath %>/<%= pascalEntityName %>Container').default
-      const reducer = require('./modules/<%= camelEntityName %>').default
-      const sagas = require('./modules/<%= camelEntityName %>').sagas
+      const <%= camelEntityName %> = require('./<%= smartPath %>/<%= pascalEntityName %>Container').default;
+      const reducer = require('./modules/<%= camelEntityName %>').default;
+      const sagas = require('./modules/<%= camelEntityName %>').sagas;
       /*  Add the reducer to the store on key '<%= realEntityName %>'  */
-      injectReducer(store, { key: '<%= camelEntityName %>', reducer })
-      injectSagas(store, { key: '<%= camelEntityName %>', sagas })
+      injectReducer(store, { key: '<%= camelEntityName %>', reducer });
+      injectSagas(store, { key: '<%= camelEntityName %>', sagas });
       /*  Return getComponent   */
-      cb(null, <%= camelEntityName %>)
+      cb(null, <%= camelEntityName %>);
 
     /* Webpack named bundle   */
     }, '<%= realEntityName %>')

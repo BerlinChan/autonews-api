@@ -1,6 +1,7 @@
 // We only need to import the modules necessary for initial render
 import CoreLayout from '../layouts/CoreLayout/CoreLayout'
 import MonitorRoute from './Monitor'
+import PastInqueryRoute from './PastInquery'
 import AboutRoute from './About'
 
 /*  Note: Instead of using JSX, we recommend using react-router
@@ -65,6 +66,7 @@ export const createRoutes = (store) => ({
     {
       component: CoreLayout,
       childRoutes: [
+        PastInqueryRoute(store),
         AboutRoute(store),
       ]
     }

@@ -50,7 +50,7 @@ class MonitorCard extends Component {
             }>
         {/* TODO: scroll height responsive*/}
         <Table columns={columns} dataSource={this.state.mouseEnter ? this.state.listSnap : this.props.list}
-               scroll={{y: 220}}
+               scroll={{y: '100%'}}
                className={(this.props.list.length == 0) ? cls.noData : ''}
                pagination={false} size="small" bordered={false}
         />

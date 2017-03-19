@@ -31,9 +31,9 @@ class About extends Component {
           <li><a href="http://ctjb.cnhubei.com/cache/paper_ctjb.aspx" target="_blank">楚天金报</a></li>
           <li><a href="http://ctdsbxy.cnhubei.com/cache/paper_ctdsbxy.aspx" target="_blank">楚天快报</a></li>
           <li><a href="http://epaper.cnhubei.com/cache/paper_ctsb.aspx" target="_blank">楚天时报</a></li>
-          <li><a href="http://cjrb.cjn.cn/" target="_blank">长江日报</a></li>
-          <li><a href="http://whwb.cjn.cn/" target="_blank">武汉晚报</a></li>
-          <li><a href="http://whcb.cjn.cn/" target="_blank">武汉晨报</a></li>
+          <li><a href="http://cjrb.cjn.cn/" target="_blank">长江日报(待添加)</a></li>
+          <li><a href="http://whwb.cjn.cn/" target="_blank">武汉晚报(待添加)</a></li>
+          <li><a href="http://whcb.cjn.cn/" target="_blank">武汉晨报(待添加)</a></li>
           <li>添加中……</li>
         </ul>
         <br/>
