@@ -80,9 +80,10 @@ async function parser_shiyan($, res) {
         queue: filteredQueueDetail,
     };
 }
+
 // detail parser
 const detailParser = ($, res) => {
-    if (!!$('body#P-QQ').children('div#Main-P-QQ').text()) {
+    if (!!$('body#P-QQ').find('div#Main-P-QQ').text().trim()) {
         //为高清大图模版
         return hdImgTemplateParse($, res);
     } else {
