@@ -33,24 +33,29 @@ module.exports = (option) => {
         } else {
             let $ = res.$;
 
-            item.parser($, res).then(tempQueueResult => {
-                if (tempQueueResult.isAgain) {
-                    // crawl again for page
-                    listCrawler.queue(generateQueueList([tempQueueResult.queue]));
-                } else if (tempQueueResult.queue.length) {
-                    // remove duplicate & generate detail queue
-                    tempQueueResult.queue.forEach(item => {
-                        item.id = monk.id();//生成 id, 待 detail 入库时与之 _id 对应
-                        queueDetail.push({
-                            uri: item.uri,
-                            callback: detailCrawlerCbWrapper(item.detailParser, item.id),
+            try {
+                item.parser($, res).then(tempQueueResult => {
+                    if (tempQueueResult.isAgain) {
+                        // crawl again for page
+                        listCrawler.queue(generateQueueList([tempQueueResult.queue]));
+                    } else if (tempQueueResult.queue.length) {
+                        // remove duplicate & generate detail queue
+                        tempQueueResult.queue.forEach(item => {
+                            item.id = monk.id();//生成 id, 待 detail 入库时与之 _id 对应
+                            queueDetail.push({
+                                uri: item.uri,
+                                callback: detailCrawlerCbWrapper(item.detailParser, item.id),
+                            });
                         });
-                    });
 
-                    //insert to db
-                    insertList(tempQueueResult.queue);
-                }
-            });
+                        //insert to db
+                        insertList(tempQueueResult.queue);
+                    }
+                });
+            }
+            catch (error) {
+                console.log('Get list error: ', error);
+            }
         }
         done();
     };

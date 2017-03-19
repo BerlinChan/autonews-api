@@ -82,7 +82,7 @@ async function parser_shiyan($, res) {
 }
 // detail parser
 const detailParser = ($, res) => {
-    if (!!$('body#P-QQ').children('div#Main-P-QQ')) {
+    if (!!$('body#P-QQ').children('div#Main-P-QQ').text()) {
         //为高清大图模版
         return hdImgTemplateParse($, res);
     } else {

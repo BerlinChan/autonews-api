@@ -43,7 +43,7 @@ const parser_list = async($, res) => {
     newsListDom.each(function (index) {
         let onclickAttr = $(this).attr('onclick');
         if (onclickAttr) {
-            let date = S(res.request.uri.href).between('html/ctdsb/', '/').s;
+            let date = S(res.request.uri.href).between('/ctdsb/', '/').s;
             let url = 'http://ctdsb.cnhubei.com/HTML/ctdsb/'
                 + date
                 + S(onclickAttr).between(date, 'html').s + 'html';
@@ -57,7 +57,7 @@ const parser_list = async($, res) => {
                 if (!isDuplicateResult[index]) {
                     let currentListDom = newsListDom.eq(item);
                     let onclickAttr = currentListDom.attr('onclick');
-                    let date = S(res.request.uri.href).between('html/ctdsb/', '/').s;
+                    let date = S(res.request.uri.href).between('/ctdsb/', '/').s;
                     let url = 'http://ctdsb.cnhubei.com/HTML/ctdsb/'
                         + date
                         + S(onclickAttr).between(date, 'html').s + 'html';
@@ -96,7 +96,7 @@ const detailParser = ($, res) => {
         category: topDom.eq(0).text() + topDom.eq(2).text(),//文章分类、子栏目、子版面、子频道
         tags: [],//文章标签、关键词
         url: res.request.uri.href,//文章地址
-        content: mainDom.eq(4).children('#copytext').html(),//正文内容
+        content: mainDom.eq(4).find('#copytext').html(),//正文内容
         authorName: '',//作者名
         editorName: '',//编辑姓名
         date: new Date(res.headers['last-modified']),//文章发布日期时间戳

@@ -23,5 +23,8 @@
     "request-promise": "^4.1.1",
     "seenreq": "^0.1.11",
     "string": "^3.3.3"
+  },
+  "devDependencies": {
+    "colors": "^1.1.2"
   }
 }

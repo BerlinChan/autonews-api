@@ -3,10 +3,12 @@
 用于新闻抓取并实时推送到Web客户端，目前主要收集湖北省内报纸与大型门户网站新闻。
 
 ## 运行
-- run mongoDB: `mongod --config /usr/local/etc/mongod.conf`
+- run mongoDB server: `mongod --config /usr/local/etc/mongod.conf`
 - init db: `node src/crawler/dbInit.js`
-- 运行爬虫：`node src/crawler/index.js`
 - 运行HTTP服务：`node server/index.js`
+- 运行爬虫：`node src/crawler/index.js`
+- 编译客户端：`npm run deploy:prod`
+- 打开客户端： [localhost:3090](http://localhost:3090)
 
 ## 目录说明
     root
