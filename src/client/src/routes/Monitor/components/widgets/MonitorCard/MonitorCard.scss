@@ -58,6 +58,12 @@
                   .ant-table-body {
                     height: 100%;
                   }
+                  .ant-table-placeholder {
+                    position: absolute;
+                    top: 50%;
+                    left: 0;
+                    width: 100%;
+                  }
                 }
               }
             }
