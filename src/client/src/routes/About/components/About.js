@@ -69,10 +69,32 @@ class About extends Component {
 
         <h3>Release Note</h3>
         <hr/>
+        <h5>Version: 0.1.0</h5>
+        <p>Date: 2017-03-20</p>
         <ul>
-          <li>Last Update: 2017-03-20</li>
-          <li>Current Version: 0.1.0</li>
+          <li>放弃进一步使用Firebase框架工具（该坑很大），自建mongoDb数据库用作存储</li>
+          <li>完善客户端监控界面，初始化时加载当日历史数据（数据未分页，量多时偶尔卡死）</li>
+          <li>修改爬虫配置，统一 news list, news detail 数据结构</li>
+          <li>存储爬取数据到mongoDb</li>
+          <li>爬取时的排重（仍有缺陷）</li>
+          <li>开发获取当日爬取数据API</li>
         </ul>
+        <br/>
+
+        <h5>Version: 0.0.3</h5>
+        <p>Date: 2017-03-13</p>
+        <ul>
+          <li>使用React开发客户端界面</li>
+          <li>探索使用Firebase database存储数据，并集成实时数据库到Redux</li>
+        </ul>
+        <br/>
+
+        <h5>Version: 0.0.2</h5>
+        <p>Date: 2017-03-11</p>
+        <ul>
+          <li>开发爬虫，使用websockt协议实时推送news detail</li>
+        </ul>
+        <br/>
       </div>
     )
   }
