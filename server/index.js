@@ -9,66 +9,58 @@ const IO = require('koa-socket');
 const cors = require('kcors');
 const route = require('koa-route');
 const rawBody = require('raw-body');
-const config = require('../utils/config');
+const config = require('../src/utils/config');
+const {getOrigin, getSpecificList}=require('./DAO');
 
 const app = new Koa();
 const io = new IO();
 
-app.use(require('koa-static')('../client/dist'));
-app.use(cors({
-    origin: 'www.berlinchan.com',
-}));
+//static serve
+app.use(require('koa-static')('../public'));
 
-//route
-app.use(route.post('/addNews', async function (ctx) {
-    ctx.status = 200;
-    ctx.req.body = await rawBody(ctx.req, {limit: '100kb', encoding: 'utf8'});
-    ctx.req.body = JSON.parse(ctx.req.body);
-    ctx.body = {msg: 'success'};
-    //broadcast socket event
-    const monitorConfig = {
-        '1': {key: '1', origin: '楚天都市报',},
-        '2': {key: '2', origin: '湖北日报',},
-        '3': {key: '3', origin: '三峡晚报',},
-        '4': {key: '4', origin: '楚天快报',},
-        '5': {key: '6', origin: '楚天金报',},
-        '6': {key: '7', origin: '腾讯大楚网',},
-        '7': {key: '5', origin: '楚天时报',},
-    };
-    let key = '';
-    for (let i in monitorConfig) {
-        if (monitorConfig[i].origin == ctx.req.body.origin) {
-            key = i;
-            break;
-        }
-    }
-    let tempData = {key: key, origin: monitorConfig[key], news: ctx.req.body};
-    app.io.broadcast('action',
-        {type: 'socket/Monitor_ON_Socket_News_Added', data: tempData});
-}));
+// Origin verification generator
+function verifyOrigin(ctx) {
+    let validOrigins = ['http://www.berlinchan.com', 'http://localhost:3091'];
+
+    const origin = ctx.headers.origin;
+    if (!(validOrigins.indexOf(origin) != -1)) return false;
+    return origin;
+}
+app.use(cors({origin: verifyOrigin}));
 
 io.attach(app);
 
+//route
+//查询来源列表
+app.use(route.get('/getOrigin', async function (ctx, next) {
+    await getOrigin().then(doc => {
+        ctx.status = 200;
+        ctx.body = {data: doc, msg: 'success'}
+    });
+}));
+//按(开始时间: date，结束时间: date，origin_key: string)查询list
+app.use(route.get('/getSpecificList', async function (ctx, next) {
+    await getSpecificList(ctx.query.beginDate, ctx.query.endDate, ctx.query.origin_key).then(doc => {
+        ctx.status = 200;
+        ctx.body = {data: doc, msg: 'success'}
+    });
+}));
+app.use(route.post('/listItem_added', async function (ctx) {
+    ctx.status = 200;
+    ctx.req.body = await rawBody(ctx.req, {limit: '10kb', encoding: 'utf8'});
+    ctx.req.body = JSON.parse(ctx.req.body);
+    ctx.body = {data: undefined, msg: 'success'};
+    //broadcast socket event
+    app.io.broadcast('action',
+        {type: 'socket_Monitor_ON_News_Added', data: ctx.req.body});
+}));
+
 // koa-socket events
-app.io.on('connection', (ctx, id) => {
+app.io.on('connection', async(ctx, id) => {
     console.log('connect client: ', id);
     //广播客户端连接数
     app.io.broadcast('action',
-        {type: 'socket/Global_SET_clientCount', data: app.io.connections.size});
-    //给 sender 发送 init monitor 配置
-    app.io.broadcast('action',
-        {
-            type: 'socket/Monitor_ON_initMonitorConfigs',
-            data: {
-                '1': {origin: '楚天都市报',},
-                '2': {origin: '湖北日报',},
-                '3': {origin: '三峡晚报',},
-                '4': {origin: '楚天快报',},
-                '5': {origin: '楚天金报',},
-                '6': {origin: '腾讯大楚网',},
-                '7': {origin: '楚天时报',},
-            }
-        });
+        {type: 'socket_Global_SET_clientCount', data: app.io.connections.size});
 });
 
 // redux actions handler
