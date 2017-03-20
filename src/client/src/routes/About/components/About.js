@@ -18,8 +18,8 @@ class About extends Component {
 
         <h3>What</h3>
         <hr/>
-        <p>准实时监控新闻源更新，通知编辑第一时间处理。本页面打开时，会实时接收抓取到的新闻，但之前抓取的不显示，查询往期内容功能还在开发</p>
-        <p>汇总零散资源，将信息集中呈现，供编辑筛选、处理</p>
+        <p>将分散的新闻汇总，提供一处界面总览当日新闻全局，供网络新闻编辑和新闻关注者查阅、筛选、处理</p>
+        <p>当日监控能准实时反馈新闻源更新，通知编辑第一时间处理。查询往期内容功能还在开发</p>
         <br/>
 
         <h4>数据来源如下：</h4>
@@ -70,8 +70,8 @@ class About extends Component {
         <h3>Release Note</h3>
         <hr/>
         <ul>
-          <li>Last Update: 2017-03-11</li>
-          <li>Current Version: 0.0.2</li>
+          <li>Last Update: 2017-03-20</li>
+          <li>Current Version: 0.1.0</li>
         </ul>
       </div>
     )
