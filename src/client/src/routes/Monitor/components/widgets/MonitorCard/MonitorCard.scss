@@ -54,15 +54,18 @@
                     position: absolute;
                     top: 0;
                     left: 0;
+                    overflow-y: hidden;
                   }
                   .ant-table-body {
                     height: 100%;
+                    overflow-y: auto;
                   }
                   .ant-table-placeholder {
                     position: absolute;
                     top: 50%;
                     left: 0;
                     width: 100%;
+                    border-bottom: 0 none;
                   }
                 }
               }
