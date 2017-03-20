@@ -38,8 +38,6 @@ class MonitorCard extends Component {
 
     return (
       <Card title={this.props.origin_name} className={cls.monitorCard}
-            onMouseEnter={() => this.setState({mouseEnter: true, listSnap: this.props.list})}
-            onMouseLeave={() => this.setState({mouseEnter: false, listSnap: []})}
             extra={
               <div>
                 <Badge count={this.props.list.length} showZero overflowCount={999}
@@ -49,11 +47,14 @@ class MonitorCard extends Component {
               </div>
             }>
         {/* TODO: scroll height responsive*/}
-        <Table columns={columns} dataSource={this.state.mouseEnter ? this.state.listSnap : this.props.list}
-               scroll={{y: '100%'}}
-               className={(this.props.list.length == 0) ? cls.noData : ''}
-               pagination={false} size="small" bordered={false}
-        />
+        <div onMouseEnter={() => this.setState({mouseEnter: true, listSnap: this.props.list})}
+             onMouseLeave={() => this.setState({mouseEnter: false, listSnap: []})}>
+          <Table columns={columns} dataSource={this.state.mouseEnter ? this.state.listSnap : this.props.list}
+                 scroll={{y: '100%'}}
+                 className={(this.props.list.length == 0) ? cls.noData : ''}
+                 pagination={false} size="small" bordered={false}
+          />
+        </div>
       </Card>
     );
   }
