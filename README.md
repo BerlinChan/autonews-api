@@ -27,3 +27,7 @@
 ### list - 新闻列表
 
 ### detail - 新闻详情
+
+## 常用命令
+- 备份mongodb：`mongodump -h 127.0.0.1:27017 -d auto-news -o C:\data\backup\`
+- 恢复mongodb：`mongorestore -h 127.0.0.1:27017 -d auto-news C:\data\backup\auto-news`
