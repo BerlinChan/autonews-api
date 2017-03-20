@@ -109,7 +109,7 @@ const detailParser = ($, res) => {
 module.exports = {
     taskName: origin.name,
     taskInterval: 2.5 * 60000,
-    rateLimit: 1700,
+    rateLimit: 1800,
     maxConnections: 1,
     queue: (date = new Date()) => [{
         uri: `http://ctjb.cnhubei.com/HTML/ctjb/${moment(date).format('YYYYMMDD')}/index.html`,//${moment(date).format('YYYYMMDD')}
