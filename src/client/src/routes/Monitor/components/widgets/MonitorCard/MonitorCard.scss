@@ -58,7 +58,7 @@
                   }
                   .ant-table-body {
                     height: 100%;
-                    overflow-y: auto;
+                    overflow-y: auto !important;
                   }
                   .ant-table-placeholder {
                     position: absolute;
