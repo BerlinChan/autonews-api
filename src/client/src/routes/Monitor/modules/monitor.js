@@ -60,93 +60,17 @@ const ACTION_HANDLERS = {
 const initialState = Immutable.Map({
   isFetching: false,
   newsList: Immutable.fromJS({
-    /*  'ctdsb': {
+    /*'ctdsb': {
      origin_name: '楚天都市报',
+     isFetched: false,
      list: [
-     {
-     title: 'title',
-     url: 'url',
-     origin_key: 'origin',//来源
-     date: new Date(),
-     },
-     ]
-     },
-     'hbrb': {
-     origin_name: '湖北日报',
-     list: [
-     {
-     title: 'title',
-     url: 'url',
-     origin_key: 'origin',//来源
-     date: new Date(),
-     },
-     ]
-     },
-     'sxwb': {
-     origin_name: '三峡晚报',
-     list: [
-     {
-     title: 'title',
-     url: 'url',
-     origin_key: 'origin',//来源
-     date: new Date(),
-     },
-     ]
-     },
-     'ctkb': {
-     origin_name: '楚天快报',
-     list: [
-     {
-     title: 'title',
-     url: 'url',
-     origin_key: 'origin',//来源
-     date: new Date(),
-     },
-     ]
-     },
-     'ctjb': {
-     origin_name: '楚天金报',
-     list: [
-     {
-     title: 'title',
-     url: 'url',
-     origin_key: 'origin',//来源
-     date: new Date(),
-     },
-     ]
-     },
-     'txdcw': {
-     origin_name: '腾讯大楚网',
-     list: [
-     {
-     title: 'title',
-     url: 'url',
-     origin_key: 'origin',//来源
-     date: new Date(),
-     },
-     ]
-     },
-     'ctsb': {
-     origin_name: '楚天时报',
-     list: [
-     {
-     title: 'title',
-     url: 'url',
-     origin_key: 'origin',//来源
-     date: new Date(),
-     },
+     {title: 'title', url: 'url', origin_key: 'origin', date: new Date()},
      ]
      },*/
   }),
   origin: Immutable.List(
     /* [
      {"_id": "58caa435de0f2f724e27148", "key": "ctdsb", "name": "楚天都市报"},
-     {"_id": "58caa435de0f2f724e2e7149", "key": "hbrb", "name": "湖北日报"},
-     {"_id": "58caa435de0f2f724e2e714a", "key": "sxwb", "name": "三峡晚报"},
-     {"_id": "58caa435de0f2f724e2e714b", "key": "ctkb", "name": "楚天快报"},
-     {"_id": "58caa435de0f2f724e2e714c", "key": "ctjb", "name": "楚天金报"},
-     {"_id": "58caa435de0f2f724e2e714d", "key": "txdcw", "name": "腾讯大楚网"},
-     {"_id": "58caa435de0f2f724e2e714e", "key": "ctsb", "name": "楚天时报"},
      ] */
   ),
 });
@@ -186,6 +110,12 @@ function* watchFetchMonitor() {
         yield listResults.map((item, index) => {
           if (!item.err) {
             return put({type: 'Monitor_PUSH_newsList', origin: newsOriginKeyArray[index], data: item.data.data});
+          } else {
+            let errBody = item.err.response.json();
+            return notification.error({
+              message: 'Error',
+              description: errBody.msg,
+            });
           }
         });
       }
