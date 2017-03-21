@@ -11,6 +11,7 @@ import moment from 'moment';
 import cls from './MonitorCard.scss'
 import  {Table, Column, Cell}  from 'fixed-data-table';
 import 'fixed-data-table/dist/fixed-data-table.min.css'
+import Dimensions from 'react-dimensions'
 
 const DateCell = ({rowIndex, data, col, ...props}) => (
   <Cell {...props}>
@@ -19,7 +20,6 @@ const DateCell = ({rowIndex, data, col, ...props}) => (
 );
 
 const TitleCell = ({rowIndex, data, col, ...props}) => {
-  console.log(rowIndex, data, col);
   const record = data[rowIndex];
   return (
     <Cell {...props}>
@@ -38,21 +38,6 @@ class MonitorCard extends Component {
   }
 
   render() {
-    const columns = [
-      {
-        title: '时间',
-        dataIndex: 'date',
-        width: '28%',
-        render: (text, record, index) => moment(record.date).format('MM-DD HH:mm:ss'),
-      },
-      {
-        title: '标题',
-        dataIndex: 'title',
-        width: '72%',
-        render: (text, record, index) =>
-          <a href={record.url} target="_blank">{record.title + (record.subTitle ? record.subTitle : '')}</a>
-      },
-    ];
 
     return (
       <Card title={this.props.origin_name} className={cls.monitorCard}
@@ -68,21 +53,20 @@ class MonitorCard extends Component {
         <div onMouseEnter={() => this.setState({mouseEnter: true, listSnap: this.props.list})}
              onMouseLeave={() => this.setState({mouseEnter: false, listSnap: []})}>
           <Table
-            rowHeight={50}
-            headerHeight={50}
+            headerHeight={24} rowHeight={30}
             rowsCount={this.props.list.length}
-            width={1000}
-            height={400}
+            width={this.props.containerWidth}
+            height={this.props.containerHeight - 48}
             {...this.props}>
             <Column
-              header={<Cell>日期</Cell>}
+              header={<Cell className={cls.tableHeader}>日期</Cell>}
               cell={<DateCell data={this.state.mouseEnter ? this.state.listSnap : this.props.list} col="date"/>}
-              width={100}
+              width={.28 * this.props.containerWidth}
             />
             <Column
-              header={<Cell>标题</Cell>}
+              header={<Cell className={cls.tableHeader}>标题</Cell>}
               cell={<TitleCell data={this.state.mouseEnter ? this.state.listSnap : this.props.list} col="title"/>}
-              width={100}
+              width={.72 * this.props.containerWidth}
             />
           </Table>
         </div>
@@ -109,4 +93,4 @@ MonitorCard.defaultProps = {
   ]
 };
 
-export default MonitorCard;
+export default Dimensions({elementResize: true})(MonitorCard);
