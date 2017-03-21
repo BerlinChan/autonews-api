@@ -1,6 +1,6 @@
 import React, {Component, PropTypes,} from 'react'
 import cls from './Monitor.scss'
-import {Row, Col, Spin} from 'antd';
+import {Row, Col} from 'antd';
 import MonitorCard from './widgets/MonitorCard/MonitorCard'
 import '../../../../node_modules/react-grid-layout/css/styles.css'
 import '../../../../node_modules/react-resizable/css/styles.css'
@@ -82,25 +82,22 @@ class Monitor extends Component {
 
     return (
       <div className={cls.monitor}>
-        <Spin size="large" spinning={monitor.toJS().isFetching}>
-
-          {/*monitor dashboard*/}
-          <ResponsiveReactGridLayout className={cls.rowMargin} layouts={layouts} draggableHandle=".move-cursor"
-                                     breakpoints={{lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0}}
-                                     cols={{lg: 12, md: 12, sm: 6, xs: 4, xxs: 2}}>
-            {monitor.toJS().origin.map((item, index) => {
-                if (originLength > index) {
-                  let currentKey = item.key;
-                  return (
-                    <div key={currentKey}>
-                      <MonitorCard {...monitor.toJS().newsList[currentKey]} origin_key={currentKey}/>
-                    </div>
-                  );
-                }
+        {/*monitor dashboard*/}
+        <ResponsiveReactGridLayout className={cls.rowMargin} layouts={layouts} draggableHandle=".move-cursor"
+                                   breakpoints={{lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0}}
+                                   cols={{lg: 12, md: 12, sm: 6, xs: 4, xxs: 2}}>
+          {monitor.toJS().origin.map((item, index) => {
+              if (originLength > index) {
+                let currentKey = item.key;
+                return (
+                  <div key={currentKey}>
+                    <MonitorCard {...monitor.toJS().newsList[currentKey]} origin_key={currentKey}/>
+                  </div>
+                );
               }
-            )}
-          </ResponsiveReactGridLayout>
-        </Spin>
+            }
+          )}
+        </ResponsiveReactGridLayout>
       </div>
     );
   }

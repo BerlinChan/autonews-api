@@ -40,19 +40,18 @@ const ACTION_HANDLERS = {
   [Monitor_SET_origin]: (state, action) => {
     let tempNewsList = {};
     action.data.length && action.data.forEach((item, index) => {
-      tempNewsList[item.key] = {origin_name: item.name, list: []};
+      tempNewsList[item.key] = {origin_name: item.name, list: [], isFetched: false};
     });
 
     return state.set('origin', Immutable.fromJS(action.data))
       .set('newsList', Immutable.fromJS(tempNewsList));
   },
   [Monitor_PUSH_newsList]: (state, action) => {
-    let tempList = state.get('newsList').toJS();
-    action.data.length && action.data.forEach((item, index) => {
-      tempList[item.origin_key].list.push({...item, key: item._id});
-    });
+    let tempList = state.getIn(['newsList', action.origin, 'list']).toJS();
+    tempList = tempList.concat(action.data);
 
-    return state.set('newsList', Immutable.fromJS(tempList));
+    return state.setIn(['newsList', action.origin, 'list'], Immutable.fromJS(tempList))
+      .setIn(['newsList', action.origin, 'isFetched'], true);
   },
 
 };
@@ -177,18 +176,19 @@ function* watchFetchMonitor() {
       });
     }
 
-    //fetch today news list
-    const newsList = yield call(request,
-      config.API_SERVER + `getSpecificList?beginDate=${new Date(moment().format('YYYY-MM-DD'))}&endDate=${new Date(moment().add({days: 1}).format('YYYY-MM-DD'))}&origin_key=ctdsb,ctjb,ctkb,ctsb,txdcw,hbrb,sxwb`,
-    );
-    if (!newsList.err) {
-      yield put({type: 'Monitor_PUSH_newsList', data: newsList.data.data});
-    } else {
-      let errBody = yield newsList.err.response.json();
-      notification.error({
-        message: 'Error',
-        description: errBody.msg,
-      });
+    //fetch today news list with origin
+    const newsOriginKeyArray = originList.data.data.map(item => item.key);
+    if (newsOriginKeyArray && newsOriginKeyArray.length) {
+      const listResults = yield newsOriginKeyArray.map(item => call(request,
+        config.API_SERVER + `getSpecificList?beginDate=${new Date(moment().format('YYYY-MM-DD'))}&endDate=${new Date(moment().add({days: 1}).format('YYYY-MM-DD'))}&origin_key=${item}`,
+      ));
+      if (listResults && listResults.length) {
+        yield listResults.map((item, index) => {
+          if (!item.err) {
+            return put({type: 'Monitor_PUSH_newsList', origin: newsOriginKeyArray[index], data: item.data.data});
+          }
+        });
+      }
     }
 
     yield put({type: 'Monitor_FETCH_SUCCESSED', data: originList.data.data});

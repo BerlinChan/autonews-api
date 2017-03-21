@@ -42,7 +42,7 @@ app.use(route.get('/getOrigin', async function (ctx, next) {
 app.use(route.get('/getSpecificList', async function (ctx, next) {
     await getSpecificList(ctx.query.beginDate, ctx.query.endDate, ctx.query.origin_key).then(doc => {
         ctx.status = 200;
-        ctx.body = {data: doc, msg: 'success'}
+        ctx.body = {data: doc, msg: 'success'};
     });
 }));
 app.use(route.post('/listItem_added', async function (ctx) {

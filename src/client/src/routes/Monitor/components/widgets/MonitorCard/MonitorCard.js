@@ -6,7 +6,7 @@ import React, {
   Component,
   PropTypes,
 } from 'react';
-import {Card, Switch, Badge} from 'antd';
+import {Card, Switch, Badge, Spin} from 'antd';
 import moment from 'moment';
 import cls from './MonitorCard.scss'
 import  {Table, Column, Cell}  from 'fixed-data-table';
@@ -49,9 +49,9 @@ class MonitorCard extends Component {
                 <i className={cls.iconMove + ' move-cursor'} title="Move"/>
               </div>
             }>
-        {/* TODO: scroll height responsive*/}
-        <div onMouseEnter={() => this.setState({mouseEnter: true, listSnap: this.props.list})}
-             onMouseLeave={() => this.setState({mouseEnter: false, listSnap: []})}>
+        <Spin spinning={!this.props.isFetched}
+              onMouseEnter={() => this.setState({mouseEnter: true, listSnap: this.props.list})}
+              onMouseLeave={() => this.setState({mouseEnter: false, listSnap: []})}>
           <Table
             headerHeight={24} rowHeight={30}
             rowsCount={this.props.list.length}
@@ -69,7 +69,7 @@ class MonitorCard extends Component {
               width={.72 * this.props.containerWidth}
             />
           </Table>
-        </div>
+        </Spin>
       </Card>
     );
   }

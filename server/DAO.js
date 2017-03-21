@@ -16,7 +16,7 @@ function getSpecificList(beginDate = new Date(moment().format('YYYY-MM-DD')), en
     let origin_key_array = origin_key.split(',');
     return db.get('list').find(
         {
-            "date": {$gte: new Date(Date.parse(beginDate) - 57600000), $lt: new Date(Date.parse(endDate) - 57600000)},
+            "date": {$gte: new Date(Date.parse(beginDate) - 57600000), $lt: new Date(Date.parse(endDate) - 57600000)}, //减去16小时？
             "origin_key": {$in: origin_key_array}
         },
         {sort: {'date': -1}, fields: '-origin_name'}
