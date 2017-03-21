@@ -6,7 +6,7 @@ import React, {
   Component,
   PropTypes,
 } from 'react';
-import {Card, Switch, Table, Badge} from 'antd';
+import {Card, Switch, Badge} from 'antd';
 import moment from 'moment';
 import cls from './MonitorCard.scss'
 import  {Table, Column, Cell}  from 'fixed-data-table';
@@ -14,13 +14,13 @@ import 'fixed-data-table/dist/fixed-data-table.min.css'
 
 const DateCell = ({rowIndex, data, col, ...props}) => (
   <Cell {...props}>
-    {moment(data.getObjectAt(rowIndex)[col].date).format('MM-DD HH:mm:ss')}
+    {moment(data[rowIndex].date).format('MM-DD HH:mm:ss')}
   </Cell>
 );
 
 const TitleCell = ({rowIndex, data, col, ...props}) => {
   console.log(rowIndex, data, col);
-  const record = data.getObjectAt(rowIndex)[col];
+  const record = data[rowIndex];
   return (
     <Cell {...props}>
       <a href={record.url} target="_blank">{record.title + (record.subTitle ? record.subTitle : '')}</a>
