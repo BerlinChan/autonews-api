@@ -9,6 +9,24 @@ import React, {
 import {Card, Switch, Table, Badge} from 'antd';
 import moment from 'moment';
 import cls from './MonitorCard.scss'
+import  {Table, Column, Cell}  from 'fixed-data-table';
+import 'fixed-data-table/dist/fixed-data-table.min.css'
+
+const DateCell = ({rowIndex, data, col, ...props}) => (
+  <Cell {...props}>
+    {moment(data.getObjectAt(rowIndex)[col].date).format('MM-DD HH:mm:ss')}
+  </Cell>
+);
+
+const TitleCell = ({rowIndex, data, col, ...props}) => {
+  console.log(rowIndex, data, col);
+  const record = data.getObjectAt(rowIndex)[col];
+  return (
+    <Cell {...props}>
+      <a href={record.url} target="_blank">{record.title + (record.subTitle ? record.subTitle : '')}</a>
+    </Cell>
+  )
+};
 
 class MonitorCard extends Component {
   constructor(props) {
@@ -49,11 +67,24 @@ class MonitorCard extends Component {
         {/* TODO: scroll height responsive*/}
         <div onMouseEnter={() => this.setState({mouseEnter: true, listSnap: this.props.list})}
              onMouseLeave={() => this.setState({mouseEnter: false, listSnap: []})}>
-          <Table columns={columns} dataSource={this.state.mouseEnter ? this.state.listSnap : this.props.list}
-                 scroll={{y: '100%'}}
-                 className={(this.props.list.length == 0) ? cls.noData : ''}
-                 pagination={false} size="small" bordered={false}
-          />
+          <Table
+            rowHeight={50}
+            headerHeight={50}
+            rowsCount={this.props.list.length}
+            width={1000}
+            height={400}
+            {...this.props}>
+            <Column
+              header={<Cell>日期</Cell>}
+              cell={<DateCell data={this.state.mouseEnter ? this.state.listSnap : this.props.list} col="date"/>}
+              width={100}
+            />
+            <Column
+              header={<Cell>标题</Cell>}
+              cell={<TitleCell data={this.state.mouseEnter ? this.state.listSnap : this.props.list} col="title"/>}
+              width={100}
+            />
+          </Table>
         </div>
       </Card>
     );
