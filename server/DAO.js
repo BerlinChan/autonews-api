@@ -19,8 +19,7 @@ function getSpecificList(beginDate = new Date(moment().format('YYYY-MM-DD')), en
             "date": {$gte: new Date(Date.parse(beginDate) - 57600000), $lt: new Date(Date.parse(endDate) - 57600000)},
             "origin_key": {$in: origin_key_array}
         },
-        {sort: {'date': -1}},
-        '-origin_name'// ['-origin_name','-title']
+        {sort: {'date': -1}, fields: '-origin_name'}
     );
 }
 
