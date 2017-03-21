@@ -13,10 +13,17 @@
     background-image: url(../../assets/icon_Move2.png);
     cursor: move;
   }
-  .noData {
+  .tableHeader {
     :global {
-      .ant-table-body {
-        min-height: 190px;
+      .public_fixedDataTableCell_cellContent {
+        padding: 2px 4px;
+      }
+    }
+  }
+  .tableCell {
+    :global {
+      .public_fixedDataTableCell_cellContent {
+        padding: 2px 4px;
       }
     }
   }
@@ -36,52 +43,6 @@
       height: 100%;
       > div {
         height: 100%;
-        .ant-table-wrapper {
-          height: 100%;
-          .ant-spin-nested-loading {
-            height: 100%;
-            .ant-spin-container {
-              height: 100%;
-              .ant-table-small {
-                height: 100%;
-                border: 0 none;
-                .ant-table-content {
-                  height: 100%;
-                  .ant-table-scroll {
-                    height: 100%;
-                    position: relative;
-                    padding-top: 39px;
-                    .ant-table-header {
-                      width: 100%;
-                      position: absolute;
-                      top: 0;
-                      left: 0;
-                      overflow-y: hidden;
-                    }
-                    .ant-table-body {
-                      height: 100%;
-                      overflow-y: auto !important;
-                    }
-                    .ant-table-placeholder {
-                      position: absolute;
-                      top: 50%;
-                      left: 0;
-                      width: 100%;
-                      border-bottom: 0 none;
-                    }
-                  }
-                }
-              }
-            }
-          }
-          border: 0 none;
-          .ant-table-header table {
-            border-bottom: 0 none;
-          }
-          .ant-table-body {
-            min-height: 220px;
-          }
-        }
       }
     }
   }
