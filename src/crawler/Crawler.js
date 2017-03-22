@@ -11,7 +11,9 @@ const request = require('request');// for send a request to HTTP server, push li
 
 module.exports = (option, callback) => {
     // constructor
-    let queueList = [],// 待爬取的[列表页]
+    let detailFirstRun = true,
+        listFirstRun = true,
+        queueList = [],// 待爬取的[列表页]
         queueDetail = [];// 排重后用于抓取的列表
 
     // 生成后并后的 list 抓取队列
@@ -113,16 +115,20 @@ module.exports = (option, callback) => {
 
 // Crawler event
     listCrawler.on('drain', function () {
-        console.log(`start crawl ${option.taskName}, queue: ${queueDetail.length}`);
-        if (queueDetail.length) {
+        if (!listFirstRun && queueDetail.length) {
+            listFirstRun = false;
+            console.log(`start crawl ${option.taskName}, queue: ${queueDetail.length}`);
             // have new details, crawl them
             detailCrawler.queue(queueDetail);
-        }else if(!detailCrawler.queueSize){
-            start();
         }
     });
     detailCrawler.on('drain', function () {
-        start();
+        if (detailFirstRun) {
+            detailFirstRun = false;
+        } else {
+            console.log('start from detail')
+            start();
+        }
     });
 
     return start;
