@@ -6,9 +6,10 @@
 const Crawler = require("crawler");
 const config = require('../utils/config');
 const monk = require('monk');
-const {db, insertList, insertDetail} = require('./dbConnection');
+const {db, insertListItem, insertDetailItem, isDuplicate} = require('./dbConnection');
+const request = require('request');// for send a request to HTTP server, push list item to client
 
-module.exports = (option) => {
+module.exports = (option, callback) => {
     // constructor
     let queueList = [],// 待爬取的[列表页]
         queueDetail = [];// 排重后用于抓取的列表
@@ -41,15 +42,12 @@ module.exports = (option) => {
                     } else if (tempQueueResult.queue.length) {
                         // remove duplicate & generate detail queue
                         tempQueueResult.queue.forEach(item => {
-                            item.id = monk.id();//生成 id, 待 detail 入库时与之 _id 对应
+                            item._id = monk.id();//list item, 待 detail item 同时入库时
                             queueDetail.push({
                                 uri: item.uri,
-                                callback: detailCrawlerCbWrapper(item.detailParser, item.id),
+                                callback: detailCrawlerCbWrapper(item.detailParser, item),
                             });
                         });
-
-                        //insert to db
-                        insertList(tempQueueResult.queue);
                     }
                 });
             }
@@ -59,15 +57,36 @@ module.exports = (option) => {
         }
         done();
     };
-    const detailCrawlerCbWrapper = (parser, id) => function (error, res, done) {
+    const detailCrawlerCbWrapper = (parser, listItem) => function (error, res, done) {
         if (error) {
             console.log(error);
         } else {
             let $ = res.$;
-            let newsDetail = parser($, res);
+            let newsDetailItem = parser($, res);
 
-            //insert to db
-            insertDetail(id, newsDetail);
+            //通知web客户端
+            request({
+                method: 'POST',
+                url: 'http://localhost:' + config.HTTP_PORT + '/listItem_added',
+                headers: {'content-type': 'application/json'},
+                body: JSON.stringify({
+                    title: listItem.title,
+                    url: listItem.uri,
+                    date: listItem.date,
+                    origin_key: listItem.origin_key,
+                    key: listItem._id,
+                }),
+            }, function callback(error, response, body) {
+                if (!error && response.statusCode == 200) {
+                    //insert to db
+                    insertListItem(listItem)
+                        .then(() => {
+                            return insertDetailItem(listItem._id, newsDetailItem)
+                        });
+                } else {
+                    console.log(error);
+                }
+            });
         }
         done();
     };
@@ -76,7 +95,6 @@ module.exports = (option) => {
         queueList = generateQueueList([
             typeof option.queue == 'function' ? option.queue() : option.queue,
         ]);
-
         queueDetail = [];
 
         setTimeout(() => listCrawler.queue(queueList), option.taskInterval || config.CRAWL_INTERVAL);
@@ -99,10 +117,7 @@ module.exports = (option) => {
         if (queueDetail.length) {
             // have new details, crawl them
             detailCrawler.queue(queueDetail);
-        } else if (detailCrawler.queueSize) {
-            console.log('Wait for detail crawler complete.')
-        } else {
-            // no new details, crawl list again
+        }else if(!detailCrawler.queueSize){
             start();
         }
     });

@@ -43,16 +43,6 @@ async function initDb() {
         .then(result => {
             console.log('Create collection:', 'list'.yellow, ' OK.');
         });
-    await db.get('requestedUrl').drop()
-        .then(result => {
-            return db.get('requestedUrl').index({'url': 1});
-        })
-        .then(reusult => {
-            db.create("requestedUrl", {capped: true, size: 209715200});//记录已请求url collection，大小：200MB
-        })
-        .then(result => {
-            console.log('Create collection:', 'requestedUrl'.yellow, ' OK.');
-        });
     await db.close();
 }
 

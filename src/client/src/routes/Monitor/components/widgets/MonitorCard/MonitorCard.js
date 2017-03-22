@@ -49,27 +49,28 @@ class MonitorCard extends Component {
                 <i className={cls.iconMove + ' move-cursor'} title="Move"/>
               </div>
             }>
-        <Spin spinning={!this.props.isFetched}
-              onMouseEnter={() => this.setState({mouseEnter: true, listSnap: this.props.list})}
-              onMouseLeave={() => this.setState({mouseEnter: false, listSnap: []})}>
-          {this.props.list.length ? <Table
-              headerHeight={24} rowHeight={30}
-              rowsCount={this.props.list.length}
-              width={this.props.containerWidth}
-              height={this.props.containerHeight - 48}
-              {...this.props}>
-              <Column
-                header={<Cell className={cls.tableHeader}>日期</Cell>}
-                cell={<DateCell data={this.state.mouseEnter ? this.state.listSnap : this.props.list} col="date"/>}
-                width={.28 * this.props.containerWidth}
-              />
-              <Column
-                header={<Cell className={cls.tableHeader}>标题</Cell>}
-                cell={<TitleCell data={this.state.mouseEnter ? this.state.listSnap : this.props.list} col="title"/>}
-                width={.72 * this.props.containerWidth}
-              />
-            </Table> :
-            <div className={cls.empty}>暂无数据</div>}
+        <Spin spinning={!this.props.isFetched}>
+          <div onMouseEnter={() => this.setState({mouseEnter: true, listSnap: this.props.list})}
+               onMouseLeave={() => this.setState({mouseEnter: false, listSnap: []})}>
+            {this.props.list.length ? <Table
+                headerHeight={24} rowHeight={30}
+                rowsCount={this.props.list.length}
+                width={this.props.containerWidth}
+                height={this.props.containerHeight - 48}
+                {...this.props}>
+                <Column
+                  header={<Cell className={cls.tableHeader}>日期</Cell>}
+                  cell={<DateCell data={this.state.mouseEnter ? this.state.listSnap : this.props.list} col="date"/>}
+                  width={.28 * this.props.containerWidth}
+                />
+                <Column
+                  header={<Cell className={cls.tableHeader}>标题</Cell>}
+                  cell={<TitleCell data={this.state.mouseEnter ? this.state.listSnap : this.props.list} col="title"/>}
+                  width={.72 * this.props.containerWidth}
+                />
+              </Table> :
+              <div className={cls.empty}>暂无数据</div>}
+          </div>
         </Spin>
       </Card>
     );
@@ -80,6 +81,7 @@ MonitorCard.propTypes = {
   origin_key: PropTypes.string,
   origin_name: PropTypes.string.isRequired,
   list: PropTypes.array,
+  isFetched: PropTypes.bool,
 };
 MonitorCard.defaultProps = {
   origin_key: '',
