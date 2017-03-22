@@ -1,22 +1,20 @@
-import React,{Component} from 'react'
+import React, {Component} from 'react'
 import {Card, Table, Button, Modal, Popconfirm} from 'antd';
 
-class  PastInquery extends Component
-{
+class PastInquery extends Component {
   constructor(props) {
-      super(props);
-}
-
-  componentDidMount()
-  {
-  this.props.fetchPastInquery();
+    super(props);
   }
 
-  render()
-  {
-    return(
+  componentDidMount() {
+    window.scrollTo(0, 0);
+    this.props.fetchPastInquery();
+  }
+
+  render() {
+    return (
       <div>
-   hello PastInquery
+        hello PastInquery
       </div>
     )
   }

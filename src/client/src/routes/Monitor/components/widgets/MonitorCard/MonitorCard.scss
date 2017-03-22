@@ -13,10 +13,9 @@
     background-image: url(../../assets/icon_Move2.png);
     cursor: move;
   }
-  :global {
-    .fixedDataTableLayout_main {
-      border: 0 none;
-    }
+  .empty {
+    margin-top: 25%;
+    text-align: center;
   }
   .tableHeader {
     :global {
@@ -46,8 +45,8 @@
     .ant-card-body {
       padding: 0;
       height: 100%;
-      > div {
-        height: 100%;
+      .fixedDataTableLayout_main {
+        border: 0 none;
       }
     }
   }
