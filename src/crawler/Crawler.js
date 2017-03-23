@@ -11,8 +11,7 @@ const request = require('request');// for send a request to HTTP server, push li
 
 module.exports = (option, callback) => {
     // constructor
-    let detailFirstRun = true,
-        listFirstRun = true,
+    let shouldListRun = true,
         queueList = [],// 待爬取的[列表页]
         queueDetail = [];// 排重后用于抓取的列表
 
@@ -43,6 +42,7 @@ module.exports = (option, callback) => {
                         listCrawler.queue(generateQueueList([tempQueueResult.queue]));
                     } else if (tempQueueResult.queue.length) {
                         // remove duplicate & generate detail queue
+                        shouldListRun = false;
                         tempQueueResult.queue.forEach(item => {
                             item._id = monk.id();//list item, 待 detail item 同时入库时
                             queueDetail.push({
@@ -93,13 +93,12 @@ module.exports = (option, callback) => {
         done();
     };
     const start = () => {
-        console.log(` --- wait ${option.taskName} start in ${((option.taskInterval || config.CRAWL_INTERVAL) / 60000).toFixed(1)}min ---`);
+        console.log(` --- crawler ${option.taskName} start ---`);
         queueList = generateQueueList([
             typeof option.queue == 'function' ? option.queue() : option.queue,
         ]);
         queueDetail = [];
-
-        setTimeout(() => listCrawler.queue(queueList), option.taskInterval || config.CRAWL_INTERVAL);
+        listCrawler.queue(queueList);
     };
 
 // news list crawler
@@ -115,20 +114,17 @@ module.exports = (option, callback) => {
 
 // Crawler event
     listCrawler.on('drain', function () {
-        if (!listFirstRun && queueDetail.length) {
-            listFirstRun = false;
+        if (!shouldListRun && queueDetail.length) {
             console.log(`start crawl ${option.taskName}, queue: ${queueDetail.length}`);
             // have new details, crawl them
             detailCrawler.queue(queueDetail);
+        } else {
+            listCrawler.queue(queueList);
         }
     });
     detailCrawler.on('drain', function () {
-        if (detailFirstRun) {
-            detailFirstRun = false;
-        } else {
-            console.log('start from detail')
-            start();
-        }
+        console.log(` --- wait ${option.taskName} start in ${((option.taskInterval || config.CRAWL_INTERVAL) / 60000).toFixed(1)}min ---`);
+        setTimeout(() => start(), option.taskInterval || config.CRAWL_INTERVAL);
     });
 
     return start;

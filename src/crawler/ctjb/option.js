@@ -54,7 +54,7 @@ const parser_list = async($, res) => {
 
     await isDuplicate(urlList).then(isDuplicateResult => {
             filteredDomIndex.forEach((item, index) => {
-                if (isDuplicateResult[index]) {
+                if (!isDuplicateResult[index]) {
                     let currentListDom = newsListDom.eq(item);
                     let onclickAttr = currentListDom.attr('onclick');
                     let date = S(res.request.uri.href).between('/ctjb/', '/').s;
