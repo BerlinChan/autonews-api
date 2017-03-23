@@ -52,13 +52,8 @@
             display: block;
             overflow: hidden;
             width: 100%;
-            a {
-              display: block;
-              white-space: nowrap;
-              overflow: hidden;
-              text-overflow: ellipsis;
-              width: 100%;
-            }
+            white-space: nowrap;
+            text-overflow: ellipsis;
           }
         }
       }
