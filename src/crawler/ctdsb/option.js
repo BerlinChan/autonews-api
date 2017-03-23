@@ -66,7 +66,7 @@ const parser_list = async($, res) => {
                         _id: '',//list document 唯一id
                         title: currentListDom.children('a').text(),//文章标题
                         uri: url,//文章链接
-                        date: new Date(res.headers['last-modified']),//文章发布日期时间戳
+                        date: new Date(moment(date,'YYYYMMDD')),//文章发布日期时间戳
                         origin_name: origin.name,//文章来源、出处
                         origin_key: origin.key,//指向 origin collection 中对应的 document id
                         parser: undefined,//下一步爬取的解析器，isAgain为true时，detailParser无作用。如本解析对象为【版面】，下一步解析对象为【文章列表】，再次为【文章详情】
@@ -89,6 +89,7 @@ const detailParser = ($, res) => {
     let mainDom = $("#Table17 tr");
     let topDom = $('#Table16 tr').eq(0).children('td');
     let titleIndex0 = mainDom.eq(0).find('td').text().trim();
+    let date = S(res.request.uri.href).between('/ctdsb/', '/').s;
     return {
         _id: '',//文章唯一 document id，与对应 list id 相同
         title: titleIndex0 ? titleIndex0 : mainDom.eq(1).text().trim(),//文章标题
@@ -99,7 +100,7 @@ const detailParser = ($, res) => {
         content: mainDom.eq(4).find('#copytext').html(),//正文内容
         authorName: '',//作者名
         editorName: '',//编辑姓名
-        date: new Date(res.headers['last-modified']),//文章发布日期时间戳
+        date: new Date(moment(date,'YYYYMMDD')),//文章发布日期时间戳
         crawledDate: new Date(),//抓取日期时间戳
         origin_name: origin.name,//来源、出处名
         origin_key: origin.key,//指向 origin collection 中对应的 document id
