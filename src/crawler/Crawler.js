@@ -97,6 +97,7 @@ module.exports = (option, callback) => {
         queueList = generateQueueList([
             typeof option.queue == 'function' ? option.queue() : option.queue,
         ]);
+        shouldListRun = true;
         queueDetail = [];
         listCrawler.queue(queueList);
     };
