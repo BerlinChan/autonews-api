@@ -47,6 +47,20 @@
       height: 100%;
       .fixedDataTableLayout_main {
         border: 0 none;
+        .fixedDataTableCellLayout_main {
+          div {
+            display: block;
+            overflow: hidden;
+            width: 100%;
+            a {
+              display: block;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              width: 100%;
+            }
+          }
+        }
       }
     }
   }
