@@ -118,8 +118,6 @@ module.exports = (option, callback) => {
             console.log(`start crawl ${option.taskName}, queue: ${queueDetail.length}`);
             // have new details, crawl them
             detailCrawler.queue(queueDetail);
-        } else {
-            listCrawler.queue(queueList);
         }
     });
     detailCrawler.on('drain', function () {
