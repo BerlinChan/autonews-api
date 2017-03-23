@@ -11,9 +11,11 @@ const route = require('koa-route');
 const rawBody = require('raw-body');
 const config = require('../src/utils/config');
 const {getOrigin, getSpecificList}=require('./DAO');
+const gzip = require('koa-gzip');
 
 const app = new Koa();
 const io = new IO();
+app.use(gzip());
 
 //static serve
 app.use(require('koa-static')('../public'));
@@ -54,6 +56,7 @@ app.use(route.post('/listItem_added', async function (ctx) {
     app.io.broadcast('action',
         {type: 'socket_Monitor_ON_News_Added', data: ctx.req.body});
 }));
+
 
 // koa-socket events
 app.io.on('connection', async(ctx, id) => {
