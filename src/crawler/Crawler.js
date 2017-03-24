@@ -91,10 +91,10 @@ function CrawlerCreator(option) {
                         origin_key: listItem.origin_key,
                         key: listItem._id,
                     }),
-                }, function callback(error, response, body) {
-                    if (!error && response.statusCode == 200) {
+                }, async function callback(error, response, body) {
+                    if (!error && response.statusCode === 200) {
                         //insert to db
-                        insertListItem(listItem)
+                        await insertListItem(listItem)
                             .then(() => {
                                 return insertDetailItem(listItem._id, newsDetailItem)
                             });
@@ -108,7 +108,7 @@ function CrawlerCreator(option) {
     }
 
     function start() {
-        console.log(` --- crawler ${option.taskName} start ---`);
+        console.log(`--- crawler ${option.taskName} start ---`);
         queueList = _generateQueueList([
             typeof option.queue == 'function' ? option.queue() : option.queue,
         ]);
@@ -118,15 +118,17 @@ function CrawlerCreator(option) {
 
     // Crawler event
     listCrawler.on('drain', function () {
-        console.log(22, option.taskName, listCrawler.queueSize, queueDetail.length)
         if (queueDetail.length) {
             console.log(`start crawl ${option.taskName}, queue: ${queueDetail.length}`);
             // have new details, crawl them
             detailCrawler.queue(queueDetail);
+        } else {
+            console.log(`--- ${option.taskName} has no new item, wait ${((option.taskInterval || config.CRAWL_INTERVAL) / 60000).toFixed(1)}min and try again ---`);
+            setTimeout(() => start(), option.taskInterval || config.CRAWL_INTERVAL);
         }
     });
     detailCrawler.on('drain', function () {
-        console.log(` --- wait ${option.taskName} start in ${((option.taskInterval || config.CRAWL_INTERVAL) / 60000).toFixed(1)}min ---`);
+        console.log(`--- ${option.taskName} complete, wait ${((option.taskInterval || config.CRAWL_INTERVAL) / 60000).toFixed(1)}min and start again ---`);
         setTimeout(() => start(), option.taskInterval || config.CRAWL_INTERVAL);
     });
 

@@ -19,64 +19,32 @@ class Monitor extends Component {
   }
 
   render() {
-    const {monitor}=this.props;
-    const originLength = monitor.toJS().origin.length;//monitor 个数
-    const columnNum = 3;//新闻监视器 card 列数
-    const rowNum = Math.floor(originLength / 3 + 1);//新闻监视器 card 行数
+    const {monitor} = this.props;
+    const gridCols = {lg: 12, md: 12, sm: 6, xs: 4, xxs: 2};//grid cols, 栅格列数
+    const monitorWidth = {lg: 3, md: 4, sm: 3, xs: 4, xxs: 2};//每监视器栅格宽
+    const monitorHeight = {lg: 2, md: 2, sm: 2, xs: 2, xxs: 2};//每监视器栅格高
     // layout is an array of objects, see the demo for more complete usage
     let layouts = {lg: [], md: [], sm: [], xs: [], xxs: []};
-    for (let row = 0; row < rowNum; row++) {
-      for (let col = 0; col < columnNum; col++) {
-        let width = {lg: 4, md: 4, sm: 3, xs: 4, xxs: 2};
-        let height = 2;
-        let configIndex = row * columnNum + col;
-        if (originLength > configIndex) {
-          let origin_key = monitor.toJS().origin[configIndex].key;
-          layouts.lg.push({
-            i: origin_key,
-            x: col * width.lg,
-            y: row * height,
-            w: width.lg,
-            h: height,
-            minW: 3,
-            minH: 2,
-          });
-          layouts.md.push({
-            i: origin_key,
-            x: col * width.md,
-            y: row * height,
-            w: width.md,
-            h: height,
-            minW: 3,
-            minH: 2,
-          });
-          layouts.sm.push({
-            i: origin_key,
-            x: col * width.sm,
-            y: row * height,
-            w: width.sm,
-            h: height,
-            minW: 3,
-            minH: 2,
-          });
-          layouts.xs.push({
-            i: origin_key,
-            x: col * width.xs,
-            y: row * height,
-            w: width.xs,
-            h: height,
-            minW: 3,
-            minH: 2,
-          });
-          layouts.xxs.push({
-            i: origin_key,
-            x: col * width.xxs,
-            y: row * height,
-            w: width.xxs,
-            h: height,
-            minW: 2,
-            minH: 2,
-          });
+
+    for (let i in layouts) {
+      let currentX = 0;
+      let currentY = 0;
+      for (let j = 0; j < monitor.toJS().origin.length; j++) {
+        let colsPerRow = gridCols[i] / monitorWidth[i];
+        layouts[i].push({
+          i: monitor.toJS().origin[j].key,
+          x: currentX * monitorWidth[i],
+          y: currentY * monitorHeight[i],
+          w: monitorWidth[i],
+          h: monitorHeight[i],
+          minW: 3,
+          minH: 2,
+        });
+        if (currentX >= colsPerRow - 1) {
+          currentX = 0;
+          currentY += 1;
+        } else {
+          currentX += 1;
         }
       }
     }
@@ -85,17 +53,15 @@ class Monitor extends Component {
       <div className={cls.monitor}>
         {/*monitor dashboard*/}
         <ResponsiveReactGridLayout className={cls.rowMargin} layouts={layouts} draggableHandle=".move-cursor"
-                                   breakpoints={{lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0}}
-                                   cols={{lg: 12, md: 12, sm: 6, xs: 4, xxs: 2}}>
+                                   breakpoints={{lg: 1440, md: 996, sm: 768, xs: 480, xxs: 0}}
+                                   cols={gridCols}>
           {monitor.toJS().origin.map((item, index) => {
-              if (originLength > index) {
-                let currentKey = item.key;
-                return (
-                  <div key={currentKey} className={cls.layoutContent}>
-                    <MonitorCard {...monitor.toJS().newsList[currentKey]} origin_key={currentKey}/>
-                  </div>
-                );
-              }
+              let currentKey = item.key;
+              return (
+                <div key={currentKey} className={cls.layoutContent}>
+                  <MonitorCard {...monitor.toJS().newsList[currentKey]} origin_key={currentKey}/>
+                </div>
+              );
             }
           )}
         </ResponsiveReactGridLayout>

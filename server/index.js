@@ -10,12 +10,13 @@ const cors = require('kcors');
 const route = require('koa-route');
 const rawBody = require('raw-body');
 const config = require('../src/utils/config');
-const {getOrigin, getSpecificList}=require('./DAO');
+const {getOrigin, getSpecificList} = require('./DAO');
 const gzip = require('koa-gzip');
+const convert = require('koa-convert');// convert generator to async, support koa2
 
 const app = new Koa();
 const io = new IO();
-app.use(gzip());
+app.use(convert(gzip()));
 
 //static serve
 app.use(require('koa-static')('../public'));
@@ -28,7 +29,7 @@ function verifyOrigin(ctx) {
     if (!(validOrigins.indexOf(origin) != -1)) return false;
     return origin;
 }
-app.use(cors({origin: verifyOrigin}));
+app.use(convert(cors({origin: verifyOrigin})));
 
 io.attach(app);
 
@@ -59,7 +60,7 @@ app.use(route.post('/listItem_added', async function (ctx) {
 
 
 // koa-socket events
-app.io.on('connection', async(ctx, id) => {
+app.io.on('connection', async (ctx, id) => {
     console.log('connect client: ', id);
     //广播客户端连接数
     app.io.broadcast('action',
