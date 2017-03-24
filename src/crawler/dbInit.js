@@ -22,6 +22,8 @@ async function initDb() {
                     {"_id": monk.id("58cb5e1237e1e826b453062c"), "key": "txdcw", "name": "腾讯大楚网"},
                     {"_id": monk.id("58cb5e1237e1e826b453062d"), "key": "ctsb", "name": "楚天时报"},
                     {"_id": monk.id("58d53490fc20345298a738bc"), "key": "whwb", "name": "武汉晚报"},
+                    {"_id": monk.id("58d55029fc20345298a738bd"), "key": "cjrb", "name": "长江日报"},
+                    {"_id": monk.id("58d55038fc20345298a738be"), "key": "whcb", "name": "武汉晨报"},
                 ]
             );
         })

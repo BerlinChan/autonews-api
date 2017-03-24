@@ -6,7 +6,7 @@
 const Crawler = require("crawler");
 const config = require('../utils/config');
 const monk = require('monk');
-const {db, insertListItem, insertDetailItem, isDuplicate} = require('./dbConnection');
+const {insertListItem, insertDetailItem, isDuplicate} = require('./dbConnection');
 const request = require('request');// for send a request to HTTP server, push list item to client
 
 function CrawlerCreator(option) {

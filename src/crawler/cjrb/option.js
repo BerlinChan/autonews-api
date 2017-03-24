@@ -1,12 +1,12 @@
 /**
- * Created by Berlin on 2017/3/24.
- * 武汉晚报
- * http://whwb.cjn.cn/
+ * Created by Berlin on 2017/3/25.
+ * 长江日报
+ * http://cjrb.cjn.cn/
  */
 
 const S = require('string');
 const moment = require('moment');
-const origin = {key: 'whwb', name: '武汉晚报'};
+const origin = {key: 'cjrb', name: '长江日报'};
 
 // page 解析处理器
 function parser_page($, res) {
@@ -96,7 +96,7 @@ module.exports = {
     rateLimit: 1900,
     maxConnections: 1,
     queue: (date = new Date()) => [{
-        uri: `http://whwb.cjn.cn/html/${moment(date).format('YYYY-MM')}/${moment(date).format('DD')}/node_22.htm`,
+        uri: `http://cjrb.cjn.cn/html/${moment(date).format('YYYY-MM')}/${moment(date).format('DD')}/node_2.htm`,
         parser: parser_page,
     }],
 };
