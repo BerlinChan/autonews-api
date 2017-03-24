@@ -18,6 +18,10 @@ class Monitor extends Component {
     this.props.fetchMonitor();
   }
 
+  componentWillUnmount() {
+    this.props.onDestroy();
+  }
+
   render() {
     const {monitor} = this.props;
     const gridCols = {lg: 12, md: 12, sm: 6, xs: 4, xxs: 2};//grid cols, 栅格列数
@@ -25,7 +29,6 @@ class Monitor extends Component {
     const monitorHeight = {lg: 2, md: 2, sm: 2, xs: 2, xxs: 2};//每监视器栅格高
     // layout is an array of objects, see the demo for more complete usage
     let layouts = {lg: [], md: [], sm: [], xs: [], xxs: []};
-
     for (let i in layouts) {
       let currentX = 0;
       let currentY = 0;

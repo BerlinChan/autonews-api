@@ -12,6 +12,7 @@ const Monitor_FETCH_SUCCESSED = 'Monitor_FETCH_SUCCESSED';
 const Monitor_FETCH_FAILURE = 'Monitor_FETCH_FAILURE';
 const Monitor_SET_origin = 'Monitor_SET_origin';
 const Monitor_PUSH_newsList = 'Monitor_PUSH_newsList';
+const Monitor_ON_destroy = 'Monitor_ON_destroy';
 
 const socket_Monitor_ON_News_Added = 'socket_Monitor_ON_News_Added';
 
@@ -21,9 +22,15 @@ function fetchMonitor() {
     type: Monitor_FETCH_REQUESTED,
   }
 }
+function onDestroy() {
+  return {
+    type: Monitor_ON_destroy,
+  }
+}
 
 export const actions = {
   fetchMonitor,
+  onDestroy,
 };
 
 // Action Handlers
@@ -53,7 +60,7 @@ const ACTION_HANDLERS = {
     return state.setIn(['newsList', action.origin, 'list'], Immutable.fromJS(tempList))
       .setIn(['newsList', action.origin, 'isFetched'], true);
   },
-
+  [Monitor_ON_destroy]: () => initialState,
 };
 
 // Reducer
@@ -84,7 +91,7 @@ export default function monitorReducer(state = initialState, action) {
 // Sagas
 function* watchFetchMonitor() {
   while (true) {
-    const {}=yield take(Monitor_FETCH_REQUESTED);
+    const {} = yield take(Monitor_FETCH_REQUESTED);
 
     //fetch origin list
     const originList = yield call(request,

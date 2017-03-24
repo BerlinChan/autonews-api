@@ -6,10 +6,10 @@ import React, {
   Component,
   PropTypes,
 } from 'react';
-import {Card, Switch, Badge, Spin} from 'antd';
+import {Card, Badge, Spin} from 'antd';
 import moment from 'moment';
 import cls from './MonitorCard.scss'
-import  {Table, Column, Cell}  from 'fixed-data-table';
+import  {Table, Column, Cell}  from 'fixed-data-table-2';
 import 'fixed-data-table/dist/fixed-data-table.min.css'
 import Dimensions from 'react-dimensions'
 
@@ -40,24 +40,27 @@ class MonitorCard extends Component {
   render() {
 
     return (
-      <Card title={this.props.origin_name} className={cls.monitorCard}
-            extra={
-              <div>
-                <Badge count={this.props.list.length} showZero overflowCount={999}
-                       style={{backgroundColor: '#fff', color: '#999'}}/>
-                <Switch checked={!this.state.mouseEnter} disabled checkedChildren={'开'} unCheckedChildren={'关'}/>
-                <i className={cls.iconMove + ' move-cursor'} title="Move"/>
-              </div>
+      <Card className={cls.monitorCard}
+            title={<div>
+              {this.props.origin_name}
+              <span className={cls.power} style={{backgroundColor: this.state.mouseEnter ? '#e33' : '#3e3'}}/>
+            </div>}
+            extra={<div>
+              <Badge count={this.props.list.length} showZero overflowCount={999}
+                     style={{backgroundColor: '#fff', color: '#999'}}/>
+              <i className={cls.iconMove + ' move-cursor'} title="Move"/>
+            </div>
             }>
         <Spin spinning={!this.props.isFetched}>
           <div onMouseEnter={() => this.setState({mouseEnter: true, listSnap: this.props.list})}
                onMouseLeave={() => this.setState({mouseEnter: false, listSnap: []})}>
-            {this.props.list.length ? <Table
-                headerHeight={24} rowHeight={30}
-                rowsCount={this.props.list.length}
-                width={this.props.containerWidth}
-                height={this.props.containerHeight - 48}
-                {...this.props}>
+            {this.props.list.length ?
+              <Table touchScrollEnabled={true}
+                     headerHeight={24} rowHeight={30}
+                     rowsCount={this.props.list.length}
+                     width={this.props.containerWidth}
+                     height={this.props.containerHeight - 48}
+                     {...this.props}>
                 <Column
                   header={<Cell className={cls.tableHeader}>日期</Cell>}
                   cell={<DateCell data={this.state.mouseEnter ? this.state.listSnap : this.props.list} col="date"/>}
