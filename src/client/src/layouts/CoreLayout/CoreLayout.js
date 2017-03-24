@@ -17,7 +17,7 @@ class CoreLayout extends Component {
     return (
       <Menu theme="dark" mode={mode} selectedKeys={[this.props.location.pathname]} className={cls.menu}>
         <Menu.Item key="/"><Link to="/">当日监控</Link></Menu.Item>
-        <Menu.Item key="pastInquery"><Link to="/pastInquery">往期查询(开发中)</Link></Menu.Item>
+        {/*<Menu.Item key="pastInquery"><Link to="/pastInquery">往期查询(开发中)</Link></Menu.Item>*/}
         <Menu.Item key="about"><Link to="/about">关于</Link></Menu.Item>
       </Menu>
     );

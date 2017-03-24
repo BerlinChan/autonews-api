@@ -46,25 +46,24 @@ function CrawlerCreator(option) {
             } else {
                 let $ = res.$;
 
-                try {
-                    await item.parser($, res).then((tempQueueResult) => {
-                        if (tempQueueResult.isAgain) {
-                            // crawl again for page
-                            listCrawler.queue(_generateQueueList([tempQueueResult.queue]));
-                        } else if (tempQueueResult.queue.length) {
-                            // remove duplicate & generate detail queue
-                            tempQueueResult.queue.forEach(item => {
-                                item._id = monk.id();//list item, 待 detail item 同时入库时
-                                queueDetail.push({
-                                    uri: item.uri,
-                                    callback: _detailCrawlerCbWrapper(item.detailParser, item),
-                                });
+                let tempQueueResult = item.parser($, res);
+                if (tempQueueResult.isAgain) {
+                    // crawl again for page
+                    listCrawler.queue(_generateQueueList([tempQueueResult.queue]));
+                } else if (tempQueueResult.queue.length) {
+                    // remove duplicate & generate detail queue
+                    await isDuplicate(tempQueueResult.queue.map(item => item.uri))
+                        .then(isDuplicateResult => {
+                            isDuplicateResult.forEach((isDuplicate, index) => {
+                                if (!isDuplicate) {
+                                    tempQueueResult.queue[index]._id = monk.id();//list item, 待 detail item 同时入库时
+                                    queueDetail.push({
+                                        uri: tempQueueResult.queue[index].uri,
+                                        callback: _detailCrawlerCbWrapper(tempQueueResult.queue[index].detailParser, tempQueueResult.queue[index]),
+                                    });
+                                }
                             });
-                        }
-                    });
-                }
-                catch (error) {
-                    console.log('Get list error: ', error);
+                        });
                 }
             }
             done();
@@ -110,7 +109,7 @@ function CrawlerCreator(option) {
     function start() {
         console.log(`--- crawler ${option.taskName} start ---`);
         queueList = _generateQueueList([
-            typeof option.queue == 'function' ? option.queue() : option.queue,
+            typeof option.queue === 'function' ? option.queue() : option.queue,
         ]);
         queueDetail = [];
         listCrawler.queue(queueList);

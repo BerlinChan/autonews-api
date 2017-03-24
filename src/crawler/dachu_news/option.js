@@ -4,41 +4,29 @@
  * 湖北要闻/宜昌/襄阳/黄石/十堰/孝感/荆门/荆州/黄冈/恩施/随州/潜江/仙桃
  */
 
-const {isDuplicate} = require('../dbConnection');
 const moment = require('moment');
 const origin = {key: 'txdcw', name: '腾讯大楚网'};
 
 // 列表解析处理器, 适用: 要闻/宜昌/襄阳/黄石/孝感/荆门/荆州/黄冈/恩施/随州/潜江/仙桃
-async function parser_common($, res) {
+function parser_common($, res) {
     let newsListDom = $(".mod.newslist li"),
-        urlList = [],
         filteredQueueDetail = [];
 
     //准备待排重的 url 列表
     newsListDom.each(function (index) {
-        urlList.push($(this).children('a').attr('href'));
+        let tempListItem = {
+            _id: '',//list document 唯一id
+            title: $(this).children('a').text(),//文章标题
+            uri: $(this).children('a').attr('href'),//文章链接
+            date: new Date(moment($(this).children('span').text(), 'MM月DD HH:mm')),//文章发布日期时间戳
+            origin_name: origin.name,//文章来源、出处
+            origin_key: origin.key,//指向 origin collection 中对应的 document id
+            parser: undefined,//下一步爬取的解析器，isAgain为true时，detailParser无作用。如本解析对象为【版面】，下一步解析对象为【文章列表】，再次为【文章详情】
+            detailParser: detailParser,//对应[详情页]解析函数
+        };
+
+        filteredQueueDetail.push(tempListItem);
     });
-
-    await isDuplicate(urlList).then(isDuplicateResult => {
-            isDuplicateResult.forEach((isDuplicate, index) => {
-                if (!isDuplicate) {
-                    let currentListDom = newsListDom.eq(index);
-                    let tempListItem = {
-                        _id: '',//list document 唯一id
-                        title: currentListDom.children('a').text(),//文章标题
-                        uri: currentListDom.children('a').attr('href'),//文章链接
-                        date: new Date(moment(currentListDom.children('span').text(), 'MM月DD HH:mm')),//文章发布日期时间戳
-                        origin_name: origin.name,//文章来源、出处
-                        origin_key: origin.key,//指向 origin collection 中对应的 document id
-                        parser: undefined,//下一步爬取的解析器，isAgain为true时，detailParser无作用。如本解析对象为【版面】，下一步解析对象为【文章列表】，再次为【文章详情】
-                        detailParser: detailParser,//对应[详情页]解析函数
-                    };
-
-                    filteredQueueDetail.push(tempListItem);
-                }
-            })
-        }
-    );
 
     return {
         isAgain: false,// list 处理结束
@@ -46,33 +34,24 @@ async function parser_common($, res) {
     };
 }
 // 适用: 十堰
-async function parser_shiyan($, res) {
+function parser_shiyan($, res) {
     let newsListDom = $("ul.list01 li"),
-        urlList = [],
         filteredQueueDetail = [];
 
+    //准备待排重的 url 列表
     newsListDom.each(function (index) {
-        urlList.push($(this).children('a').attr('href'));
-    });
+        let tempListItem = {
+            _id: '',//list document 唯一id
+            title: $(this).children('a').text(),//文章标题
+            uri: $(this).children('a').attr('href'),//文章链接
+            date: new Date(moment($(this).children('span').text(), 'MM月DD HH:mm')),//文章发布日期时间戳
+            origin_name: origin.name,//文章来源、出处
+            origin_key: origin.key,//指向 origin collection 中对应的 document id
+            parser: undefined,//下一步爬取的解析器，isAgain为true时，detailParser无作用。如本解析对象为【版面】，下一步解析对象为【文章列表】，再次为【文章详情】
+            detailParser: detailParser,//对应[详情页]解析函数
+        };
 
-    await isDuplicate(urlList).then(isDuplicateResult => {
-        isDuplicateResult.forEach((isDuplicate, index) => {
-            if (!isDuplicate) {
-                let currentListDom = newsListDom.eq(index);
-                let tempListItem = {
-                    _id: '',//list document 唯一id
-                    title: currentListDom.children('a').text(),//文章标题
-                    uri: currentListDom.children('a').attr('href'),//文章链接
-                    date: new Date(moment(currentListDom.children('span').text(), 'MM月DD HH:mm')),//文章发布日期时间戳
-                    origin_name: origin.name,//文章来源、出处
-                    origin_key: origin.key,//指向 origin collection 中对应的 document id
-                    parser: undefined,//下一步爬取的解析器，isAgain为true时，detailParser无作用。如本解析对象为【版面】，下一步解析对象为【文章列表】，再次为【文章详情】
-                    detailParser: detailParser,//对应[详情页]解析函数
-                };
-
-                filteredQueueDetail.push(tempListItem);
-            }
-        });
+        filteredQueueDetail.push(tempListItem);
     });
 
     return {
@@ -82,7 +61,7 @@ async function parser_shiyan($, res) {
 }
 
 // detail parser
-const detailParser = ($, res) => {
+function detailParser($, res) {
     if (!!$('body#P-QQ').find('div#Main-P-QQ').text().trim()) {
         //为高清大图模版
         return hdImgTemplateParse($, res);
@@ -104,9 +83,9 @@ const detailParser = ($, res) => {
             origin_key: origin.key,//指向 origin collection 中对应的 document id
         };
     }
-};
+}
 // 高清大图 detail 模版, 如 http://hb.qq.com/a/20170308/043790.htm
-const hdImgTemplateParse = ($, res) => {
+function hdImgTemplateParse($, res) {
     let mainDom = $(".main#Main-P-QQ");
     return {
         _id: '',//文章唯一 document id，与对应 list id 相同
@@ -124,7 +103,7 @@ const hdImgTemplateParse = ($, res) => {
         origin_name: mainDom.find('#InfoWrap #infoTxtWrap #time_source span').eq(1).text(),//来源、出处名
         origin_key: '',//指向 origin collection 中对应的 document id
     };
-};
+}
 
 module.exports = {
     taskName: origin.name,

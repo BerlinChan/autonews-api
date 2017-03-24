@@ -6,14 +6,13 @@
 
 const S = require('string');
 const moment = require('moment');
-const {isDuplicate} = require('../dbConnection');
 const origin = {key: 'ctdsb', name: '楚天都市报'};
 
 // page 解析处理器
-const parser_page = async($, res) => {
+function parser_page($, res) {
     let queuePage = [];//版面队列
     let title = $('title').text();
-    if (title == '楚天都市报') {
+    if (title === '楚天都市报') {
         $('tr td.info3').each(function (index) {
             let onclickAttr = $(this).attr('onclick');
             if (onclickAttr) {
@@ -32,12 +31,10 @@ const parser_page = async($, res) => {
         isAgain: true,// page 处理完再处理 list
         queue: queuePage,
     };
-};
+}
 // list parser
-const parser_list = async($, res) => {
+function parser_list($, res) {
     let newsListDom = $("td[width=300] tr td"),
-        urlList = [],
-        filteredDomIndex = [],
         filteredQueueDetail = [];
 
     newsListDom.each(function (index) {
@@ -47,45 +44,27 @@ const parser_list = async($, res) => {
             let url = 'http://ctdsb.cnhubei.com/HTML/ctdsb/'
                 + date
                 + S(onclickAttr).between(date, 'html').s + 'html';
-            urlList.push(url);
-            filteredDomIndex.push(index);
-        }
-    });
 
-    await isDuplicate(urlList).then(isDuplicateResult => {
-            filteredDomIndex.forEach((item, index) => {
-                if (!isDuplicateResult[index]) {
-                    let currentListDom = newsListDom.eq(item);
-                    let onclickAttr = currentListDom.attr('onclick');
-                    let date = S(res.request.uri.href).between('/ctdsb/', '/').s;
-                    let url = 'http://ctdsb.cnhubei.com/HTML/ctdsb/'
-                        + date
-                        + S(onclickAttr).between(date, 'html').s + 'html';
-
-                    let tempListItem = {
-                        _id: '',//list document 唯一id
-                        title: currentListDom.children('a').text(),//文章标题
-                        uri: url,//文章链接
-                        date: new Date(moment(date,'YYYYMMDD')),//文章发布日期时间戳
-                        origin_name: origin.name,//文章来源、出处
-                        origin_key: origin.key,//指向 origin collection 中对应的 document id
-                        parser: undefined,//下一步爬取的解析器，isAgain为true时，detailParser无作用。如本解析对象为【版面】，下一步解析对象为【文章列表】，再次为【文章详情】
-                        detailParser: detailParser,//对应[详情页]解析函数
-                    };
-
-                    filteredQueueDetail.push(tempListItem);
-                }
+            filteredQueueDetail.push({
+                _id: '',//list document 唯一id
+                title: $(this).children('a').text(),//文章标题
+                uri: url,//文章链接
+                date: new Date(moment(date, 'YYYYMMDD')),//文章发布日期时间戳
+                origin_name: origin.name,//文章来源、出处
+                origin_key: origin.key,//指向 origin collection 中对应的 document id
+                parser: undefined,//下一步爬取的解析器，isAgain为true时，detailParser无作用。如本解析对象为【版面】，下一步解析对象为【文章列表】，再次为【文章详情】
+                detailParser: detailParser,//对应[详情页]解析函数
             });
         }
-    );
+    });
 
     return {
         isAgain: false,// list 处理结束
         queue: filteredQueueDetail,
     };
-};
+}
 // detail parser
-const detailParser = ($, res) => {
+function detailParser($, res) {
     let mainDom = $("#Table17 tr");
     let topDom = $('#Table16 tr').eq(0).children('td');
     let titleIndex0 = mainDom.eq(0).find('td').text().trim();
@@ -100,12 +79,12 @@ const detailParser = ($, res) => {
         content: mainDom.eq(4).find('#copytext').html(),//正文内容
         authorName: '',//作者名
         editorName: '',//编辑姓名
-        date: new Date(moment(date,'YYYYMMDD')),//文章发布日期时间戳
+        date: new Date(moment(date, 'YYYYMMDD')),//文章发布日期时间戳
         crawledDate: new Date(),//抓取日期时间戳
         origin_name: origin.name,//来源、出处名
         origin_key: origin.key,//指向 origin collection 中对应的 document id
     };
-};
+}
 
 module.exports = {
     taskName: origin.name,
