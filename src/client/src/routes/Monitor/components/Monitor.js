@@ -91,7 +91,7 @@ class Monitor extends Component {
               if (originLength > index) {
                 let currentKey = item.key;
                 return (
-                  <div key={currentKey}>
+                  <div key={currentKey} className={cls.layoutContent}>
                     <MonitorCard {...monitor.toJS().newsList[currentKey]} origin_key={currentKey}/>
                   </div>
                 );
