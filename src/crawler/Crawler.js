@@ -11,16 +11,14 @@ const request = require('request');// for send a request to HTTP server, push li
 
 function CrawlerCreator(option) {
     // init
-    let shouldListRun = true,
-        queueList = [],// 待爬取的[列表页]
+    let queueList = [],// 待爬取的[列表页]
         queueDetail = [];// 排重后用于抓取的列表
 
-    // news list crawler
+    // crawler instance
     const listCrawler = new Crawler({
         rateLimit: option.rateLimit || 0,
         maxConnections: option.maxConnections || 5,
     });
-    // detail crawler
     const detailCrawler = new Crawler({
         rateLimit: option.rateLimit || 0,
         maxConnections: option.maxConnections || 5,
@@ -42,20 +40,19 @@ function CrawlerCreator(option) {
     }
 
     function _listCrawlerCbWrapper(item) {
-        return function (error, res, done) {
+        return async function (error, res, done) {
             if (error) {
                 console.log(error);
             } else {
                 let $ = res.$;
 
                 try {
-                    item.parser($, res).then(tempQueueResult => {
+                    await item.parser($, res).then((tempQueueResult) => {
                         if (tempQueueResult.isAgain) {
                             // crawl again for page
                             listCrawler.queue(_generateQueueList([tempQueueResult.queue]));
                         } else if (tempQueueResult.queue.length) {
                             // remove duplicate & generate detail queue
-                            shouldListRun = false;
                             tempQueueResult.queue.forEach(item => {
                                 item._id = monk.id();//list item, 待 detail item 同时入库时
                                 queueDetail.push({
@@ -115,14 +112,14 @@ function CrawlerCreator(option) {
         queueList = _generateQueueList([
             typeof option.queue == 'function' ? option.queue() : option.queue,
         ]);
-        shouldListRun = true;
         queueDetail = [];
         listCrawler.queue(queueList);
     }
 
     // Crawler event
     listCrawler.on('drain', function () {
-        if (!shouldListRun && queueDetail.length) {
+        console.log(22, option.taskName, listCrawler.queueSize, queueDetail.length)
+        if (queueDetail.length) {
             console.log(`start crawl ${option.taskName}, queue: ${queueDetail.length}`);
             // have new details, crawl them
             detailCrawler.queue(queueDetail);
