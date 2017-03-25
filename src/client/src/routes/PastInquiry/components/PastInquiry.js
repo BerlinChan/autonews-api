@@ -98,54 +98,54 @@ class PastInquiry extends Component {
 
     return (
       <div className={cls.pastInquiry}>
-        <Row gutter={12}>
-          <Col span={10}>
-            {/*query form*/}
-            <Card title="搜索">
-              <Form>
-                <Select defaultValue="lucy" style={{width: 120}} onChange={this.handleChange}>
-                  <Select.Option value="jack">Jack</Select.Option>
-                  <Select.Option value="lucy">Lucy</Select.Option>
-                  <Select.Option value="disabled" disabled>Disabled</Select.Option>
-                  <Select.Option value="Yiminghe">yiminghe</Select.Option>
-                </Select>
+        {/*query form*/}
+        <Form>
+          <Row gutter={12}>
+            <Col span={11}>
+              <Select defaultValue="lucy" style={{width: '100%'}} onChange={this.handleChange} multiple={true}>
+                <Select.Option value="jack">Jack</Select.Option>
+                <Select.Option value="lucy">Lucy</Select.Option>
+                <Select.Option value="disabled" disabled>Disabled</Select.Option>
+                <Select.Option value="Yiminghe">yiminghe</Select.Option>
+              </Select>
+            </Col>
 
-                <DatePicker
-                  disabledDate={this.disabledStartDate}
-                  showTime
-                  format="YYYY-MM-DD HH:mm:ss"
-                  value={startValue}
-                  placeholder="Start"
-                  onChange={this.onStartChange}
-                  onOpenChange={this.handleStartOpenChange}
-                />
-                <DatePicker
-                  disabledDate={this.disabledEndDate}
-                  showTime
-                  format="YYYY-MM-DD HH:mm:ss"
-                  value={endValue}
-                  placeholder="End"
-                  onChange={this.onEndChange}
-                  open={endOpen}
-                  onOpenChange={this.handleEndOpenChange}
-                />
+            <Col span={7} offset={1}>
+              <DatePicker
+                style={{width: '48%'}}
+                disabledDate={this.disabledStartDate}
+                showTime
+                format="YYYY-MM-DD HH:mm:ss"
+                value={startValue}
+                placeholder="Start"
+                onChange={this.onStartChange}
+                onOpenChange={this.handleStartOpenChange}
+              />
+              <span style={{width: '4%', display: 'inline-block', textAlign: 'center'}}>&nbsp;-&nbsp;</span>
+              <DatePicker
+                style={{width: '48%'}}
+                disabledDate={this.disabledEndDate}
+                showTime
+                format="YYYY-MM-DD HH:mm:ss"
+                value={endValue}
+                placeholder="End"
+                onChange={this.onEndChange}
+                open={endOpen}
+                onOpenChange={this.handleEndOpenChange}
+              />
+            </Col>
 
-                <Input placeholder="关键词"/>
-                <Button type="primary">搜索</Button>
-              </Form>
+            <Col span={4} offset={1}>
+              <Input placeholder="关键词"/>
+            </Col>
+          </Row>
+          <Row style={{margin: '10px 0 16px', textAlign: 'right'}}>
+            <Button type="primary">搜索</Button>
+          </Row>
+        </Form>
 
-              {/*search result*/}
-              <Table columns={columns} title={() => '结果'}/>
-            </Card>
-          </Col>
-
-          <Col span={14}>
-            {/*详情*/}
-            <Card title="详情">
-              详情
-            </Card>
-          </Col>
-        </Row>
+        {/*search result*/}
+        <Table columns={columns}/>
       </div>
     );
   }
