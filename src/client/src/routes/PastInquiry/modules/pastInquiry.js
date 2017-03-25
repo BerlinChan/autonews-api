@@ -26,7 +26,7 @@ function onDestory() {
 }
 
 export const actions = {
-  fetchPastInquery,
+  fetchPastInquiry,
   onDestory,
 };
 

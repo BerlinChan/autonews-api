@@ -17,7 +17,7 @@ class CoreLayout extends Component {
     return (
       <Menu theme="dark" mode={mode} selectedKeys={[this.props.location.pathname]} className={cls.menu}>
         <Menu.Item key="/"><Link to="/">当日监控</Link></Menu.Item>
-        <Menu.Item key="pastInquery"><Link to="/pastInquery">往期查询</Link></Menu.Item>
+        <Menu.Item key="pastInquiry"><Link to="/pastInquiry">往期查询</Link></Menu.Item>
         <Menu.Item key="about"><Link to="/about">关于</Link></Menu.Item>
       </Menu>
     );
@@ -45,7 +45,7 @@ class CoreLayout extends Component {
         <Footer className={cls.footer}>
           <span>
             监控服务:&nbsp;
-            {this.props.global.get('socketConnectStatus') == 'disconnect' ?
+            {this.props.global.get('socketConnectStatus') === 'disconnect' ?
               <span className={cls.warning}>停机</span> : <span>运行中</span>}
           </span>&nbsp;|&nbsp;
 {/*
