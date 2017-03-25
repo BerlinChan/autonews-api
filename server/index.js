@@ -11,12 +11,18 @@ const route = require('koa-route');
 const rawBody = require('raw-body');
 const config = require('../src/utils/config');
 const {getOrigin, getSpecificList} = require('./DAO');
-const gzip = require('koa-gzip');
+const compress = require('koa-compress');
 const convert = require('koa-convert');// convert generator to async, support koa2
 
 const app = new Koa();
 const io = new IO();
-app.use(convert(gzip()));
+app.use(compress({
+    filter: function (content_type) {
+        return /text/i.test(content_type)
+    },
+    threshold: 2048,
+    flush: require('zlib').Z_SYNC_FLUSH,
+}));
 
 //static serve
 app.use(require('koa-static')('../public'));

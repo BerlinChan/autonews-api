@@ -53,7 +53,6 @@ export default function request(url, options) {
   let opt = {
     headers: {
       'Content-Type': 'application/json',
-      'X-Auth-Token': token,
     },
   };
   Object.assign(opt, options);

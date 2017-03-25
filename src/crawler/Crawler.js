@@ -88,7 +88,7 @@ function CrawlerCreator(option) {
                         url: listItem.uri,
                         date: listItem.date,
                         origin_key: listItem.origin_key,
-                        key: listItem._id,
+                        _id: listItem._id,
                     }),
                 }, async function callback(error, response, body) {
                     if (!error && response.statusCode === 200) {

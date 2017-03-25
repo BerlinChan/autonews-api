@@ -23,7 +23,7 @@ const TitleCell = ({rowIndex, data, col, ...props}) => {
   const record = data[rowIndex];
   return (
     <Cell {...props}>
-      <a href={record.url} target="_blank">{record.title + (record.subTitle ? record.subTitle : '')}</a>
+      <a href={record.url} target="_blank">{record.title + (record.subTitle ? (' ' + record.subTitle) : '')}</a>
     </Cell>
   )
 };

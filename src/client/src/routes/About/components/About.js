@@ -32,9 +32,10 @@ class About extends Component {
           <li><a href="http://ctjb.cnhubei.com/cache/paper_ctjb.aspx" target="_blank">楚天金报</a></li>
           <li><a href="http://ctdsbxy.cnhubei.com/cache/paper_ctdsbxy.aspx" target="_blank">楚天快报</a></li>
           <li><a href="http://epaper.cnhubei.com/cache/paper_ctsb.aspx" target="_blank">楚天时报</a></li>
-          <li><a href="http://cjrb.cjn.cn/" target="_blank">长江日报(待添加)</a></li>
-          <li><a href="http://whwb.cjn.cn/" target="_blank">武汉晚报(待添加)</a></li>
-          <li><a href="http://whcb.cjn.cn/" target="_blank">武汉晨报(待添加)</a></li>
+          <li><a href="http://cjrb.cjn.cn/" target="_blank">长江日报</a></li>
+          <li><a href="http://whwb.cjn.cn/" target="_blank">武汉晚报</a></li>
+          <li><a href="http://whcb.cjn.cn/" target="_blank">武汉晨报</a></li>
+          <li><a href="http://www.hsdcw.com/daymap/" target="_blank">黄石日报（待添加）</a></li>
           <li>添加中……</li>
         </ul>
         <br/>
@@ -70,10 +71,21 @@ class About extends Component {
 
         <h3>Release Note</h3>
         <hr/>
+        <h5>Version: 0.1.2</h5>
+        <p>Date: 2017-03-25</p>
+        <ul>
+          <li>抓取排重，配置结构调整</li>
+          <li>添加长报系爬虫配置</li>
+          <li>客户端监控页替换 table 组件，提高大数据量显示性能</li>
+          <li>客户端优化请求方式，界面细节调整</li>
+          <li>监控服务器 API 配置 gzip</li>
+        </ul>
+        <br/>
+
         <h5>Version: 0.1.0</h5>
         <p>Date: 2017-03-20</p>
         <ul>
-          <li>放弃进一步使用 Firebase 框架（数据库不支持多条件查询，仅这一条就无法满足业务），自建 mongoDb 数据库用作存储</li>
+          <li>放弃进一步使用 Firebase 框架（数据库不支持多条件查询），自建 mongoDb 数据库用作存储</li>
           <li>完善客户端监控界面，初始化时加载当日历史数据（数据未分页，量多时偶尔卡死）</li>
           <li>修改爬虫配置，统一 news list, news detail 数据结构</li>
           <li>存储爬取数据到 mongoDb</li>
@@ -86,7 +98,7 @@ class About extends Component {
         <p>Date: 2017-03-13</p>
         <ul>
           <li>使用React开发客户端界面</li>
-          <li>探索使用 Firebase database 存储数据，并集成实时数据库到Redux</li>
+          <li>探索使用 Firebase database 存储数据，集成实时数据库到 Redux</li>
         </ul>
         <br/>
 
