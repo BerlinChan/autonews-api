@@ -1,8 +1,8 @@
 import React, {Component} from 'react'
 import {Row, Col, Card, Form, Input, DatePicker, Select, Table, Button, Modal, Popconfirm} from 'antd';
-import cls from './PastInquery.scss'
+import cls from './PastInquiry.scss'
 
-class PastInquery extends Component {
+class PastInquiry extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -13,8 +13,8 @@ class PastInquery extends Component {
   }
 
   componentDidMount() {
+    this.props.fetchPastInquiry();
     window.scrollTo(0, 0);
-    this.props.fetchPastInquery();
   }
 
   componentWillUnmount() {
@@ -65,6 +65,7 @@ class PastInquery extends Component {
     this.setState({endOpen: open});
   }
 
+
   render() {
     const {startValue, endValue, endOpen} = this.state;
     const columns = [
@@ -96,7 +97,7 @@ class PastInquery extends Component {
     ];
 
     return (
-      <div className={cls.pastInquery}>
+      <div className={cls.pastInquiry}>
         <Row gutter={12}>
           <Col span={10}>
             {/*query form*/}
@@ -150,7 +151,7 @@ class PastInquery extends Component {
   }
 }
 
-PastInquery.propTypes = {};
-PastInquery.defaultProps = {};
+PastInquiry.propTypes = {};
+PastInquiry.defaultProps = {};
 
-export default PastInquery
+export default PastInquiry
