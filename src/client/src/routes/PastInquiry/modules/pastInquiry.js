@@ -64,10 +64,10 @@ function* watchFetchPastInquiry() {
     if (!originList.err) {
       yield put({type: PastInquiry_FETCH_SUCCESSED})
     } else {
-      let errBody = yield originList.err.response.json();
+      let errBody = yield originList.err.response.statusText;
       notification.error({
         message: 'Error',
-        description: errBody.msg,
+        description: errBody,
       });
     }
   }

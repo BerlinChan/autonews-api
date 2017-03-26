@@ -27,16 +27,21 @@ function pastInquiry(origin = '', beginDate = new Date(moment().format('YYYY-MM-
     let origin_key_array = origin.split(',');
     let query = {
         "date": {$gte: new Date(Date.parse(beginDate) - 57600000), $lt: new Date(Date.parse(endDate) - 57600000)}, //减去16小时？
-        "origin_key": {$in: origin_key_array}
+        "origin_key": {$in: origin_key_array},
     };
     if (keyword) {
-        let keyword_array = keyword.split(',');
-        query['title'] = {$in: keyword_array};
+        //let keyword_array = keyword.split(',');
+        query['title'] = eval(`/${keyword}/i`);
     }
-    return db.get('detail').find(
-        query,
-        {sort: {'date': -1}, fields: '-content', limit: parseInt(pageSize)}
-    );
+    try {
+        return db.get('detail').find(
+            query,
+            {sort: {'date': -1}, fields: '-content', limit: parseInt(pageSize)}
+        );
+    }
+    catch (err) {
+        console.log(11,err);
+    }
 }
 
 
