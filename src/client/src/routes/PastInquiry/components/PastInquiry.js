@@ -52,7 +52,7 @@ class PastInquiry extends Component {
       <div className={cls.pastInquiry}>
         {/*query form*/}
         <PastInquiryForm origins={global.get('origin').toJS()}
-                         pastInquiry={this.props.pastInquiry}
+                         fetchPastInquiry={this.props.fetchPastInquiry}
                          query={this.props.location.query}/>
 
         {/*search result*/}

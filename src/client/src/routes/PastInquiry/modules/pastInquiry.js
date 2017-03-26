@@ -1,8 +1,9 @@
 import {take, put, select, call} from 'redux-saga/effects'
 import Immutable from 'immutable'
 import request from 'utils/request'
-import { notification} from 'antd';
+import {notification} from 'antd';
 import config from 'utils/config'
+import moment from 'moment'
 import {actions as globalActions} from '../../../redux/Global'
 
 // Constants
@@ -18,7 +19,7 @@ function onDestory() {
     type: PastInquiry_ON_destroy
   }
 }
-function fetchPastInquiry(origin = '', startDate, endDate, keyword, pageIndex = 0, pageSize = 20) {
+function fetchPastInquiry(origin = '', startDate = new Date(moment().format('YYYY-MM-DD')), endDate = new Date(moment().add({day: 1}).format('YYYY-MM-DD')), keyword = '', pageIndex = 0, pageSize = 20) {
   return {
     type: PastInquiry_FETCH_REQUESTED,
     origin, startDate, endDate, keyword, pageIndex, pageSize,
@@ -43,6 +44,7 @@ const ACTION_HANDLERS = {
 const initialState = Immutable.Map({
   isFetching: false,
   list: Immutable.fromJS([{key: '001'},]),
+  pagination: Immutable.fromJS({}),
 });
 export default function pastInquiryReducer(state = initialState, action) {
   const handler = ACTION_HANDLERS[action.type];
