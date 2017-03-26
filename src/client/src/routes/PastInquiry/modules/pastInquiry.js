@@ -1,10 +1,9 @@
 import {take, put, select, call} from 'redux-saga/effects'
 import Immutable from 'immutable'
 import request from 'utils/request'
-import {startSubmit, stopSubmit} from 'redux-form'
-import {message, notification} from 'antd';
+import { notification} from 'antd';
 import config from 'utils/config'
-
+import {actions as globalActions} from '../../../redux/Global'
 
 // Constants
 const PastInquiry_FETCH_REQUESTED = 'PastInquiry_FETCH_REQUESTED';
@@ -14,20 +13,22 @@ const PastInquiry_ON_destroy = 'PastInquiry_ON_destroy';
 
 
 // Actions
-function fetchPastInquiry() {
-  return {
-    type: PastInquiry_FETCH_REQUESTED
-  }
-}
 function onDestory() {
   return {
     type: PastInquiry_ON_destroy
+  }
+}
+function fetchPastInquiry(origin = '', startDate, endDate, keyword, pageIndex = 0, pageSize = 20) {
+  return {
+    type: PastInquiry_FETCH_REQUESTED,
+    origin, startDate, endDate, keyword, pageIndex, pageSize,
   }
 }
 
 export const actions = {
   fetchPastInquiry,
   onDestory,
+  fetchOriginAndNews: globalActions.fetchOriginAndNews,
 };
 
 // Action Handlers
@@ -53,16 +54,20 @@ export default function pastInquiryReducer(state = initialState, action) {
 // Sagas
 function* watchFetchPastInquiry() {
   while (true) {
+    const {origin, startDate, endDate, keyword, pageIndex, pageSize} = yield take(PastInquiry_FETCH_REQUESTED);
 
-    yield take(PastInquiry_FETCH_REQUESTED)
-    // let {data, err} = yield call(asyncWait)
-    // if (!err)
-
-    yield put({type: 'PastInquiry_FETCH_SUCCESSED'})
-    // else {
-    //
-    //   yield put({type: 'PastInquiry_FETCH_FAILURE', error: err.toString()})
-    // }
+    const originList = yield call(request,
+      config.API_SERVER + `pastInquiry?origin=${origin}&startDate=${startDate}&endDate=${endDate}&keyword=${keyword}&pageIndex=${pageIndex}&pageSize=${pageSize}`,
+    );
+    if (!originList.err) {
+      yield put({type: PastInquiry_FETCH_SUCCESSED})
+    } else {
+      let errBody = yield originList.err.response.json();
+      notification.error({
+        message: 'Error',
+        description: errBody.msg,
+      });
+    }
   }
 }
 

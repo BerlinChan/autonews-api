@@ -10,7 +10,7 @@ const cors = require('kcors');
 const route = require('koa-route');
 const rawBody = require('raw-body');
 const config = require('../src/utils/config');
-const {getOrigin, getSpecificList, getSpecificDetail} = require('./DAO');
+const {getOrigin, getSpecificList, pastInquiry} = require('./DAO');
 const compress = require('koa-compress');
 const convert = require('koa-convert');// convert generator to async, support koa2
 
@@ -55,7 +55,7 @@ app.use(route.get('/getSpecificList', async function (ctx, next) {
     });
 }));
 //按(开始时间: date，结束时间: date，origin_key: string)查询detail
-app.use(route.get('/getSpecificDetail', async function (ctx, next) {
+app.use(route.get('/pastInquiry', async function (ctx, next) {
     await getSpecificDetail(ctx.query.beginDate, ctx.query.endDate, ctx.query.origin_key, ctx.query.keyword).then(doc => {
         ctx.status = 200;
         ctx.body = {data: doc, msg: 'success'};

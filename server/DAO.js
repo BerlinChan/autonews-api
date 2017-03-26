@@ -22,8 +22,8 @@ function getSpecificList(beginDate = new Date(moment().format('YYYY-MM-DD')), en
         {sort: {'date': -1}, fields: '-origin_name'}
     );
 }
-//按(开始时间: date，结束时间: date，origin_key: string)查询detail
-function getSpecificDetail(beginDate = new Date(moment().format('YYYY-MM-DD')), endDate = new Date(moment().add({days: 1}).format('YYYY-MM-DD')), origin_key = '', keyword = '') {
+//按(开始时间: date，结束时间: date，origin_key: string)查询往期数据
+function pastInquiry(beginDate = new Date(moment().format('YYYY-MM-DD')), endDate = new Date(moment().add({days: 1}).format('YYYY-MM-DD')), origin_key = '', keyword = '') {
     let origin_key_array = origin_key.split(',');
     let keyword_array = keyword.split(',');
     return db.get('detail').find(
@@ -40,5 +40,5 @@ function getSpecificDetail(beginDate = new Date(moment().format('YYYY-MM-DD')), 
 module.exports = {
     getOrigin,
     getSpecificList,
-    getSpecificDetail,
+    pastInquiry,
 };
