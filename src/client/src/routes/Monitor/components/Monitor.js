@@ -1,11 +1,9 @@
 import React, {Component, PropTypes,} from 'react'
 import cls from './Monitor.scss'
-import {Row, Col} from 'antd';
 import MonitorCard from './widgets/MonitorCard/MonitorCard'
 import '../../../../node_modules/react-grid-layout/css/styles.css'
 import '../../../../node_modules/react-resizable/css/styles.css'
 import {Responsive, WidthProvider} from 'react-grid-layout';
-
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
 class Monitor extends Component {
@@ -15,7 +13,7 @@ class Monitor extends Component {
 
   componentDidMount() {
     window.scrollTo(0, 0);
-    this.props.fetchMonitor();
+    this.props.fetchOriginAndNews();
   }
 
   componentWillUnmount() {
@@ -23,7 +21,7 @@ class Monitor extends Component {
   }
 
   render() {
-    const {monitor} = this.props;
+    const {monitor, global} = this.props;
     const gridCols = {lg: 12, md: 12, sm: 6, xs: 4, xxs: 2};//grid cols, 栅格列数
     const monitorWidth = {lg: 3, md: 4, sm: 3, xs: 4, xxs: 2};//每监视器栅格宽
     const monitorHeight = {lg: 2, md: 2, sm: 2, xs: 2, xxs: 2};//每监视器栅格高
@@ -32,10 +30,10 @@ class Monitor extends Component {
     for (let i in layouts) {
       let currentX = 0;
       let currentY = 0;
-      for (let j = 0; j < monitor.toJS().origin.length; j++) {
+      for (let j = 0; j < global.toJS().origin.length; j++) {
         let colsPerRow = gridCols[i] / monitorWidth[i];
         layouts[i].push({
-          i: monitor.toJS().origin[j].key,
+          i: global.toJS().origin[j].key,
           x: currentX * monitorWidth[i],
           y: currentY * monitorHeight[i],
           w: monitorWidth[i],
@@ -58,11 +56,11 @@ class Monitor extends Component {
         <ResponsiveReactGridLayout className={cls.rowMargin} layouts={layouts} draggableHandle=".move-cursor"
                                    breakpoints={{lg: 1440, md: 996, sm: 768, xs: 480, xxs: 0}}
                                    cols={gridCols}>
-          {monitor.toJS().origin.map((item, index) => {
+          {global.toJS().origin.map((item, index) => {
               let currentKey = item.key;
               return (
                 <div key={currentKey} className={cls.layoutContent}>
-                  <MonitorCard {...monitor.toJS().newsList[currentKey]} origin_key={currentKey}/>
+                  <MonitorCard {...global.toJS().newsList[currentKey]} origin_key={currentKey}/>
                 </div>
               );
             }
