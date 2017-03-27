@@ -35,7 +35,8 @@ export const actions = {
 // Action Handlers
 const ACTION_HANDLERS = {
   [PastInquiry_FETCH_REQUESTED]: (state) => state.setIn(['isFetching'], true),
-  [PastInquiry_FETCH_SUCCESSED]: (state, payload) => state.setIn(['isFetching'], false),
+  [PastInquiry_FETCH_SUCCESSED]: (state, action) => state.setIn(['isFetching'], false)
+    .set('pastInquiryResult', Immutable.fromJS(action.data)),
   [PastInquiry_FETCH_FAILURE]: (state, action) => state.setIn(['isFetching'], false),
   [PastInquiry_ON_destroy]: () => initialState,
 };
@@ -43,8 +44,7 @@ const ACTION_HANDLERS = {
 // Reducer
 const initialState = Immutable.Map({
   isFetching: false,
-  list: Immutable.fromJS([{key: '001'},]),
-  pagination: Immutable.fromJS({}),
+  pastInquiryResult: Immutable.fromJS({list: [], pagination: {}}),
 });
 export default function pastInquiryReducer(state = initialState, action) {
   const handler = ACTION_HANDLERS[action.type];
@@ -58,13 +58,13 @@ function* watchFetchPastInquiry() {
   while (true) {
     const {origin, startDate, endDate, keyword, pageIndex, pageSize} = yield take(PastInquiry_FETCH_REQUESTED);
 
-    const originList = yield call(request,
+    const pastInquiry = yield call(request,
       config.API_SERVER + `pastInquiry?origin=${origin}&startDate=${startDate}&endDate=${endDate}&keyword=${keyword}&pageIndex=${pageIndex}&pageSize=${pageSize}`,
     );
-    if (!originList.err) {
-      yield put({type: PastInquiry_FETCH_SUCCESSED})
+    if (!pastInquiry.err) {
+      yield put({type: PastInquiry_FETCH_SUCCESSED, data: pastInquiry.data.data});
     } else {
-      let errBody = yield originList.err.response.statusText;
+      let errBody = yield pastInquiry.err.response.statusText;
       notification.error({
         message: 'Error',
         description: errBody,

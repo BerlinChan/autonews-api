@@ -58,7 +58,10 @@ app.use(route.get('/getSpecificList', async function (ctx, next) {
 app.use(route.get('/pastInquiry', async function (ctx, next) {
     await pastInquiry(ctx.query.origin, ctx.query.beginDate, ctx.query.endDate, ctx.query.keyword, ctx.query.pageIndex, ctx.query.pageSize).then(doc => {
         ctx.status = 200;
-        ctx.body = {data: doc, msg: 'success'};
+        ctx.body = {
+            data: {list: doc, pagination: {currentIndex: undefined, pageSize: undefined, total: undefined}},
+            msg: 'success'
+        };
     });
 }));
 app.use(route.post('/listItem_added', async function (ctx) {

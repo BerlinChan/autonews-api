@@ -1,7 +1,8 @@
 import React, {Component} from 'react'
-import {Table} from 'antd';
+import {Table, Card} from 'antd';
 import cls from './PastInquiry.scss'
 import PastInquiryForm from './PastInquiryForm'
+import moment from 'moment'
 
 class PastInquiry extends Component {
   constructor(props) {
@@ -19,31 +20,32 @@ class PastInquiry extends Component {
   }
 
   render() {
-    const {global} = this.props;
+    const {global, pastInquiry} = this.props;
     const columns = [
       {
         title: '日期',
-        dataIndex: 'name',
         key: 'date',
+        render: (text, record, index) => moment(record.date).format('MM-DD HH:mm:ss'),
       },
       {
         title: '来源',
-        dataIndex: 'name',
-        key: 'origin',
+        dataIndex: 'origin_name',
+        key: 'origin_name',
       },
       {
         title: '标题',
-        dataIndex: 'name',
         key: 'title',
+        render: (text, record, index) => <a href={record.url} target="_blank">{record.title + (record.subTitle ? (' ' +
+        record.subTitle) : '')}</a>,
       },
       {
         title: '分类',
-        dataIndex: 'name',
+        dataIndex: 'category',
         key: 'category',
       },
       {
         title: '标签',
-        dataIndex: 'name',
+        dataIndex: 'tag',
         key: 'tag',
       },
     ];
@@ -56,7 +58,11 @@ class PastInquiry extends Component {
                          query={this.props.location.query}/>
 
         {/*search result*/}
-        <Table columns={columns}/>
+        <Card>
+          <Table columns={columns} rowKey={(record) => record.url}
+                 dataSource={pastInquiry.get('pastInquiryResult').toJS().list}
+          />
+        </Card>
       </div>
     );
   }

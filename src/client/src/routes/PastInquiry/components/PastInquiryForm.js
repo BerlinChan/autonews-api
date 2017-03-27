@@ -22,7 +22,6 @@ class PastInquiryForm extends Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         this.props.fetchPastInquiry(values.origin.join(','), new Date(values.rangeTimePicker[0]), new Date(values.rangeTimePicker[1]), values.keyword, this.props.query.pageIndex || 0, this.props.query.pageSize || 20);
-        console.log('Received values of form: ', values);
       }
     });
   };
@@ -39,7 +38,6 @@ class PastInquiryForm extends Component {
                 {getFieldDecorator('origin', {
                   rules: [{required: true, message: '请选择来源'}],
                   onChange: (value) => {
-                    console.log(value);
                   },
                 })(
                   <Select style={{width: '100%'}} multiple={true} placeholder="来源">
@@ -56,7 +54,6 @@ class PastInquiryForm extends Component {
                   rules: [{type: 'array', required: true, message: '请选择日期范围'}],
                   initialValue: [moment(moment().format('YYYY-MM-DD')), moment(moment().add({day: 1}).format('YYYY-MM-DD'))],
                   onChange: (value, dateString) => {
-                    console.log(value, dateString)
                   },
                 })(
                 <RangePicker showTime format="YYYY-MM-DD HH:mm:ss" style={{width: '100%'}}/>
