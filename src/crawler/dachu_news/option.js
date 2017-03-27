@@ -74,7 +74,9 @@ function detailParser($, res) {
             category: mainDom.find('.hd .tit-bar .color-a-1').text(),//文章分类、子栏目、子版面、子频道
             tags: [],//文章标签、关键词
             url: res.request.uri.href,//文章地址
-            content: mainDom.find('.bd #Cnt-Main-Article-QQ').html(),//正文内容
+            content: mainDom.find('.bd #Cnt-Main-Article-QQ img').each(function (index) {
+                return $(this).html();
+            }) + mainDom.find('.bd #Cnt-Main-Article-QQ').text(),//正文内容
             authorName: mainDom.find('.hd .tit-bar .color-a-3').text(),//作者名
             editorName: mainDom.find('.ft .QQeditor').text(),//编辑姓名
             date: new Date(mainDom.find('.hd .tit-bar .article-time').text()),//文章发布日期时间戳

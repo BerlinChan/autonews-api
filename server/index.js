@@ -10,7 +10,7 @@ const cors = require('kcors');
 const route = require('koa-route');
 const rawBody = require('raw-body');
 const config = require('../src/utils/config');
-const {getOrigin, getSpecificList} = require('./DAO');
+const {getOrigin, getSpecificList, pastInquiry} = require('./DAO');
 const compress = require('koa-compress');
 const convert = require('koa-convert');// convert generator to async, support koa2
 
@@ -32,7 +32,7 @@ function verifyOrigin(ctx) {
     let validOrigins = ['http://www.berlinchan.com', 'http://localhost:3091'];
 
     const origin = ctx.headers.origin;
-    if (!(validOrigins.indexOf(origin) != -1)) return false;
+    if (!(validOrigins.indexOf(origin) !== -1)) return false;
     return origin;
 }
 app.use(convert(cors({origin: verifyOrigin})));
@@ -54,6 +54,16 @@ app.use(route.get('/getSpecificList', async function (ctx, next) {
         ctx.body = {data: doc, msg: 'success'};
     });
 }));
+//按(开始时间: date，结束时间: date，origin_key: string)查询detail
+app.use(route.get('/pastInquiry', async function (ctx, next) {
+    await pastInquiry(ctx.query.origin, ctx.query.beginDate, ctx.query.endDate, ctx.query.keyword, ctx.query.pageIndex, ctx.query.pageSize).then(doc => {
+        ctx.status = 200;
+        ctx.body = {
+            data: {list: doc, pagination: {currentIndex: undefined, pageSize: undefined, total: undefined}},
+            msg: 'success'
+        };
+    });
+}));
 app.use(route.post('/listItem_added', async function (ctx) {
     ctx.status = 200;
     ctx.req.body = await rawBody(ctx.req, {limit: '10kb', encoding: 'utf8'});
@@ -61,7 +71,7 @@ app.use(route.post('/listItem_added', async function (ctx) {
     ctx.body = {data: undefined, msg: 'success'};
     //broadcast socket event
     app.io.broadcast('action',
-        {type: 'socket_Monitor_ON_News_Added', data: ctx.req.body});
+        {type: 'socket_global_ON_News_Added', data: ctx.req.body});
 }));
 
 
