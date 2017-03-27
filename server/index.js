@@ -56,7 +56,7 @@ app.use(route.get('/getSpecificList', async function (ctx, next) {
 }));
 //按(开始时间: date，结束时间: date，origin_key: string)查询detail
 app.use(route.get('/pastInquiry', async function (ctx, next) {
-    await pastInquiry(ctx.query.origin, ctx.query.beginDate, ctx.query.endDate, ctx.query.keyword,ctx.query.pageIndex,ctx.query.pageSize).then(doc => {
+    await pastInquiry(ctx.query.origin, ctx.query.beginDate, ctx.query.endDate, ctx.query.keyword, ctx.query.pageIndex, ctx.query.pageSize).then(doc => {
         ctx.status = 200;
         ctx.body = {data: doc, msg: 'success'};
     });
@@ -68,7 +68,7 @@ app.use(route.post('/listItem_added', async function (ctx) {
     ctx.body = {data: undefined, msg: 'success'};
     //broadcast socket event
     app.io.broadcast('action',
-        {type: 'socket_Monitor_ON_News_Added', data: ctx.req.body});
+        {type: 'socket_global_ON_News_Added', data: ctx.req.body});
 }));
 
 
