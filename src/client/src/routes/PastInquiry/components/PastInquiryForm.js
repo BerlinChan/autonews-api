@@ -21,6 +21,7 @@ class PastInquiryForm extends Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
+        console.log(values)
         this.props.fetchPastInquiry(values.origin.join(','), new Date(values.rangeTimePicker[0]), new Date(values.rangeTimePicker[1]), values.keyword, this.props.query.pageIndex || 0, this.props.query.pageSize || 20);
       }
     });
@@ -52,8 +53,9 @@ class PastInquiryForm extends Component {
               {getFieldDecorator('rangeTimePicker',
                 {
                   rules: [{type: 'array', required: true, message: '请选择日期范围'}],
-                  initialValue: [moment(moment().format('YYYY-MM-DD')), moment(moment().add({day: 1}).format('YYYY-MM-DD'))],
+                  //initialValue: [moment(moment().format('YYYY-MM-DD')), moment(moment().add({day: 1}).format('YYYY-MM-DD'))],
                   onChange: (value, dateString) => {
+                    console.log(value,111)
                   },
                 })(
                 <RangePicker showTime format="YYYY-MM-DD HH:mm:ss" style={{width: '100%'}}/>

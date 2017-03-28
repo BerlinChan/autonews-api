@@ -19,10 +19,10 @@ function onDestory() {
     type: PastInquiry_ON_destroy
   }
 }
-function fetchPastInquiry(origin = '', startDate = new Date(moment().format('YYYY-MM-DD')), endDate = new Date(moment().add({day: 1}).format('YYYY-MM-DD')), keyword = '', pageIndex = 0, pageSize = 20) {
+function fetchPastInquiry(origin = '', startDate = new Date(moment().format('YYYY-MM-DD')), endDate = new Date(moment().add({day: 1}).format('YYYY-MM-DD')), keyword = '', current = 0, pageSize = 20) {
   return {
     type: PastInquiry_FETCH_REQUESTED,
-    origin, startDate, endDate, keyword, pageIndex, pageSize,
+    origin, startDate, endDate, keyword, current, pageSize,
   }
 }
 
@@ -56,10 +56,10 @@ export default function pastInquiryReducer(state = initialState, action) {
 // Sagas
 function* watchFetchPastInquiry() {
   while (true) {
-    const {origin, startDate, endDate, keyword, pageIndex, pageSize} = yield take(PastInquiry_FETCH_REQUESTED);
+    const {origin, startDate, endDate, keyword, current, pageSize} = yield take(PastInquiry_FETCH_REQUESTED);
 
     const pastInquiry = yield call(request,
-      config.API_SERVER + `pastInquiry?origin=${origin}&startDate=${startDate}&endDate=${endDate}&keyword=${keyword}&pageIndex=${pageIndex}&pageSize=${pageSize}`,
+      config.API_SERVER + `pastInquiry?origin=${origin}&startDate=${startDate}&endDate=${endDate}&keyword=${keyword}&pageIndex=${current}&pageSize=${pageSize}`,
     );
     if (!pastInquiry.err) {
       yield put({type: PastInquiry_FETCH_SUCCESSED, data: pastInquiry.data.data});

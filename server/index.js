@@ -56,10 +56,10 @@ app.use(route.get('/getSpecificList', async function (ctx, next) {
 }));
 //按(开始时间: date，结束时间: date，origin_key: string)查询detail
 app.use(route.get('/pastInquiry', async function (ctx, next) {
-    await pastInquiry(ctx.query.origin, ctx.query.beginDate, ctx.query.endDate, ctx.query.keyword, ctx.query.pageIndex, ctx.query.pageSize).then(doc => {
+    await pastInquiry(ctx.query.origin, ctx.query.beginDate, ctx.query.endDate, ctx.query.keyword, ctx.query.current, ctx.query.pageSize).then(doc => {
         ctx.status = 200;
         ctx.body = {
-            data: {list: doc, pagination: {currentIndex: undefined, pageSize: undefined, total: undefined}},
+            data: doc,
             msg: 'success'
         };
     });

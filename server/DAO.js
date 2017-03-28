@@ -23,7 +23,7 @@ function getSpecificList(beginDate = new Date(moment().format('YYYY-MM-DD')), en
     );
 }
 //按(开始时间: date，结束时间: date，origin_key: string)查询往期数据
-function pastInquiry(origin = '', beginDate = new Date(moment().format('YYYY-MM-DD')), endDate = new Date(moment().add({days: 1}).format('YYYY-MM-DD')), keyword = '', pageIndex = 0, pageSize = 20) {
+async function pastInquiry(origin = '', beginDate, endDate, keyword = '', current = 0, pageSize = 20) {
     let origin_key_array = origin.split(',');
     let query = {
         "date": {$gte: new Date(Date.parse(beginDate) - 57600000), $lt: new Date(Date.parse(endDate) - 57600000)}, //减去16小时？
@@ -33,15 +33,22 @@ function pastInquiry(origin = '', beginDate = new Date(moment().format('YYYY-MM-
         //let keyword_array = keyword.split(',');
         query['title'] = eval(`/${keyword}/i`);
     }
-    try {
-        return db.get('detail').find(
-            query,
-            {sort: {'date': -1}, fields: '-content', limit: parseInt(pageSize)}
-        );
-    }
-    catch (err) {
-        console.log(11,err);
-    }
+
+    let detailList = await db.get('detail').find(
+        query,
+        {
+            sort: {'date': -1},
+            fields: '-content',
+            limit: parseInt(pageSize),
+            skip: parseInt(current) * parseInt(pageSize),
+        }
+    );
+    let totalList = await db.get('detail').count(query);
+
+    return {
+        list: detailList,
+        pagination: {current: current, pageSize: pageSize, total: totalList},
+    };
 }
 
 
