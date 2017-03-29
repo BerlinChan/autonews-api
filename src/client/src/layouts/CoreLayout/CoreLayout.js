@@ -4,6 +4,7 @@ import '../../styles/core.scss'
 import cls from'./CoreLayout.scss'
 import {Link} from 'react-router'
 import {connect} from 'react-redux'
+import logoAutoNews from './assets/auto-news-logo.png'
 
 const {Header, Content, Footer} = Layout;
 
@@ -28,7 +29,9 @@ class CoreLayout extends Component {
     return (
       <Layout className={cls.body}>
         <Header className={cls.header}>
-          <div className={cls.logo}><a href="http://autonews.berlinchan.com/">【新闻源监控】</a></div>
+          <div className={cls.logo}>
+            <a href="http://autonews.berlinchan.com/"><img src={logoAutoNews} alt="新闻源监控系统"/></a>
+          </div>
 
           <div className={cls.horizontalMenu}>
             {this.getMenu('horizontal')}
@@ -48,9 +51,9 @@ class CoreLayout extends Component {
             {this.props.global.get('socketConnectStatus') === 'disconnect' ?
               <span className={cls.warning}>停机</span> : <span>运行中</span>}
           </span>&nbsp;|&nbsp;
-{/*
-          <span>有 {this.props.global.get('clientCount')} 位小编在线</span>&nbsp;|&nbsp;
-*/}
+          {/*
+           <span>有 {this.props.global.get('clientCount')} 位小编在线</span>&nbsp;|&nbsp;
+           */}
           <span>Code with <i className={cls.iconLove}/> by&nbsp;
             <a href="http://www.berlinchan.com" target="_blank">摄影师陈柏林</a>
           </span>

@@ -9,7 +9,11 @@
     .logo {
       font-size: 18px;
       float: left;
-      height: 40px;
+      line-height: 54px;
+      margin-right: 10px;
+      img {
+        vertical-align: middle;
+      }
     }
     .horizontalMenu {
       .menu {
