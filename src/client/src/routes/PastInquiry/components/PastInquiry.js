@@ -56,6 +56,7 @@ class PastInquiry extends Component {
       total: pastInquiryResult.pagination.total,
       pageSize: pastInquiryResult.pagination.pageSize,
       showSizeChanger: true,
+      showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
       pageSizeOptions: ['10', '20', '30'],
       onChange: (page, pageSize) => this.props.fetchPastInquiry(formData.origin.value.join(','), new Date(formData.rangeTimePicker.value[0]), new Date(formData.rangeTimePicker.value[1]), formData.keyword.value, page || 0, pageSize || 20),
       onShowSizeChange: (page, pageSize) => this.props.fetchPastInquiry(formData.origin.value.join(','), new Date(formData.rangeTimePicker.value[0]), new Date(formData.rangeTimePicker.value[1]), formData.keyword.value, page || 0, pageSize || 20),

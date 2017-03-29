@@ -75,7 +75,7 @@ async function pastInquiry(origin = '', beginDate, endDate, keyword = '', curren
             sort: {'date': -1},
             fields: '-content',
             limit: parseInt(pageSize),
-            skip: parseInt(current) * parseInt(pageSize),
+            skip: (parseInt(current) - 1) * parseInt(pageSize),
         }
     );
     let totalList = await db.get('detail').count(query);
