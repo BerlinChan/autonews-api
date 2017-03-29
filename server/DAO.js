@@ -59,7 +59,7 @@ function getSpecificList(beginDate = new Date(moment().format('YYYY-MM-DD')), en
  *   current：       查询页面
  *   pageSize：      每页数量
  */
-async function pastInquiry(origin = '', beginDate, endDate, keyword = '', current = 0, pageSize = 20) {
+async function pastInquiry(origin = '', beginDate, endDate, keyword = '', current = 1, pageSize = 20) {
     let origin_key_array = origin.split(',');
     let query = {
         "date": {$gte: new Date(Date.parse(beginDate) - 57600000), $lt: new Date(Date.parse(endDate) - 57600000)}, //减去16小时？

@@ -20,7 +20,7 @@ class PastInquiryForm extends Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        this.props.fetchPastInquiry(values.origin.join(','), new Date(values.rangeTimePicker[0]), new Date(values.rangeTimePicker[1]), values.keyword, 0, 20);
+        this.props.fetchPastInquiry(values.origin.join(','), new Date(values.rangeTimePicker[0]), new Date(values.rangeTimePicker[1]), values.keyword, 1, 20);
       }
     });
   };

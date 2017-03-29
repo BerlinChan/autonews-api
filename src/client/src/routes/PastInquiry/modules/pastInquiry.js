@@ -20,7 +20,7 @@ function onDestory() {
     type: PastInquiry_ON_destroy
   }
 }
-function fetchPastInquiry(origin = '', beginDate = new Date(moment().format('YYYY-MM-DD')), endDate = new Date(moment().add({day: 1}).format('YYYY-MM-DD')), keyword = '', current = 0, pageSize = 20) {
+function fetchPastInquiry(origin = '', beginDate = new Date(moment().format('YYYY-MM-DD')), endDate = new Date(moment().add({day: 1}).format('YYYY-MM-DD')), keyword = '', current = 1, pageSize = 20) {
   return {
     type: PastInquiry_FETCH_REQUESTED,
     origin, beginDate, endDate, keyword, current, pageSize,
