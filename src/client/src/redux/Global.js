@@ -124,7 +124,7 @@ function* fetchGlobalOriginAndNews() {
   const newsOriginKeyArray = originList.data.data.map(item => item.key);
   if (newsOriginKeyArray && newsOriginKeyArray.length) {
     const listResults = yield newsOriginKeyArray.map(item => call(request,
-      config.API_SERVER + `getSpecificList?beginDate=${new Date(moment().format('YYYY-MM-DD'))}&endDate=${new Date(moment().add({days: 1}).format('YYYY-MM-DD'))}&origin_key=${item}`,
+      config.API_SERVER + `getTodayList?origin_key=${item}`,
     ));
     if (listResults && listResults.length) {
       yield listResults.map((item, index) => {

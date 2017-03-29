@@ -11,6 +11,31 @@ const moment = require('moment');
 function getOrigin() {
     return db.get('origin').find({});
 }
+
+//获取当日 news list
+async function getTodayList(origin_key) {
+    const todayDate = new Date(moment().format('YYYY-MM-DD'));
+    const tomorrowDate = new Date(moment().add({days: 1}).format('YYYY-MM-DD'));
+    let origin_key_array = [];
+    if (origin_key) {
+        origin_key_array = origin_key.split(',');
+    } else {
+        const allOrigin = await db.get('origin').find({}, {fields: 'key'});
+        allOrigin.forEach(item => origin_key_array.push(item.key));
+    }
+
+    return db.get('list').find(
+        {
+            "date": {
+                $gte: new Date(Date.parse(todayDate) - 57600000),
+                $lt: new Date(Date.parse(tomorrowDate) - 57600000)
+            }, //减去16小时？
+            "origin_key": {$in: origin_key_array}
+        },
+        {sort: {'date': -1}, fields: '-origin_name'}
+    );
+}
+
 //按(开始时间: date，结束时间: date，origin_key: string)查询list
 function getSpecificList(beginDate = new Date(moment().format('YYYY-MM-DD')), endDate = new Date(moment().add({days: 1}).format('YYYY-MM-DD')), origin_key = 'ctdsb,ctjb,ctkb,ctsb,txdcw,hbrb,sxwb') {
     let origin_key_array = origin_key.split(',');
@@ -22,7 +47,18 @@ function getSpecificList(beginDate = new Date(moment().format('YYYY-MM-DD')), en
         {sort: {'date': -1}, fields: '-origin_name'}
     );
 }
-//按(开始时间: date，结束时间: date，origin_key: string)查询往期数据
+
+/*
+ * 查询往期数据
+ *
+ * 参数：
+ *   beginDate：    开始时间
+ *   endDate：      结束时间
+ *   origin_key：   来源key，多个以","分割
+ *   keyword：       标题关键字
+ *   current：       查询页面
+ *   pageSize：      每页数量
+ */
 async function pastInquiry(origin = '', beginDate, endDate, keyword = '', current = 0, pageSize = 20) {
     let origin_key_array = origin.split(',');
     let query = {
@@ -30,7 +66,6 @@ async function pastInquiry(origin = '', beginDate, endDate, keyword = '', curren
         "origin_key": {$in: origin_key_array},
     };
     if (keyword) {
-        //let keyword_array = keyword.split(',');
         query['title'] = eval(`/${keyword}/i`);
     }
 
@@ -54,6 +89,6 @@ async function pastInquiry(origin = '', beginDate, endDate, keyword = '', curren
 
 module.exports = {
     getOrigin,
-    getSpecificList,
+    getTodayList,
     pastInquiry,
 };

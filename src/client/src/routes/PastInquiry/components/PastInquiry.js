@@ -21,7 +21,7 @@ class PastInquiry extends Component {
 
   render() {
     const {global, pastInquiry} = this.props;
-    const pastInquiryResult=pastInquiry.get('pastInquiryResult').toJS();
+    const pastInquiryResult = pastInquiry.get('pastInquiryResult').toJS();
     const columns = [
       {
         title: '日期',
@@ -54,7 +54,7 @@ class PastInquiry extends Component {
       current: pastInquiryResult.pagination.current,
       total: pastInquiryResult.pagination.total,
       pageSize: pastInquiryResult.pagination.pageSize,
-      onChange: (page, pageSize) => this.props.fetchPublishHistory(this.props.creatContentPublish.get('id'), page, pageSize),
+      onChange: (page, pageSize) => this.props.fetchPastInquiry(this.props.creatContentPublish.get('id'), page, pageSize),
     };
 
     return (
@@ -66,9 +66,8 @@ class PastInquiry extends Component {
 
         {/*search result*/}
         <Card>
-          <Table columns={columns} rowKey={(record) => record.url}
-                 dataSource={pastInquiryResult.list}
-          />
+          <Table columns={columns} rowKey={(record) => record.url} pagination={pagination}
+                 dataSource={pastInquiryResult.list}/>
         </Card>
       </div>
     );

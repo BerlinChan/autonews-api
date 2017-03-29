@@ -53,9 +53,8 @@ class PastInquiryForm extends Component {
               {getFieldDecorator('rangeTimePicker',
                 {
                   rules: [{type: 'array', required: true, message: '请选择日期范围'}],
-                  //initialValue: [moment(moment().format('YYYY-MM-DD')), moment(moment().add({day: 1}).format('YYYY-MM-DD'))],
+                  initialValue: [moment(moment().format('YYYY-MM-DD')), moment(moment().add({day: 1}).format('YYYY-MM-DD'))],
                   onChange: (value, dateString) => {
-                    console.log(value,111)
                   },
                 })(
                 <RangePicker showTime format="YYYY-MM-DD HH:mm:ss" style={{width: '100%'}}/>
@@ -67,7 +66,7 @@ class PastInquiryForm extends Component {
             <FormItem>
               {getFieldDecorator('keyword', {
                 rules: [{required: false}],
-              })(<Input placeholder="关键词"/>)}
+              })(<Input placeholder="标题关键词"/>)}
             </FormItem>
           </Col>
 
