@@ -82,7 +82,7 @@ async function pastInquiry(origin = '', beginDate, endDate, keyword = '', curren
 
     return {
         list: detailList,
-        pagination: {current: current, pageSize: pageSize, total: totalList},
+        pagination: {current: parseInt(current), pageSize: parseInt(pageSize), total: parseInt(totalList)},
     };
 }
 

@@ -14,14 +14,13 @@ const RangePicker = DatePicker.RangePicker;
 class PastInquiryForm extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
   }
 
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        this.props.fetchPastInquiry(values.origin.join(','), new Date(values.rangeTimePicker[0]), new Date(values.rangeTimePicker[1]), values.keyword, this.props.query.pageIndex || 0, this.props.query.pageSize || 20);
+        this.props.fetchPastInquiry(values.origin.join(','), new Date(values.rangeTimePicker[0]), new Date(values.rangeTimePicker[1]), values.keyword, 0, 20);
       }
     });
   };
@@ -49,13 +48,12 @@ class PastInquiryForm extends Component {
 
           <Col span={7} offset={1}>
             <FormItem label="">
-              {getFieldDecorator('rangeTimePicker',
-                {
-                  rules: [{type: 'array', required: true, message: '请选择日期范围'}],
-                  initialValue: [moment(moment().format('YYYY-MM-DD')), moment(moment().add({day: 1}).format('YYYY-MM-DD'))],
-                  onChange: (value, dateString) => {
-                  },
-                })(
+              {getFieldDecorator('rangeTimePicker', {
+                rules: [{type: 'array', required: true, message: '请选择日期范围'}],
+                initialValue: [moment(moment().format('YYYY-MM-DD')), moment(moment().add({day: 1}).format('YYYY-MM-DD'))],
+                onChange: (value, dateString) => {
+                },
+              })(
                 <RangePicker showTime format="YYYY-MM-DD HH:mm:ss" style={{width: '100%'}}/>
               )}
             </FormItem>
@@ -65,6 +63,8 @@ class PastInquiryForm extends Component {
             <FormItem>
               {getFieldDecorator('keyword', {
                 rules: [{required: false}],
+                onChange: (value) => {
+                },
               })(<Input placeholder="标题关键词"/>)}
             </FormItem>
           </Col>
@@ -81,5 +81,7 @@ class PastInquiryForm extends Component {
 PastInquiryForm.propTypes = {};
 PastInquiryForm.defaultProps = {};
 
-export default Form.create()(PastInquiryForm);
+export default Form.create({
+  onFieldsChange: (props, fields) => props.setFormValue(fields),
+})(PastInquiryForm);
 

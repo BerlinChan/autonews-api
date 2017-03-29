@@ -22,6 +22,7 @@ class PastInquiry extends Component {
   render() {
     const {global, pastInquiry} = this.props;
     const pastInquiryResult = pastInquiry.get('pastInquiryResult').toJS();
+    const formData = pastInquiry.get('form').toJS();
     const columns = [
       {
         title: '日期',
@@ -54,7 +55,10 @@ class PastInquiry extends Component {
       current: pastInquiryResult.pagination.current,
       total: pastInquiryResult.pagination.total,
       pageSize: pastInquiryResult.pagination.pageSize,
-      onChange: (page, pageSize) => this.props.fetchPastInquiry(this.props.creatContentPublish.get('id'), page, pageSize),
+      showSizeChanger: true,
+      pageSizeOptions: ['10', '20', '30'],
+      onChange: (page, pageSize) => this.props.fetchPastInquiry(formData.origin.value.join(','), new Date(formData.rangeTimePicker.value[0]), new Date(formData.rangeTimePicker.value[1]), formData.keyword.value, page || 0, pageSize || 20),
+      onShowSizeChange: (page, pageSize) => this.props.fetchPastInquiry(formData.origin.value.join(','), new Date(formData.rangeTimePicker.value[0]), new Date(formData.rangeTimePicker.value[1]), formData.keyword.value, page || 0, pageSize || 20),
     };
 
     return (
@@ -62,6 +66,7 @@ class PastInquiry extends Component {
         {/*query form*/}
         <PastInquiryForm origins={global.get('origin').toJS()}
                          fetchPastInquiry={this.props.fetchPastInquiry}
+                         setFormValue={this.props.setFormValue}
                          query={this.props.location.query}/>
 
         {/*search result*/}

@@ -11,6 +11,7 @@ const PastInquiry_FETCH_REQUESTED = 'PastInquiry_FETCH_REQUESTED';
 const PastInquiry_FETCH_SUCCESSED = 'PastInquiry_FETCH_SUCCESSED';
 const PastInquiry_FETCH_FAILURE = 'PastInquiry_FETCH_FAILURE';
 const PastInquiry_ON_destroy = 'PastInquiry_ON_destroy';
+const PastInquiry_SET_formValue = 'PastInquiry_SET_formValue';
 
 
 // Actions
@@ -19,10 +20,16 @@ function onDestory() {
     type: PastInquiry_ON_destroy
   }
 }
-function fetchPastInquiry(origin = '', startDate = new Date(moment().format('YYYY-MM-DD')), endDate = new Date(moment().add({day: 1}).format('YYYY-MM-DD')), keyword = '', current = 0, pageSize = 20) {
+function fetchPastInquiry(origin = '', beginDate = new Date(moment().format('YYYY-MM-DD')), endDate = new Date(moment().add({day: 1}).format('YYYY-MM-DD')), keyword = '', current = 0, pageSize = 20) {
   return {
     type: PastInquiry_FETCH_REQUESTED,
-    origin, startDate, endDate, keyword, current, pageSize,
+    origin, beginDate, endDate, keyword, current, pageSize,
+  }
+}
+function setFormValue(fields) {
+  return {
+    type: PastInquiry_SET_formValue,
+    fields,
   }
 }
 
@@ -30,6 +37,7 @@ export const actions = {
   fetchPastInquiry,
   onDestory,
   fetchOriginAndNews: globalActions.fetchOriginAndNews,
+  setFormValue,
 };
 
 // Action Handlers
@@ -38,6 +46,7 @@ const ACTION_HANDLERS = {
   [PastInquiry_FETCH_SUCCESSED]: (state, action) => state.setIn(['isFetching'], false)
     .set('pastInquiryResult', Immutable.fromJS(action.data)),
   [PastInquiry_FETCH_FAILURE]: (state, action) => state.setIn(['isFetching'], false),
+  [PastInquiry_SET_formValue]: (state, action) => state.set('form', state.get('form').mergeDeep(Immutable.fromJS(action.fields))),
   [PastInquiry_ON_destroy]: () => initialState,
 };
 
@@ -45,6 +54,7 @@ const ACTION_HANDLERS = {
 const initialState = Immutable.Map({
   isFetching: false,
   pastInquiryResult: Immutable.fromJS({list: [], pagination: {}}),
+  form: Immutable.fromJS({}),
 });
 export default function pastInquiryReducer(state = initialState, action) {
   const handler = ACTION_HANDLERS[action.type];
@@ -56,10 +66,10 @@ export default function pastInquiryReducer(state = initialState, action) {
 // Sagas
 function* watchFetchPastInquiry() {
   while (true) {
-    const {origin, startDate, endDate, keyword, current, pageSize} = yield take(PastInquiry_FETCH_REQUESTED);
+    const {origin, beginDate, endDate, keyword, current, pageSize} = yield take(PastInquiry_FETCH_REQUESTED);
 
     const pastInquiry = yield call(request,
-      config.API_SERVER + `pastInquiry?origin=${origin}&startDate=${startDate}&endDate=${endDate}&keyword=${keyword}&pageIndex=${current}&pageSize=${pageSize}`,
+      config.API_SERVER + `pastInquiry?origin=${origin}&beginDate=${beginDate}&endDate=${endDate}&keyword=${keyword}&current=${current}&pageSize=${pageSize}`,
     );
     if (!pastInquiry.err) {
       yield put({type: PastInquiry_FETCH_SUCCESSED, data: pastInquiry.data.data});
