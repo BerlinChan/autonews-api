@@ -30,7 +30,10 @@ class CoreLayout extends Component {
       <Layout className={cls.body}>
         <Header className={cls.header}>
           <div className={cls.logo}>
-            <a href="http://autonews.berlinchan.com/"><img src={logoAutoNews} alt="新闻源监控系统"/></a>
+            <a href="http://autonews.berlinchan.com/">
+              <img src={logoAutoNews} alt="新闻源监控系统"/>
+              <span className={cls.logoTitle}></span>新闻源监控系统
+            </a>
           </div>
 
           <div className={cls.horizontalMenu}>

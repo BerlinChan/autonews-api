@@ -11,7 +11,12 @@
       float: left;
       line-height: 62px;
       margin-right: 10px;
+      .logoTitle {
+        color: #49a9ee;
+        font-size: 18px;
+      }
       img {
+        margin-right: 4px;
         vertical-align: middle;
       }
     }

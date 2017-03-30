@@ -1,0 +1,18 @@
+.about {
+  margin: 12px;
+
+  p {
+    text-indent: 2em;
+  }
+  ul.releaseNoteList {
+    > li {
+      margin: 20px 0;
+      ul {
+        margin-left: 30px;
+        list-style: disc;
+        li {
+        }
+      }
+    }
+  }
+}

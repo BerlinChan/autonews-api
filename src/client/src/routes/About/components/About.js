@@ -1,5 +1,7 @@
 import React, {Component} from 'react'
 import {Card, Table, Button, Modal, Popconfirm} from 'antd';
+import cls from './About.scss'
+import logoAutoNews from '../assets/logo-auto-news.png'
 
 class About extends Component {
   constructor(props) {
@@ -13,14 +15,16 @@ class About extends Component {
 
   render() {
     return (
-      <div>
-        <h2>欢迎使用【新闻源监控】</h2>
+      <div className={cls.about}>
+        <h2>欢迎使用【新闻源监控系统】</h2>
         <br/>
 
         <h3>What</h3>
         <hr/>
-        <p>将分散的新闻汇总，提供一处界面总览当日新闻全局，供网络新闻编辑和新闻关注者查阅、筛选、处理</p>
-        <p>当日监控能准实时反馈新闻源更新，通知编辑第一时间处理。查询往期内容功能还在开发</p>
+        <p>准实时监控新闻更新并汇总反应到界面，免除人工值守，反复刷新监控</p>
+        <p>汇总分散的新闻，提供一处界面总览当日新闻全局，供网络新闻编辑和新闻关注者查阅、筛选、处理</p>
+        <p>查询往期内容，为新闻专题、汇总专题、旧闻查阅提供数据参考</p>
+        <p>……</p>
         <br/>
 
         <h4>数据来源如下：</h4>
@@ -71,43 +75,54 @@ class About extends Component {
 
         <h3>Release Note</h3>
         <hr/>
-        <h5>Version: 0.1.2</h5>
-        <p>Date: 2017-03-25</p>
-        <ul>
-          <li>抓取排重，配置结构调整</li>
-          <li>添加长报系爬虫配置</li>
-          <li>客户端监控页替换 table 组件，提高大数据量显示性能</li>
-          <li>客户端优化请求方式，界面细节调整</li>
-          <li>监控服务器 API 配置 gzip</li>
+        <ul className={cls.releaseNoteList}>
+          <li>
+            <h5>Version: 0.2.0</h5>
+            <p>Date: 2017-03-30</p>
+            <ul>
+              <li>往期查询模块开发</li>
+              <li>添加Logo</li>
+            </ul>
+          </li>
+          <li>
+            <h5>Version: 0.1.2</h5>
+            <p>Date: 2017-03-25</p>
+            <ul>
+              <li>抓取排重，配置结构调整</li>
+              <li>添加长报系爬虫配置</li>
+              <li>客户端监控页替换 table 组件，提高大数据量显示性能</li>
+              <li>客户端优化请求方式，界面细节调整</li>
+              <li>监控服务器 API 配置 gzip</li>
+            </ul>
+          </li>
+          <li>
+            <h5>Version: 0.1.0</h5>
+            <p>Date: 2017-03-20</p>
+            <ul>
+              <li>放弃进一步使用 Firebase 框架（数据库不支持多条件查询），自建 mongoDb 数据库用作存储</li>
+              <li>完善客户端监控界面，初始化时加载当日历史数据（数据未分页，量多时偶尔卡死）</li>
+              <li>修改爬虫配置，统一 news list, news detail 数据结构</li>
+              <li>存储爬取数据到 mongoDb</li>
+              <li>爬取时的排重（仍有缺陷）</li>
+              <li>开发获取当日爬取数据API</li>
+            </ul>
+          </li>
+          <li>
+            <h5>Version: 0.0.3</h5>
+            <p>Date: 2017-03-13</p>
+            <ul>
+              <li>使用React开发客户端界面</li>
+              <li>探索使用 Firebase database 存储数据，集成实时数据库到 Redux</li>
+            </ul>
+          </li>
+          <li>
+            <h5>Version: 0.0.2</h5>
+            <p>Date: 2017-03-11</p>
+            <ul>
+              <li>开发爬虫，使用websockt协议实时推送news detail</li>
+            </ul>
+          </li>
         </ul>
-        <br/>
-
-        <h5>Version: 0.1.0</h5>
-        <p>Date: 2017-03-20</p>
-        <ul>
-          <li>放弃进一步使用 Firebase 框架（数据库不支持多条件查询），自建 mongoDb 数据库用作存储</li>
-          <li>完善客户端监控界面，初始化时加载当日历史数据（数据未分页，量多时偶尔卡死）</li>
-          <li>修改爬虫配置，统一 news list, news detail 数据结构</li>
-          <li>存储爬取数据到 mongoDb</li>
-          <li>爬取时的排重（仍有缺陷）</li>
-          <li>开发获取当日爬取数据API</li>
-        </ul>
-        <br/>
-
-        <h5>Version: 0.0.3</h5>
-        <p>Date: 2017-03-13</p>
-        <ul>
-          <li>使用React开发客户端界面</li>
-          <li>探索使用 Firebase database 存储数据，集成实时数据库到 Redux</li>
-        </ul>
-        <br/>
-
-        <h5>Version: 0.0.2</h5>
-        <p>Date: 2017-03-11</p>
-        <ul>
-          <li>开发爬虫，使用websockt协议实时推送news detail</li>
-        </ul>
-        <br/>
       </div>
     )
   }
