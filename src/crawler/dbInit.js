@@ -28,27 +28,27 @@ async function initDb() {
             );
         })
         .then(result => {
-            db.get('origin').index({'key': 1});
-            db.get('origin').index({'name': 1});
+            db.get('origin').index({'key': 1}, {unique: true, background: true});
+            db.get('origin').index({'name': 1}, {unique: true, background: true});
         })
         .then(result => {
             console.log('Create collection:', 'origin'.yellow, ' OK.');
         });
     await db.get('detail').drop()
         .then(result => {
-            db.get('detail').index({'title': 1});
-            db.get('detail').index({'origin_key': 1});
-            db.get('detail').index({'date': -1});
+            db.get('detail').index({'title': 1}, {background: true});
+            db.get('detail').index({'origin_key': 1}, {background: true});
+            db.get('detail').index({'date': -1}, {background: true});
         })
         .then(result => {
             console.log('Create collection:', 'detail'.yellow, ' OK.');
         });
     await db.get('list').drop()
         .then(result => {
-            db.get('list').index({'title': 1});
-            db.get('list').index({'url': 1});
-            db.get('list').index({'origin_key': 1});
-            db.get('list').index({'date': -1});
+            db.get('list').index({'title': 1}, {background: true});
+            db.get('list').index({'url': 1}, {unique: true, background: true});
+            db.get('list').index({'origin_key': 1}, {background: true});
+            db.get('list').index({'date': -1}, {background: true});
         })
         .then(result => {
             console.log('Create collection:', 'list'.yellow, ' OK.');
