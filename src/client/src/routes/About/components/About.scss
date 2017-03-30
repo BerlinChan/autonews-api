@@ -1,18 +1,69 @@
 .about {
   margin: 12px;
-
   p {
     text-indent: 2em;
   }
-  ul.releaseNoteList {
-    > li {
-      margin: 20px 0;
+  .header {
+    @extend .clearfix;
+    .img {
+      margin-top: 26px;
+      text-align: center;
+      float: left;
+      width: 30%;
+    }
+    .content {
+      float: left;
+      width: 70%;
       ul {
-        margin-left: 30px;
         list-style: disc;
-        li {
-        }
+        margin-left: 50px;
       }
     }
   }
+  .block {
+    h3 {
+      font-size: 16px;
+    }
+    hr {
+      margin-bottom: 12px;
+    }
+    &.origin {
+      ul {
+        list-style: disc;
+        position: relative;
+        li {
+          padding: 2px 4px;
+          display: inline-block;
+          margin-left: 18px;
+          margin-bottom: 10px;
+        }
+      }
+    }
+    &.future {
+    }
+    &.releaseNote {
+      ul.releaseNoteList {
+        > li {
+          margin: 20px 0;
+          ul {
+            margin-left: 30px;
+            list-style: disc;
+            li {
+            }
+          }
+        }
+      }
+    }
+    & + .block {
+      margin-top: 24px;
+    }
+  }
+}
+
+.clearfix:after {
+  display: block;
+  clear: both;
+  height: 0;
+  visibility: hidden;
+  content: '.';
 }
