@@ -17,11 +17,11 @@
     "koa-route": "^3.2.0",
     "koa-socket": "^4.4.0",
     "koa-static": "^3.0.0",
-    "moment": "^2.17.1",
+    "moment": "^2.18.1",
     "monk": "^4.0.0",
     "raw-body": "^2.2.0",
     "request": "^2.80.0",
-    "request-promise": "^4.1.1",
+    "request-promise": "^4.2.0",
     "seenreq": "^0.1.11",
     "string": "^3.3.3"
   },
