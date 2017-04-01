@@ -46,6 +46,9 @@
 
 ### detail - 新闻详情
 
+## Release Note
+请见[About](http://www.berlinchan.com/autonews/about)
+
 ## 常用命令
 - 备份mongodb：`mongodump -h 127.0.0.1:27017 -d auto-news -o C:\data\backup\`
 - 恢复mongodb：`mongorestore -h 127.0.0.1:27017 -d auto-news C:\data\backup\auto-news`
