@@ -85,7 +85,7 @@ class PastInquiry extends Component {
 
         {/*detail modal*/}
         {pastInquiry.get('isDetailModalShow') &&
-        <Modal title="预览详情" visible={true} footer=""
+        <Modal title="预览详情" visible={true} footer="" width='70%'
                onCancel={() => this.props.setIsDetailModalShow(false)}>
           <Spin spinning={pastInquiry.get('isDetailFetching')} size="large">
             <div dangerouslySetInnerHTML={{__html: detail.content}}/>
