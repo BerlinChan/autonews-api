@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Table, Card} from 'antd';
+import {Table, Card, Modal, Spin} from 'antd';
 import cls from './PastInquiry.scss'
 import PastInquiryForm from './PastInquiryForm'
 import moment from 'moment'
@@ -22,6 +22,7 @@ class PastInquiry extends Component {
     const {global, pastInquiry} = this.props;
     const pastInquiryResult = pastInquiry.get('pastInquiryResult').toJS();
     const formData = pastInquiry.get('form').toJS();
+    const detail = pastInquiry.get('detail').toJS();
     const columns = [
       {
         title: '日期',
@@ -49,6 +50,13 @@ class PastInquiry extends Component {
         dataIndex: 'tag',
         key: 'tag',
       },
+      {
+        title: '操作',
+        key: 'operation',
+        render: (text, record, index) =>
+          <span style={{cursor: 'pointer', color: '#66f'}}
+                onClick={() => this.props.fetchDetailById(record._id)}>预览</span>,
+      },
     ];
     const pagination = {
       current: pastInquiryResult.pagination.current,
@@ -74,6 +82,15 @@ class PastInquiry extends Component {
           <Table columns={columns} rowKey={(record) => record.url} pagination={pagination}
                  dataSource={pastInquiryResult.list}/>
         </Card>
+
+        {/*detail modal*/}
+        {pastInquiry.get('isDetailModalShow') &&
+        <Modal title="预览详情" visible={true} footer=""
+               onCancel={() => this.props.setIsDetailModalShow(false)}>
+          <Spin spinning={pastInquiry.get('isDetailFetching')} size="large">
+            <div dangerouslySetInnerHTML={{__html: detail.content}}/>
+          </Spin>
+        </Modal>}
       </div>
     );
   }

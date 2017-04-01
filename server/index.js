@@ -10,7 +10,7 @@ const cors = require('kcors');
 const route = require('koa-route');
 const rawBody = require('raw-body');
 const config = require('../src/utils/config');
-const {getOrigin, getTodayList, pastInquiry} = require('./DAO');
+const {getOrigin, getTodayList, pastInquiry, getNewsDetailById} = require('./DAO');
 const conditional = require('koa-conditional-get');
 const etag = require('koa-etag');
 const compress = require('koa-compress');
@@ -64,6 +64,16 @@ app.use(route.get('/getTodayList', async function (ctx, next) {
 //按(开始时间: date，结束时间: date，origin_key: string)查询detail
 app.use(route.get('/pastInquiry', async function (ctx, next) {
     await pastInquiry(ctx.query.origin, ctx.query.beginDate, ctx.query.endDate, ctx.query.keyword, ctx.query.current, ctx.query.pageSize).then(doc => {
+        ctx.status = 200;
+        ctx.body = {
+            data: doc,
+            msg: 'success'
+        };
+    });
+}));
+// getDetailById
+app.use(route.get('/getNewsDetailById', async function (ctx, next) {
+    await getNewsDetailById(ctx.query.id).then(doc => {
         ctx.status = 200;
         ctx.body = {
             data: doc,

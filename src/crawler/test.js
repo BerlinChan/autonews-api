@@ -1,17 +1,33 @@
 /**
  * Created by berli on 2017/3/21.
  */
-const config = require('../utils/config');
-const monk = require('monk');
-const db = monk(config.DB_SERVER);
-const moment = require('moment');
+const Crawler = require("crawler");
+const url = require('url');
 
-let record1 = (new Date('2017-03-21')).toISOString();
-let record2 = new Date('2017-03-21');
+const c = new Crawler({
+    maxConnections: 10,
+    // This will be called for each crawled page
+    callback: function (error, res, done) {
+        if (error) {
+            console.log(error);
+        } else {
+            const $ = res.$;
+            let mainDom = $(".main");
+            let contentImg = '', contentText = '';
+            mainDom.find('.bd #Cnt-Main-Article-QQ img').each(function (index) {
+                if ($(this).attr('src')) {
+                    contentImg += $(this).clone().wrap('<div/>').parent().html();
+                }
+            });
+            mainDom.find('.bd #Cnt-Main-Article-QQ p').each(function (index) {
+                contentText += '<p>' + $(this).text() + '</p>';
+            });
 
-db.get('test').insert({
-    date1: record1,
-    date2: record2
+            console.log(contentText);
+        }
+        done();
+    }
 });
 
-console.log('OK');
+// Queue just one URL, with default callback
+c.queue('http://hb.qq.com/a/20170401/033071.htm');

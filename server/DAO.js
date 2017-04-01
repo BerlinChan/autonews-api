@@ -86,9 +86,20 @@ async function pastInquiry(origin = '', beginDate, endDate, keyword = '', curren
     };
 }
 
+/*
+ * 通过 id 查询 news detail
+ *
+ * 参数：
+ *   id：对应数据库 detail collection _id field
+ */
+function getNewsDetailById(id) {
+    return db.get('detail').findOne({"_id": id});
+}
+
 
 module.exports = {
     getOrigin,
     getTodayList,
     pastInquiry,
+    getNewsDetailById,
 };

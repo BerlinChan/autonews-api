@@ -12,6 +12,9 @@ const PastInquiry_FETCH_SUCCESSED = 'PastInquiry_FETCH_SUCCESSED';
 const PastInquiry_FETCH_FAILURE = 'PastInquiry_FETCH_FAILURE';
 const PastInquiry_ON_destroy = 'PastInquiry_ON_destroy';
 const PastInquiry_SET_formValue = 'PastInquiry_SET_formValue';
+const PastInquiry_SET_isDetailModalShow = 'PastInquiry_SET_isDetailModalShow';
+const PastInquiry_FETCH_detail_REQUESTED = 'PastInquiry_FETCH_detail_REQUESTED';
+const PastInquiry_FETCH_detail_SUCCESSED = 'PastInquiry_FETCH_detail_SUCCESSED';
 
 
 // Actions
@@ -32,12 +35,26 @@ function setFormValue(fields) {
     fields,
   }
 }
+function setIsDetailModalShow(status = false) {
+  return {
+    type: PastInquiry_SET_isDetailModalShow,
+    status,
+  }
+}
+function fetchDetailById(id) {
+  return {
+    type: PastInquiry_FETCH_detail_REQUESTED,
+    id,
+  }
+}
 
 export const actions = {
   fetchPastInquiry,
   onDestory,
   fetchOriginAndNews: globalActions.fetchOriginAndNews,
   setFormValue,
+  setIsDetailModalShow,
+  fetchDetailById,
 };
 
 // Action Handlers
@@ -47,6 +64,9 @@ const ACTION_HANDLERS = {
     .set('pastInquiryResult', Immutable.fromJS(action.data)),
   [PastInquiry_FETCH_FAILURE]: (state, action) => state.setIn(['isFetching'], false),
   [PastInquiry_SET_formValue]: (state, action) => state.set('form', state.get('form').mergeDeep(Immutable.fromJS(action.fields))),
+  [PastInquiry_FETCH_detail_SUCCESSED]: (state, action) => state.set('detail', Immutable.fromJS(action.data)).set('isDetailFetching', false),
+  [PastInquiry_FETCH_detail_REQUESTED]: (state, action) => state.set('isDetailFetching', true),
+  [PastInquiry_SET_isDetailModalShow]: (state, action) => state.set('isDetailModalShow', action.status),
   [PastInquiry_ON_destroy]: () => initialState,
 };
 
@@ -55,6 +75,9 @@ const initialState = Immutable.Map({
   isFetching: false,
   pastInquiryResult: Immutable.fromJS({list: [], pagination: {}}),
   form: Immutable.fromJS({}),
+  isDetailModalShow: false,
+  isDetailFetching: false,
+  detail: Immutable.fromJS({}),
 });
 export default function pastInquiryReducer(state = initialState, action) {
   const handler = ACTION_HANDLERS[action.type];
@@ -82,8 +105,28 @@ function* watchFetchPastInquiry() {
     }
   }
 }
+function* watchFetchDetailById() {
+  while (true) {
+    const {id} = yield take(PastInquiry_FETCH_detail_REQUESTED);
+
+    yield put(setIsDetailModalShow(true));
+    const newsDetail = yield call(request,
+      config.API_SERVER + `getNewsDetailById?id=${id}`,
+    );
+    if (!newsDetail.err) {
+      yield put({type: PastInquiry_FETCH_detail_SUCCESSED, data: newsDetail.data.data});
+    } else {
+      let errBody = yield newsDetail.err.response.statusText;
+      notification.error({
+        message: 'Error',
+        description: errBody,
+      });
+    }
+  }
+}
 
 
 export const sagas = [
   watchFetchPastInquiry,
+  watchFetchDetailById,
 ];
