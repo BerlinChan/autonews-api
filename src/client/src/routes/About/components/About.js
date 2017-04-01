@@ -87,6 +87,14 @@ class About extends Component {
           <hr/>
           <ul className={cls.releaseNoteList}>
             <li>
+              <h5>Version: 0.2.1</h5>
+              <p>Date: 2017-04-01</p>
+              <ul>
+                <li>修正查询日期时区问题</li>
+                <li>API添加 ETags 与 Expires</li>
+              </ul>
+            </li>
+            <li>
               <h5>Version: 0.2.0</h5>
               <p>Date: 2017-03-30</p>
               <ul>
