@@ -13,9 +13,11 @@ const config = require('../src/utils/config');
 const {getOrigin, getTodayList, pastInquiry} = require('./DAO');
 const compress = require('koa-compress');
 const convert = require('koa-convert');// convert generator to async, support koa2
+const moment = require('moment');
 
 const app = new Koa();
 const io = new IO();
+
 app.use(compress({
     filter: function (content_type) {
         return /[text|json|javascript]/i.test(content_type)
@@ -25,7 +27,7 @@ app.use(compress({
 }));
 
 //static serve
-app.use(require('koa-static')('../public'));
+app.use(require('koa-static')('../public', {index: 'index.html'}));
 
 // Origin verification generator
 function verifyOrigin(ctx) {
@@ -44,7 +46,8 @@ io.attach(app);
 app.use(route.get('/getOrigin', async function (ctx, next) {
     await getOrigin().then(doc => {
         ctx.status = 200;
-        ctx.body = {data: doc, msg: 'success'}
+        ctx.set('Expires', moment().add({days: 2}).utc());
+        ctx.body = {data: doc, msg: 'success'};
     });
 }));
 //按(开始时间: date，结束时间: date，origin_key: string)查询list
