@@ -11,6 +11,8 @@ const route = require('koa-route');
 const rawBody = require('raw-body');
 const config = require('../src/utils/config');
 const {getOrigin, getTodayList, pastInquiry} = require('./DAO');
+const conditional = require('koa-conditional-get');
+const etag = require('koa-etag');
 const compress = require('koa-compress');
 const convert = require('koa-convert');// convert generator to async, support koa2
 const moment = require('moment');
@@ -25,6 +27,8 @@ app.use(compress({
     threshold: 2048,
     flush: require('zlib').Z_SYNC_FLUSH,
 }));
+app.use(conditional());
+app.use(etag());
 
 //static serve
 app.use(require('koa-static')('../public', {index: 'index.html'}));
