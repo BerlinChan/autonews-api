@@ -27,9 +27,9 @@ async function getTodayList(origin_key) {
     return db.get('list').find(
         {
             "date": {
-                $gte: new Date(Date.parse(todayDate) - 57600000),
-                $lt: new Date(Date.parse(tomorrowDate) - 57600000)
-            }, //减去16小时？
+                $gte: new Date(Date.parse(todayDate) - 28800000),
+                $lt: new Date(Date.parse(tomorrowDate) - 28800000)
+            }, //减去8小时？
             "origin_key": {$in: origin_key_array}
         },
         {sort: {'date': -1}, fields: '-origin_name'}
@@ -62,7 +62,7 @@ function getSpecificList(beginDate = new Date(moment().format('YYYY-MM-DD')), en
 async function pastInquiry(origin = '', beginDate, endDate, keyword = '', current = 1, pageSize = 20) {
     let origin_key_array = origin.split(',');
     let query = {
-        "date": {$gte: new Date(Date.parse(beginDate) - 57600000), $lt: new Date(Date.parse(endDate) - 57600000)}, //减去16小时？
+        "date": {$gte: new Date(Date.parse(beginDate) - 28800000), $lt: new Date(Date.parse(endDate) - 28800000)}, //减去8小时？
         "origin_key": {$in: origin_key_array},
     };
     if (keyword) {
