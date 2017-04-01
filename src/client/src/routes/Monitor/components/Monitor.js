@@ -22,8 +22,8 @@ class Monitor extends Component {
 
   render() {
     const {monitor, global} = this.props;
-    const gridCols = {lg: 12, md: 12, sm: 6, xs: 4, xxs: 2};//grid cols, 栅格列数
-    const monitorWidth = {lg: 3, md: 4, sm: 3, xs: 4, xxs: 2};//每监视器栅格宽
+    const gridCols = {lg: 12, md: 12, sm: 6, xs: 4, xxs: 4};//grid cols, 栅格列数
+    const monitorWidth = {lg: 3, md: 4, sm: 3, xs: 4, xxs: 3};//每监视器栅格宽
     const monitorHeight = {lg: 2, md: 2, sm: 2, xs: 2, xxs: 2};//每监视器栅格高
     // layout is an array of objects, see the demo for more complete usage
     let layouts = {lg: [], md: [], sm: [], xs: [], xxs: []};
@@ -38,7 +38,7 @@ class Monitor extends Component {
           y: currentY * monitorHeight[i],
           w: monitorWidth[i],
           h: monitorHeight[i],
-          minW: 3,
+          minW: monitorWidth[i],
           minH: 2,
         });
         if (currentX >= colsPerRow - 1) {
