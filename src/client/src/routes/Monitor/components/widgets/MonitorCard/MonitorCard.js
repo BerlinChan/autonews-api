@@ -23,7 +23,11 @@ const TitleCell = ({rowIndex, data, col, ...props}) => {
   const record = data[rowIndex];
   return (
     <Cell {...props}>
-      <a href={record.url} target="_blank">{record.title + (record.subTitle ? (' ' + record.subTitle) : '')}</a>
+      <a href={record.url} target="_blank">
+        {record.title ?
+          (record.title + (record.subTitle ? (' ' + record.subTitle) : '')) :
+          <span style={{color: '#888'}}>（无标题）</span>
+        }</a>
     </Cell>
   )
 };

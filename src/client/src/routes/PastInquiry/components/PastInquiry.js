@@ -15,7 +15,7 @@ class PastInquiry extends Component {
   }
 
   componentWillUnmount() {
-    this.props.onDestory();
+    this.props.onDestroy();
   }
 
   render() {
@@ -37,8 +37,22 @@ class PastInquiry extends Component {
       {
         title: '标题',
         key: 'title',
-        render: (text, record, index) => <a href={record.url} target="_blank">{record.title + (record.subTitle ? (' ' +
-        record.subTitle) : '')}</a>,
+        render: (text, record, index) => <a href={record.url} target="_blank">
+          {record.title ?
+            (record.title + (record.subTitle ? (' ' + record.subTitle) : '')) :
+            <span style={{color: '#888'}}>（无标题）</span>
+          }
+        </a>,
+      },
+      {
+        title: '作者',
+        dataIndex: 'authorName',
+        key: 'authorName',
+      },
+      {
+        title: '编辑',
+        dataIndex: 'editorName',
+        key: 'editorName',
       },
       {
         title: '分类',
@@ -79,7 +93,7 @@ class PastInquiry extends Component {
 
         {/*search result*/}
         <Card>
-          <Table columns={columns} rowKey={(record) => record.url} pagination={pagination}
+          <Table columns={columns} rowKey={(record) => record._id} pagination={pagination}
                  dataSource={pastInquiryResult.list}/>
         </Card>
 

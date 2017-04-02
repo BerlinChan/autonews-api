@@ -18,7 +18,7 @@ const PastInquiry_FETCH_detail_SUCCESSED = 'PastInquiry_FETCH_detail_SUCCESSED';
 
 
 // Actions
-function onDestory() {
+function onDestroy() {
   return {
     type: PastInquiry_ON_destroy
   }
@@ -50,7 +50,7 @@ function fetchDetailById(id) {
 
 export const actions = {
   fetchPastInquiry,
-  onDestory,
+  onDestroy,
   fetchOriginAndNews: globalActions.fetchOriginAndNews,
   setFormValue,
   setIsDetailModalShow,
@@ -66,7 +66,13 @@ const ACTION_HANDLERS = {
   [PastInquiry_SET_formValue]: (state, action) => state.set('form', state.get('form').mergeDeep(Immutable.fromJS(action.fields))),
   [PastInquiry_FETCH_detail_SUCCESSED]: (state, action) => state.set('detail', Immutable.fromJS(action.data)).set('isDetailFetching', false),
   [PastInquiry_FETCH_detail_REQUESTED]: (state, action) => state.set('isDetailFetching', true),
-  [PastInquiry_SET_isDetailModalShow]: (state, action) => state.set('isDetailModalShow', action.status),
+  [PastInquiry_SET_isDetailModalShow]: (state, action) => {
+    if (action.status) {
+      return state.set('isDetailModalShow', action.status);
+    } else {
+      return state.set('isDetailModalShow', action.status).set('detail', Immutable.fromJS({}));
+    }
+  },
   [PastInquiry_ON_destroy]: () => initialState,
 };
 
