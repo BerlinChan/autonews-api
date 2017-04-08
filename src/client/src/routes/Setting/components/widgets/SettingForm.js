@@ -61,7 +61,7 @@ class SettingForm extends Component {
                labelSpan="0" wrapperSpan="24"
                dataSource={origin} required={true}
                onChange={(value) => {
-                 console.log(value);
+                 //console.log(value);
                }}
                component={TransferField}/>
 

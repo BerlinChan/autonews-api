@@ -102,7 +102,13 @@ const ACTION_HANDLERS = {
     return state.setIn(['newsList', action.origin, 'list'], Immutable.fromJS(tempList))
       .setIn(['newsList', action.origin, 'isFetched'], true);
   },
-  [GLOBAL_SET_layouts]: (state, action) => state.setIn(['userSetting', 'layouts'], Immutable.fromJS(action.layouts)),
+  [GLOBAL_SET_layouts]: (state, action) => {
+    if (action.layouts.md.length) {
+      return state.setIn(['userSetting', 'layouts'], Immutable.fromJS(action.layouts));
+    } else {
+      return state;
+    }
+  },
 };
 
 // Reducer
@@ -176,8 +182,11 @@ function* watchFetchGlobalUserSetting() {
     const {origin, selectedOriginKeys} = yield take(GLOBAL_FETCH_userSetting_REQUESTED);
 
     // get user setting
-    let userSetting = JSON.parse(localStorage.getItem('userSetting'));
-    if (!userSetting) {
+    let userSetting = {
+      originKeys: JSON.parse(localStorage.getItem('userSetting.originKeys')),
+      layouts: JSON.parse(localStorage.getItem('userSetting.layouts')),
+    };
+    if (!userSetting.originKeys) {
       // no localStorage data, generate it
       const {global} = yield select();
       const {gridCols, monitorWidth, monitorHeight} = global.get('gridLayoutConfig').toJS();
@@ -207,7 +216,8 @@ function* watchFetchGlobalUserSetting() {
           }
         }
       }
-      localStorage.setItem('userSetting', JSON.stringify(userSetting));
+      localStorage.setItem('userSetting.originKeys', JSON.stringify(userSetting.originKeys));
+      localStorage.setItem('userSetting.layouts', JSON.stringify(userSetting.layouts));
     }
 
     yield put({type: GLOBAL_FETCH_userSetting_SUCCESSED, userSetting});
@@ -242,10 +252,9 @@ function* watchFetchGlobalNewsList() {
 function* watchSetLayouts() {
   while (true) {
     const {layouts} = yield take(GLOBAL_SET_layouts);
-    let tempSetting = JSON.parse(localStorage.getItem('userSetting'));
-    tempSetting.layouts = layouts;
 
-    localStorage.setItem('userSetting', JSON.stringify(tempSetting));
+    if (layouts.md.length)
+      localStorage.setItem('userSetting.layouts', JSON.stringify(layouts));
   }
 }
 

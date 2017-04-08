@@ -80,7 +80,8 @@ function* watchOnSubmitForm() {
     const {value} = yield take(Setting_ON_submitForm_REQUESTED);
 
     yield put(startSubmit('settingForm'));
-    localStorage.clear('userSetting');
+    localStorage.removeItem('userSetting.originKeys');
+    localStorage.removeItem('userSetting.layouts');
     yield put(fetchGlobalUserSetting(null, value.selectedOriginKeys));
     yield put(stopSubmit('settingForm'));
   }
@@ -90,7 +91,8 @@ function* watchOnResetDefault() {
     yield take(Setting_ON_resetDefault_REQUESTED);
 
     yield put(startSubmit('settingForm'));
-    localStorage.clear('userSetting');
+    localStorage.removeItem('userSetting.originKeys');
+    localStorage.removeItem('userSetting.layouts');
     yield put(fetchGlobalOrigin());
     yield put(stopSubmit('settingForm'));
   }
