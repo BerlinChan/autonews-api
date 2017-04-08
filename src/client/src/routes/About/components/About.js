@@ -91,10 +91,13 @@ class About extends Component {
           <ul className={cls.releaseNoteList}>
             <li>
               <h5>Version: 0.2.1</h5>
-              <p>Date: 2017-04-01</p>
+              <p>Date: 2017-04-11</p>
               <ul>
+                <li>添加新监控对象：人民网-湖北频道，使用更先进的Scrapy爬虫框架</li>
+                <li>添加设置模块，保存设置监控对象及监控layouts到本地存储</li>
+                <li>往期查询模块添加预览正文</li>
                 <li>修正查询日期时区问题</li>
-                <li>API添加 ETags 与 Expires</li>
+                <li>API添加 ETags 与 Expires，缓存提高效率</li>
               </ul>
             </li>
             <li>
