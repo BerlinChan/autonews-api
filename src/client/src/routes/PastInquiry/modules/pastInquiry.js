@@ -4,7 +4,6 @@ import request from 'utils/request'
 import {notification} from 'antd';
 import config from 'utils/config'
 import moment from 'moment'
-import {actions as globalActions} from '../../../redux/Global'
 
 // Constants
 const PastInquiry_FETCH_REQUESTED = 'PastInquiry_FETCH_REQUESTED';
@@ -51,7 +50,6 @@ function fetchDetailById(id) {
 export const actions = {
   fetchPastInquiry,
   onDestroy,
-  fetchOriginAndNews: globalActions.fetchOriginAndNews,
   setFormValue,
   setIsDetailModalShow,
   fetchDetailById,

@@ -3,7 +3,6 @@ import Immutable from 'immutable'
 import request from 'utils/request'
 import {notification} from 'antd';
 import config from '../../../utils/config'
-import {actions as globalActions} from '../../../redux/Global'
 
 // Constants
 const Monitor_FETCH_REQUESTED = 'Monitor_FETCH_REQUESTED';
@@ -27,7 +26,6 @@ function onDestroy() {
 export const actions = {
   fetchMonitor,
   onDestroy,
-  fetchOriginAndNews: globalActions.fetchOriginAndNews,
 };
 
 // Action Handlers
@@ -52,7 +50,7 @@ export default function monitorReducer(state = initialState, action) {
 // Sagas
 function* watchFetchMonitor() {
   while (true) {
-    const {} = yield take(Monitor_FETCH_REQUESTED);
+    yield take(Monitor_FETCH_REQUESTED);
 
     yield put({type: 'Monitor_FETCH_SUCCESSED'});
   }

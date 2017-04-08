@@ -13,7 +13,7 @@ class Monitor extends Component {
 
   componentDidMount() {
     window.scrollTo(0, 0);
-    this.props.fetchOriginAndNews();
+    this.props.fetchMonitor();
   }
 
   componentWillUnmount() {
@@ -22,45 +22,20 @@ class Monitor extends Component {
 
   render() {
     const {monitor, global} = this.props;
-    const gridCols = {lg: 12, md: 12, sm: 6, xs: 2};//grid cols, 栅格列数
-    const monitorWidth = {lg: 3, md: 4, sm: 3, xs: 2};//每监视器栅格宽
-    const monitorHeight = {lg: 2, md: 2, sm: 2, xs: 2};//每监视器栅格高
-    // layout is an array of objects, see the demo for more complete usage
-    let layouts = {lg: [], md: [], sm: [], xs: []};
-    for (let i in layouts) {
-      let currentX = 0;
-      let currentY = 0;
-      for (let j = 0; j < global.toJS().origin.length; j++) {
-        let colsPerRow = gridCols[i] / monitorWidth[i];
-        layouts[i].push({
-          i: global.toJS().origin[j].key,
-          x: currentX * monitorWidth[i],
-          y: currentY * monitorHeight[i],
-          w: monitorWidth[i],
-          h: monitorHeight[i],
-          minW: monitorWidth[i],
-          minH: 2,
-        });
-        if (currentX >= colsPerRow - 1) {
-          currentX = 0;
-          currentY += 1;
-        } else {
-          currentX += 1;
-        }
-      }
-    }
+    const gridLayoutConfig = global.toJS().gridLayoutConfig;
 
     return (
       <div className={cls.monitor}>
         {/*monitor dashboard*/}
-        <ResponsiveReactGridLayout className={cls.rowMargin} layouts={layouts} draggableHandle=".move-cursor"
-                                   breakpoints={{lg: 1440, md: 1024, sm: 425, xs: 0}}
-                                   cols={gridCols}>
-          {global.toJS().origin.map((item, index) => {
-              let currentKey = item.key;
+        <ResponsiveReactGridLayout className={cls.rowMargin}
+                                   draggableHandle=".move-cursor"
+                                   layouts={global.toJS().userSetting.layouts}
+                                   breakpoints={gridLayoutConfig.breakpoints}
+                                   cols={gridLayoutConfig.gridCols}>
+          {global.getIn(['userSetting', 'originKeys']).toJS().map((item, index) => {
               return (
-                <div key={currentKey} className={cls.layoutContent}>
-                  <MonitorCard {...global.toJS().newsList[currentKey]} origin_key={currentKey}/>
+                <div key={item} className={cls.layoutContent}>
+                  <MonitorCard {...global.toJS().newsList[item]} origin_key={item}/>
                 </div>
               );
             }

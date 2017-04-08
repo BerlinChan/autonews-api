@@ -2,6 +2,7 @@
 import CoreLayout from '../layouts/CoreLayout/CoreLayout'
 import MonitorRoute from './Monitor'
 import PastInquiryRoute from './PastInquiry'
+import SettingRoute from './Setting'
 import AboutRoute from './About'
 
 /*  Note: Instead of using JSX, we recommend using react-router
@@ -67,6 +68,7 @@ export const createRoutes = (store) => ({
       component: CoreLayout,
       childRoutes: [
         PastInquiryRoute(store),
+        SettingRoute(store),
         AboutRoute(store),
       ]
     }

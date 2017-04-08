@@ -10,7 +10,6 @@ class PastInquiry extends Component {
   }
 
   componentDidMount() {
-    this.props.fetchOriginAndNews();
     window.scrollTo(0, 0);
   }
 

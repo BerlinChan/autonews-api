@@ -80,6 +80,9 @@ class About extends Component {
           <p>现在虽然不做编辑工作，但作为一个 Code for a Better World 的 Web Developer，我觉得这会是一项有意义、有挑战的工作。</p>
           <p>计算机简直是做这些辛苦工作的最佳"人选"，所以可爱的小编们就能解放生产力，将更多精力投入到思考、学习、设计、撰写等方面，将编辑工作更提高一个层次。</p>
           <p>"苦逼的小编"也可以停下来，有更多时间优雅的喝咖啡。感觉生活都变更美好了呢:)</p>
+          <p style={{textAlign: 'right'}}>Code with <i className={cls.iconLove}/> by&nbsp;
+            <a href="http://www.berlinchan.com" target="_blank">摄影师陈柏林</a>
+          </p>
         </div>
 
         <div className={cls.block + ' ' + cls.releaseNote}>
