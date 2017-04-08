@@ -21,7 +21,7 @@ class Monitor extends Component {
   }
 
   render() {
-    const {monitor, global} = this.props;
+    const {monitor, global, setLayouts} = this.props;
     const gridLayoutConfig = global.toJS().gridLayoutConfig;
 
     return (
@@ -31,7 +31,8 @@ class Monitor extends Component {
                                    draggableHandle=".move-cursor"
                                    layouts={global.toJS().userSetting.layouts}
                                    breakpoints={gridLayoutConfig.breakpoints}
-                                   cols={gridLayoutConfig.gridCols}>
+                                   cols={gridLayoutConfig.gridCols}
+                                   onLayoutChange={(layout, layouts) => setLayouts(layouts)}>
           {global.getIn(['userSetting', 'originKeys']).toJS().map((item, index) => {
               return (
                 <div key={item} className={cls.layoutContent}>

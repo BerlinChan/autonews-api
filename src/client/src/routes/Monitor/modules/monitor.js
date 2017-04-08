@@ -3,6 +3,7 @@ import Immutable from 'immutable'
 import request from 'utils/request'
 import {notification} from 'antd';
 import config from '../../../utils/config'
+import {setLayouts} from '../../../redux/Global'
 
 // Constants
 const Monitor_FETCH_REQUESTED = 'Monitor_FETCH_REQUESTED';
@@ -26,6 +27,7 @@ function onDestroy() {
 export const actions = {
   fetchMonitor,
   onDestroy,
+  setLayouts,
 };
 
 // Action Handlers

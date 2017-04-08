@@ -18,6 +18,7 @@ const GLOBAL_FETCH_newsList_REQUESTED = 'GLOBAL_FETCH_newsList_REQUESTED';
 const GLOBAL_FETCH_newsList_SUCCESSED = 'GLOBAL_FETCH_newsList_SUCCESSED';
 const GLOBAL_FETCH_userSetting_REQUESTED = 'GLOBAL_FETCH_userSetting_REQUESTED';
 const GLOBAL_FETCH_userSetting_SUCCESSED = 'GLOBAL_FETCH_userSetting_SUCCESSED';
+const GLOBAL_SET_layouts = 'GLOBAL_SET_layouts';
 
 
 export function setUserinfo(userInfo) {
@@ -43,6 +44,12 @@ export function fetchGlobalNewsList(originKeys) {
     originKeys,
   }
 }
+export function setLayouts(layouts) {
+  return {
+    type: GLOBAL_SET_layouts,
+    layouts,
+  }
+}
 
 // Actions
 export const actions = {
@@ -50,6 +57,7 @@ export const actions = {
   fetchGlobalOrigin,
   fetchGlobalUserSetting,
   fetchGlobalNewsList,
+  setLayouts,
 };
 
 // Action Handlers
@@ -61,10 +69,14 @@ const ACTION_HANDLERS = {
   [socket_Global_SET_clientCount]: (state, action) => state.set('clientCount', action.data),
   [socket_Global_SET_SOCKET_STATUS]: (state, action) => state.set('socketConnectStatus', action.data),
   [socket_global_ON_News_Added]: (state, action) => {
-    let newList = state.getIn(['newsList', action.data.origin_key, 'list']).toJS();
-    newList.unshift(action.data);
+    if (state.getIn(['newsList', action.data.origin_key])) {
+      let newList = state.getIn(['newsList', action.data.origin_key, 'list']).toJS();
+      newList.unshift(action.data);
 
-    return state.setIn(['newsList', action.data.origin_key, 'list'], Immutable.fromJS(newList));
+      return state.setIn(['newsList', action.data.origin_key, 'list'], Immutable.fromJS(newList));
+    } else {
+      return state;
+    }
   },
   [GLOBAL_FETCH_userSetting_SUCCESSED]: (state, action) => {
     //init newsList
@@ -90,6 +102,7 @@ const ACTION_HANDLERS = {
     return state.setIn(['newsList', action.origin, 'list'], Immutable.fromJS(tempList))
       .setIn(['newsList', action.origin, 'isFetched'], true);
   },
+  [GLOBAL_SET_layouts]: (state, action) => state.setIn(['userSetting', 'layouts'], Immutable.fromJS(action.layouts)),
 };
 
 // Reducer
@@ -226,6 +239,15 @@ function* watchFetchGlobalNewsList() {
     }
   }
 }
+function* watchSetLayouts() {
+  while (true) {
+    const {layouts} = yield take(GLOBAL_SET_layouts);
+    let tempSetting = JSON.parse(localStorage.getItem('userSetting'));
+    tempSetting.layouts = layouts;
+
+    localStorage.setItem('userSetting', JSON.stringify(tempSetting));
+  }
+}
 
 
 export const sagas = [
@@ -233,4 +255,5 @@ export const sagas = [
   watchFetchGlobalUserSetting,
   watchFetchGlobalOrigin,
   watchFetchGlobalNewsList,
+  watchSetLayouts,
 ];
