@@ -18,12 +18,13 @@ class Setting extends Component {
   }
 
   render() {
-    const {global, setting, fetchSubmitForm} = this.props;
+    const {global, setting, onSubmitForm,onResetDefault} = this.props;
 
     return (
       <div className={cls.setting}>
         <SettingForm origin={global.get('origin').toJS()}
-                     onSubmit={fetchSubmitForm}
+                     onSubmit={onSubmitForm}
+                     onResetDefault={onResetDefault}
                      initialValues={{selectedOriginKeys: global.getIn(['userSetting', 'originKeys']).toJS()}}/>
       </div>
     )

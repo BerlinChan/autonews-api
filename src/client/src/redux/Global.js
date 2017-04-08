@@ -109,8 +109,8 @@ const initialState = Immutable.Map({
      ] */
   ),
   userSetting: Immutable.fromJS({
-    originKeys: [],
-    layouts: {},
+    originKeys: [],// 已监控的keys
+    layouts: {},// monitor layout
   }),
   newsList: Immutable.fromJS({
     /*'ctdsb': {
@@ -139,21 +139,23 @@ function* watchFetchUserInfo() {
     yield put({type: GLOBAL_SET_USERINFO, data: data});
 }
 function* watchFetchGlobalOrigin() {
-  yield take(GLOBAL_FETCH_origin_REQUESTED);
+  while (true) {
+    yield take(GLOBAL_FETCH_origin_REQUESTED);
 
-  //fetch origin list
-  const originList = yield call(request,
-    config.API_SERVER + `getOrigin`,
-  );
-  if (!originList.err) {
-    yield put({type: GLOBAL_FETCH_origin_SUCCESSED, data: originList.data.data});
-    yield put({type: GLOBAL_FETCH_userSetting_REQUESTED, origin: originList.data.data});
-  } else {
-    let errBody = yield originList.err.response.json();
-    notification.error({
-      message: 'Error',
-      description: errBody.msg,
-    });
+    //fetch origin list
+    const originList = yield call(request,
+      config.API_SERVER + `getOrigin`,
+    );
+    if (!originList.err) {
+      yield put({type: GLOBAL_FETCH_origin_SUCCESSED, data: originList.data.data});
+      yield put({type: GLOBAL_FETCH_userSetting_REQUESTED, origin: originList.data.data});
+    } else {
+      let errBody = yield originList.err.response.json();
+      notification.error({
+        message: 'Error',
+        description: errBody.msg,
+      });
+    }
   }
 }
 function* watchFetchGlobalUserSetting() {

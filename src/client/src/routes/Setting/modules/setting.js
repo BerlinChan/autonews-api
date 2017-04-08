@@ -4,15 +4,15 @@ import request from 'utils/request'
 import {startSubmit, stopSubmit} from 'redux-form'
 import {message, notification} from 'antd';
 import config from 'utils/config'
-import {fetchGlobalUserSetting} from '../../../redux/Global'
+import {fetchGlobalOrigin, fetchGlobalUserSetting} from '../../../redux/Global'
 
 
 // Constants
 const Setting_FETCH_REQUESTED = 'Setting_FETCH_REQUESTED';
 const Setting_FETCH_SUCCESSED = 'Setting_FETCH_SUCCESSED';
 const Setting_FETCH_FAILURE = 'Setting_FETCH_FAILURE';
-const Setting_FETCH_submitForm_REQUESTED = 'Setting_FETCH_submitForm_REQUESTED';
-const Setting_FETCH_submitForm_SUCCESSED = 'Setting_FETCH_submitForm_SUCCESSED';
+const Setting_ON_submitForm_REQUESTED = 'Setting_ON_submitForm_REQUESTED';
+const Setting_ON_resetDefault_REQUESTED = 'Setting_ON_resetDefault_REQUESTED';
 const Setting_ON_destroy = 'Setting_ON_destroy';
 
 
@@ -22,10 +22,15 @@ function fetchSetting() {
     type: Setting_FETCH_REQUESTED
   }
 }
-function fetchSubmitForm(value) {
+function onSubmitForm(value) {
   return {
-    type: Setting_FETCH_submitForm_REQUESTED,
+    type: Setting_ON_submitForm_REQUESTED,
     value,
+  }
+}
+function onResetDefault() {
+  return {
+    type: Setting_ON_resetDefault_REQUESTED,
   }
 }
 function onDestroy() {
@@ -36,8 +41,9 @@ function onDestroy() {
 
 export const actions = {
   fetchSetting,
-  fetchSubmitForm,
+  onSubmitForm,
   onDestroy,
+  onResetDefault,
 };
 
 // Action Handlers
@@ -69,14 +75,23 @@ function* watchFetchSetting() {
     yield put({type: 'Setting_FETCH_SUCCESSED'})
   }
 }
-function* watchFetchSubmitForm() {
+function* watchOnSubmitForm() {
   while (true) {
-    const {value} = yield take(Setting_FETCH_submitForm_REQUESTED);
+    const {value} = yield take(Setting_ON_submitForm_REQUESTED);
 
     yield put(startSubmit('settingForm'));
     localStorage.clear('userSetting');
     yield put(fetchGlobalUserSetting(null, value.selectedOriginKeys));
-    yield put({type: Setting_FETCH_submitForm_SUCCESSED});
+    yield put(stopSubmit('settingForm'));
+  }
+}
+function* watchOnResetDefault() {
+  while (true) {
+    yield take(Setting_ON_resetDefault_REQUESTED);
+
+    yield put(startSubmit('settingForm'));
+    localStorage.clear('userSetting');
+    yield put(fetchGlobalOrigin());
     yield put(stopSubmit('settingForm'));
   }
 }
@@ -84,5 +99,6 @@ function* watchFetchSubmitForm() {
 
 export const sagas = [
   watchFetchSetting,
-  watchFetchSubmitForm,
+  watchOnSubmitForm,
+  watchOnResetDefault,
 ];

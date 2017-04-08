@@ -6,7 +6,7 @@ import React, {
   PropTypes,
 } from 'react';
 import {Field, reduxForm} from 'redux-form';
-import {Row, Col, Form, Input, Select, Button, Transfer} from 'antd';
+import {Row, Col, Form, Input, Select, Button, Transfer, Popconfirm} from 'antd';
 const FormItem = Form.Item;
 
 const validate = (values) => {
@@ -53,8 +53,7 @@ class SettingForm extends Component {
   };
 
   render() {
-    const {origin, handleSubmit, submitting,} = this.props;
-    const {getFieldDecorator} = this.props.form;
+    const {origin, handleSubmit, submitting, onResetDefault} = this.props;
 
     return (
       <form onSubmit={handleSubmit}>
@@ -71,7 +70,10 @@ class SettingForm extends Component {
           <Col span={24} style={{marginBottom: '16px', textAlign: 'right'}}>
             <Button type="primary" htmlType="submit" loading={submitting}
                     style={{marginRight: '12px'}}>保存</Button>
-            <Button loading={submitting}>重置为系统默认</Button>
+            <Popconfirm title="确定要重置为系统默认？" okText="确定" cancelText="取消"
+                        onConfirm={() => onResetDefault()}>
+              <Button loading={submitting}>重置为系统默认</Button>
+            </Popconfirm>
           </Col>
         </Row>
       </form>
