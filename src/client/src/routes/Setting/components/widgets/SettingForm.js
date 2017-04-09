@@ -53,7 +53,7 @@ class SettingForm extends Component {
   };
 
   render() {
-    const {origin, handleSubmit, submitting, onResetDefault} = this.props;
+    const {origin, handleSubmit, submitting, onResetDefault, reset} = this.props;
 
     return (
       <form onSubmit={handleSubmit}>
@@ -70,6 +70,8 @@ class SettingForm extends Component {
           <Col span={24} style={{marginBottom: '16px', textAlign: 'right'}}>
             <Button type="primary" htmlType="submit" loading={submitting}
                     style={{marginRight: '12px'}}>保存</Button>
+            <Button loading={submitting} onClick={reset}
+                    style={{marginRight: '12px'}}>取消</Button>
             <Popconfirm title="确定要重置为系统默认？" okText="确定" cancelText="取消"
                         onConfirm={() => onResetDefault()}>
               <Button loading={submitting}>重置为系统默认</Button>
