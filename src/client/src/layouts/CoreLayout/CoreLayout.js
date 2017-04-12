@@ -55,6 +55,8 @@ class CoreLayout extends Component {
         </Content>
 
         <Footer className={cls.footer}>
+          <span className={cls.warning}>换工作中，暂停服务，预计4月30日重新上线</span>
+          &nbsp;|&nbsp;
           <span>
             监控服务:&nbsp;
             {this.props.global.get('socketConnectStatus') === 'disconnect' ?
