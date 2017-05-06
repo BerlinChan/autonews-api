@@ -24,7 +24,7 @@ async function getTodayList(origin_key) {
         allOrigin.forEach(item => origin_key_array.push(item.key));
     }
 
-    return db.get('list').find(
+    return db.get('detail').find(
         {
             "date": {
                 $gte: new Date(Date.parse(todayDate) - 28800000),
@@ -32,7 +32,7 @@ async function getTodayList(origin_key) {
             }, //减去8小时？
             "origin_key": {$in: origin_key_array}
         },
-        {sort: {'date': -1}, fields: '-origin_name'}
+        {sort: {'date': -1}, fields: '_id title subTitle url date'}
     );
 }
 
