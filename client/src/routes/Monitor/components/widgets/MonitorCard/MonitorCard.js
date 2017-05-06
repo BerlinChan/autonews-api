@@ -10,7 +10,7 @@ import {Card, Badge, Spin, Checkbox} from 'antd';
 import moment from 'moment';
 import cls from './MonitorCard.scss'
 import  {Table, Column, Cell}  from 'fixed-data-table-2';
-import 'fixed-data-table/dist/fixed-data-table.min.css'
+import 'fixed-data-table-2/dist/fixed-data-table.min.css'
 import Dimensions from 'react-dimensions'
 
 const CheckboxCell = ({rowIndex, data, col, ...props}) => (
