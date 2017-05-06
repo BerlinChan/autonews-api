@@ -43,3 +43,7 @@
 ## 常用命令
 - 备份mongodb：`mongodump -h 127.0.0.1:27017 -d auto-news -o C:\data\backup\`
 - 恢复mongodb：`mongorestore -h 127.0.0.1:27017 -d auto-news C:\data\backup\auto-news`
+- 构建docker image：`docker build -t autonews-api .`
+- 运行docker image：`docker run -it -p 3090:3090 autonews-api`
+- stop all Docker container: `docker stop $(docker ps -a -q)`
+- remove all Docker container: `docker rm $(docker ps -a -q)`

@@ -35,7 +35,11 @@ app.use(require('koa-static')('../public', {index: 'index.html'}));
 
 // Origin verification generator
 function verifyOrigin(ctx) {
-    let validOrigins = ['http://www.berlinchan.com', 'http://localhost:3091'];
+    let validOrigins = [
+        'http://www.berlinchan.com',
+        'http://localhost:3091',
+        'http://autonews.iok.la:22742',
+    ];
 
     const origin = ctx.headers.origin;
     if (!(validOrigins.indexOf(origin) !== -1)) return false;

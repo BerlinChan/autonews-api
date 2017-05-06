@@ -2,12 +2,12 @@
 FROM node:7.9
 
 # Set the working directory to /app
-WORKDIR /
+WORKDIR /autonews
 
 # Copy the current directory contents into the container at /app
-ADD ./server /server
-ADD ./utils /utils
-ADD ./package.json /
+ADD ./server /autonews/server
+ADD ./utils /autonews/utils
+ADD ./package.json /autonews
 
 # Install any needed packages specified in requirements.txt
 RUN npm i --registry=https://registry.npm.taobao.org
@@ -19,4 +19,4 @@ EXPOSE 3090
 ENV NAME autonews-api
 
 # Run app.py when the container launches
-CMD ["node", "/server/index.js"]
+CMD ["node", "./server/index.js"]
