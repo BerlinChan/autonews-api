@@ -10,7 +10,7 @@ const cors = require('kcors');
 const route = require('koa-route');
 const rawBody = require('raw-body');
 const config = require('../src/utils/config');
-const {getOrigin, getTodayList, pastInquiry, getNewsDetailById} = require('./DAO');
+const {getOrigin, getTodayList, pastInquiry, getNewsDetailById, getFilteredList} = require('./DAO');
 const conditional = require('koa-conditional-get');
 const etag = require('koa-etag');
 const compress = require('koa-compress');
@@ -89,6 +89,16 @@ app.use(route.post('/listItem_added', async function (ctx) {
     //broadcast socket event
     app.io.broadcast('action',
         {type: 'socket_global_ON_News_Added', data: ctx.req.body});
+}));
+// 查询已筛选项目详情
+app.use(route.get('/getFilteredList', async function (ctx) {
+    await getFilteredList(ctx.query.id).then(doc => {
+        ctx.status = 200;
+        ctx.body = {
+            data: doc,
+            msg: 'success'
+        };
+    });
 }));
 
 

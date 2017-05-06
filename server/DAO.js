@@ -96,10 +96,21 @@ function getNewsDetailById(id) {
     return db.get('detail').findOne({"_id": id});
 }
 
+/*
+ * 根据id查询已筛选的列表
+ * 参数：
+ *     id:以逗号","分割的 id 字符串
+ */
+function getFilteredList(id) {
+    let idList = id.split(',');
+    return db.get('detail').find({_id: {$in: idList}}, {fields: '-content'});
+}
+
 
 module.exports = {
     getOrigin,
     getTodayList,
     pastInquiry,
     getNewsDetailById,
+    getFilteredList,
 };

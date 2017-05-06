@@ -46,6 +46,7 @@ class About extends Component {
             <li><a href="http://cjrb.cjn.cn/" target="_blank">长江日报</a></li>
             <li><a href="http://whwb.cjn.cn/" target="_blank">武汉晚报</a></li>
             <li><a href="http://whcb.cjn.cn/" target="_blank">武汉晨报</a></li>
+            <li><a href="http://hb.people.com.cn/" target="_blank">人民网-湖北频道</a></li>
             <li><a href="http://www.hsdcw.com/daymap/" target="_blank">黄石日报（待添加）</a></li>
             <li>添加中……</li>
           </ul>
@@ -89,6 +90,18 @@ class About extends Component {
           <h3>Release Note</h3>
           <hr/>
           <ul className={cls.releaseNoteList}>
+            <li>
+              <h5>Version: 0.3.0</h5>
+              <p>Date: 2017-05-05</p>
+              <ul>
+                <li>API 部署到 docker 中</li>
+                <li>移植爬虫到 scrapy 框架下</li>
+                <li>添加监控项目： 人民网-湖北频道</li>
+                <li>数据统一从 detail 表取</li>
+                <li>添加 Filter 路由，功能待开发</li>
+                <li>尝试 NLP 开发：关键字提取、文章分类、情感评价，暂未部署上线</li>
+              </ul>
+            </li>
             <li>
               <h5>Version: 0.2.1</h5>
               <p>Date: 2017-04-11</p>
