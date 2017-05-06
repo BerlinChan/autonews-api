@@ -3,7 +3,7 @@
  * 处理数据库连接与数据读写
  */
 
-const config = require('../utils/config');
+const config = require('./config');
 const monk = require('monk');
 const db = monk(config.DB_SERVER);
 const colors = require('colors');
@@ -43,16 +43,6 @@ async function initDb() {
         })
         .then(result => {
             console.log('Create collection:', 'detail'.yellow, ' OK.');
-        });
-    await db.get('list').drop()
-        .then(result => {
-            db.get('list').index({'title': 1}, {background: true});
-            db.get('list').index({'url': 1}, {unique: true, background: true});
-            db.get('list').index({'origin_key': 1}, {background: true});
-            db.get('list').index({'date': -1}, {background: true});
-        })
-        .then(result => {
-            console.log('Create collection:', 'list'.yellow, ' OK.');
         });
     await db.close();
 }
