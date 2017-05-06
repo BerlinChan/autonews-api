@@ -18,14 +18,16 @@ class Setting extends Component {
   }
 
   render() {
-    const {global, setting, onSubmitForm,onResetDefault} = this.props;
+    const {global, setting, onSubmitForm, onResetDefault} = this.props;
 
     return (
       <div className={cls.setting}>
-        <SettingForm origin={global.get('origin').toJS()}
-                     onSubmit={onSubmitForm}
-                     onResetDefault={onResetDefault}
-                     initialValues={{selectedOriginKeys: global.getIn(['userSetting', 'originKeys']).toJS()}}/>
+        <Card>
+          <SettingForm origin={global.get('origin').toJS()}
+                       onSubmit={onSubmitForm}
+                       onResetDefault={onResetDefault}
+                       initialValues={{selectedOriginKeys: global.getIn(['userSetting', 'originKeys']).toJS()}}/>
+        </Card>
       </div>
     )
   }

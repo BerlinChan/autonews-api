@@ -24,7 +24,6 @@
     "raw-body": "^2.2.0",
     "request": "^2.80.0",
     "request-promise": "^4.2.0",
-    "seenreq": "^0.1.11",
     "string": "^3.3.3"
   },
   "devDependencies": {

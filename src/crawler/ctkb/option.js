@@ -75,7 +75,7 @@ const detailParser = ($, res) => {
         title: titleIndex0 ? titleIndex0 : mainDom.eq(1).text().trim(),//文章标题
         subTitle: titleIndex0 ? mainDom.eq(1).text().trim() : mainDom.eq(2).text().trim(),//文章副标题
         category: topDom.eq(0).text() + topDom.eq(2).text(),//文章分类、子栏目、子版面、子频道
-        tags: [],//文章标签、关键词
+        keywords: [],//文章标签、关键词
         url: res.request.uri.href,//文章地址
         content: mainDom.eq(4).find('#copytext').html(),//正文内容
         authorName: '',//作者名

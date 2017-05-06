@@ -4,6 +4,7 @@ import request from 'utils/request'
 import {notification} from 'antd';
 import config from 'utils/config'
 import moment from 'moment'
+import {setFilteredList} from '../../../redux/Global'
 
 // Constants
 const PastInquiry_FETCH_REQUESTED = 'PastInquiry_FETCH_REQUESTED';
@@ -53,6 +54,7 @@ export const actions = {
   setFormValue,
   setIsDetailModalShow,
   fetchDetailById,
+  setFilteredList,
 };
 
 // Action Handlers

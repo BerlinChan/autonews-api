@@ -34,7 +34,7 @@ async function insertDetailItem(_id, detailItem) {
             title: detailItem.title,//文章标题
             subTitle: detailItem.subTitle,//文章副标题
             category: detailItem.category,//文章分类、子栏目、子版面、子频道
-            tags: detailItem.tags,//文章标签、关键词
+            keywords: detailItem.keywords,//文章标签、关键词
             url: detailItem.url,//文章地址
             content: detailItem.content,//正文内容
             authorName: detailItem.authorName,//作者名

@@ -11,8 +11,8 @@ const FormItem = Form.Item;
 
 const validate = (values) => {
   const errors = {};
-  if (!values.selectedOriginKeys.length)
-    errors.selectedOriginKeys = '至少选择一个监控对象';
+  values.selectedOriginKeys.length === 0 && (errors.selectedOriginKeys = '至少选择一个监控对象');
+  values.selectedOriginKeys.length > 8 && (errors.selectedOriginKeys = '最多能选择8项');
 
   return errors;
 };
@@ -25,7 +25,8 @@ const TransferField = ({input, required, dataSource, label, labelSpan, wrapperSp
               validateStatus={(touched && error) ? "error" : ""}
               help={touched && error} required={required}>
       <Transfer
-        titles={['可用监控对象', '已选择']}
+        titles={['', '已选择']}
+        listStyle={{width: 250, height: 300}}
         dataSource={dataSource}
         showSearch
         filterOption={(inputValue, option) => option.name.indexOf(inputValue) > -1}
@@ -57,8 +58,8 @@ class SettingForm extends Component {
 
     return (
       <form onSubmit={handleSubmit}>
-        <Field name="selectedOriginKeys" label=""
-               labelSpan="0" wrapperSpan="24"
+        <Field name="selectedOriginKeys" label="监控对象"
+               labelSpan="3" wrapperSpan="21"
                dataSource={origin} required={true}
                onChange={(value) => {
                  //console.log(value);

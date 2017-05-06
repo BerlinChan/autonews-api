@@ -78,7 +78,7 @@ function detailParser($, res) {
         title: mainDom.eq(0).find('.bt1').text().trim(),//文章标题
         subTitle: mainDom.eq(0).find('.bt2').text().trim(),//文章副标题
         category: topDom.find("td[width='120']").text() + topDom.find('.bt3').text(),//文章分类、子栏目、子版面、子频道
-        tags: [],//文章标签、关键词
+        keywords: [],//文章标签、关键词
         url: res.request.uri.href,//文章地址
         content: content,//正文内容
         authorName: '',//作者名

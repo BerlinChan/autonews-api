@@ -80,8 +80,8 @@ function detailParser($, res) {
             _id: '',//文章唯一 document id，与对应 list id 相同
             title: mainDom.find('.hd h1').text(),//文章标题
             subTitle: mainDom.eq(2).find('td').text().trim(),//文章副标题
-            category: mainDom.find('.hd .tit-bar .color-a-1').text(),//文章分类、子栏目、子版面、子频道
-            tags: [],//文章标签、关键词
+            category: mainDom.find('.color-a-0 a').text(),//文章分类、子栏目、子版面、子频道
+            keywords: [],//文章标签、关键词
             url: res.request.uri.href,//文章地址
             content: contentImg + contentText,//正文内容
             authorName: mainDom.find('.hd .tit-bar .color-a-3').text(),//作者名
@@ -101,7 +101,7 @@ function hdImgTemplateParse($, res) {
         title: mainDom.children('.title h1').text(),//文章标题
         subTitle: '',//文章副标题
         category: '',//文章分类、子栏目、子版面、子频道
-        tags: [],//文章标签、关键词
+        keywords: [],//文章标签、关键词
         url: res.request.uri.href,//文章地址
         content: mainDom.find('#Main-A #picWrap img').html()
         + mainDom.find('#InfoWrap #infoTxtWrap #infoTxt').text(),//正文内容

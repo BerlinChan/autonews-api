@@ -18,7 +18,7 @@ class PastInquiry extends Component {
   }
 
   render() {
-    const {global, pastInquiry} = this.props;
+    const {global, pastInquiry, setFilteredList} = this.props;
     const pastInquiryResult = pastInquiry.get('pastInquiryResult').toJS();
     const formData = pastInquiry.get('form').toJS();
     const detail = pastInquiry.get('detail').toJS();
@@ -38,9 +38,8 @@ class PastInquiry extends Component {
         key: 'title',
         render: (text, record, index) => <a href={record.url} target="_blank">
           {record.title ?
-            (record.title + (record.subTitle ? (' ' + record.subTitle) : '')) :
-            <span style={{color: '#888'}}>（无标题）</span>
-          }
+            (record.title + (record.subTitle ? ' ' + record.subTitle : '')) :
+            <span style={{color: '#888'}}>（无标题）</span>}
         </a>,
       },
       {
@@ -55,13 +54,18 @@ class PastInquiry extends Component {
       },
       {
         title: '分类',
+        key: 'nlpClassify',
+        render: (text, record, index) => record.nlpClassify && record.nlpClassify.length && record.nlpClassify[0].name
+      },
+      {
+        title: '栏目',
         dataIndex: 'category',
         key: 'category',
       },
       {
-        title: '标签',
-        dataIndex: 'tag',
-        key: 'tag',
+        title: '关键词',
+        key: 'keywords',
+        render: (text, record, index) => record.keywords.join(', ')
       },
       {
         title: '操作',
@@ -71,11 +75,21 @@ class PastInquiry extends Component {
                 onClick={() => this.props.fetchDetailById(record._id)}>预览</span>,
       },
     ];
+    const rowSelection = {
+      selectedRowKeys: global.get('filteredList').toJS(),
+      onSelect: (record, selected, selectedRows) => {
+        setFilteredList(record._id);
+      },
+      onSelectAll: (selected, selectedRows, changeRows) => {
+        changeRows.length && changeRows.forEach(i => setFilteredList(i._id));
+      },
+    };
     const pagination = {
       current: pastInquiryResult.pagination.current,
       total: pastInquiryResult.pagination.total,
       pageSize: pastInquiryResult.pagination.pageSize,
       showSizeChanger: true,
+      showQuickJumper: true,
       showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
       pageSizeOptions: ['10', '20', '30'],
       onChange: (page, pageSize) => this.props.fetchPastInquiry(formData.origin.value.join(','), new Date(formData.rangeTimePicker.value[0]), new Date(formData.rangeTimePicker.value[1]), formData.keyword.value, page || 1, pageSize || 20),
@@ -92,7 +106,8 @@ class PastInquiry extends Component {
 
         {/*search result*/}
         <Card>
-          <Table columns={columns} rowKey={(record) => record._id} pagination={pagination}
+          <Table columns={columns} rowSelection={rowSelection}
+                 rowKey={(record) => record._id} pagination={pagination}
                  dataSource={pastInquiryResult.list}/>
         </Card>
 

@@ -19,6 +19,7 @@ const GLOBAL_FETCH_newsList_SUCCESSED = 'GLOBAL_FETCH_newsList_SUCCESSED';
 const GLOBAL_FETCH_userSetting_REQUESTED = 'GLOBAL_FETCH_userSetting_REQUESTED';
 const GLOBAL_FETCH_userSetting_SUCCESSED = 'GLOBAL_FETCH_userSetting_SUCCESSED';
 const GLOBAL_SET_layouts = 'GLOBAL_SET_layouts';
+const GLOBAL_SET_filteredList = 'GLOBAL_SET_filteredList';
 
 
 export function setUserinfo(userInfo) {
@@ -50,6 +51,12 @@ export function setLayouts(layouts) {
     layouts,
   }
 }
+export function setFilteredList(item) {
+  return {
+    type: GLOBAL_SET_filteredList,
+    item,
+  }
+}
 
 // Actions
 export const actions = {
@@ -58,6 +65,7 @@ export const actions = {
   fetchGlobalUserSetting,
   fetchGlobalNewsList,
   setLayouts,
+  setFilteredList,
 };
 
 // Action Handlers
@@ -109,6 +117,17 @@ const ACTION_HANDLERS = {
       return state;
     }
   },
+  [GLOBAL_SET_filteredList]: (state, action) => {
+    let tempList = state.get('filteredList').toJS();
+    if (tempList.findIndex(i => i === action.item) > -1) {
+      tempList = tempList.filter(i => i !== action.item);
+    }
+    else {
+      tempList.push(action.item);
+    }
+
+    return state.set('filteredList', Immutable.fromJS(tempList));
+  },
 };
 
 // Reducer
@@ -140,6 +159,7 @@ const initialState = Immutable.Map({
      ]
      },*/
   }),
+  filteredList: Immutable.List(),
 });
 export default function globalReducer(state = initialState, action) {
   const handler = ACTION_HANDLERS[action.type];

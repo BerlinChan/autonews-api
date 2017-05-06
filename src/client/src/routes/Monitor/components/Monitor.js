@@ -21,7 +21,7 @@ class Monitor extends Component {
   }
 
   render() {
-    const {monitor, global, setLayouts} = this.props;
+    const {monitor, global, setLayouts, setFilteredList} = this.props;
     const gridLayoutConfig = global.toJS().gridLayoutConfig;
 
     return (
@@ -36,7 +36,9 @@ class Monitor extends Component {
           {global.getIn(['userSetting', 'originKeys']).toJS().map((item, index) => {
               return (
                 <div key={item} className={cls.layoutContent}>
-                  <MonitorCard {...global.toJS().newsList[item]} origin_key={item}/>
+                  <MonitorCard {...global.toJS().newsList[item]} origin_key={item}
+                               filteredList={global.get('filteredList').toJS()}
+                               setFilteredList={setFilteredList}/>
                 </div>
               );
             }

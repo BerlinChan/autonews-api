@@ -6,12 +6,19 @@ import React, {
   Component,
   PropTypes,
 } from 'react';
-import {Card, Badge, Spin} from 'antd';
+import {Card, Badge, Spin, Checkbox} from 'antd';
 import moment from 'moment';
 import cls from './MonitorCard.scss'
 import  {Table, Column, Cell}  from 'fixed-data-table-2';
 import 'fixed-data-table/dist/fixed-data-table.min.css'
 import Dimensions from 'react-dimensions'
+
+const CheckboxCell = ({rowIndex, data, col, ...props}) => (
+  <Cell>
+    <Checkbox onChange={(e) => props.setFilteredList(data[rowIndex]._id)}
+              checked={props.filteredList.findIndex(i => i === data[rowIndex]._id) > -1}/>
+  </Cell>
+);
 
 const DateCell = ({rowIndex, data, col, ...props}) => (
   <Cell {...props}>
@@ -65,10 +72,18 @@ class MonitorCard extends Component {
                      width={this.props.containerWidth}
                      height={this.props.containerHeight - 48}
                      {...this.props}>
+                {this.state.mouseEnter &&
+                <Column
+                  cell={<CheckboxCell
+                    data={this.state.mouseEnter ? this.state.listSnap : this.props.list} col="date"
+                    setFilteredList={this.props.setFilteredList}
+                    filteredList={this.props.filteredList}/>}
+                  width={30}
+                />}
                 <Column
                   header={<Cell className={cls.tableHeader}>日期</Cell>}
                   cell={<DateCell data={this.state.mouseEnter ? this.state.listSnap : this.props.list} col="date"/>}
-                  width={.28 * this.props.containerWidth}
+                  width={.28 * this.props.containerWidth - (this.state.mouseEnter ? 30 : 0)}
                 />
                 <Column
                   header={<Cell className={cls.tableHeader}>标题</Cell>}

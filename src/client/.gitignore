@@ -1,7 +1,7 @@
 .DS_STORE
 *.log
 
-node_modules
+/node_modules
 
 # production
 /dist
@@ -9,4 +9,3 @@ node_modules
 # misc
 .DS_Store
 npm-debug.log*
-/.idea/
