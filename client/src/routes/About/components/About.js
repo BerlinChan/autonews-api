@@ -92,12 +92,12 @@ class About extends Component {
           <ul className={cls.releaseNoteList}>
             <li>
               <h5>Version: 0.3.0</h5>
-              <p>Date: 2017-05-05</p>
+              <p>Date: 2017-05-06</p>
               <ul>
-                <li>API 部署到 docker 中</li>
-                <li>移植爬虫到 scrapy 框架下</li>
+                <li>API 可部署到 docker 中</li>
+                <li>移植爬虫到 scrapy 框架下，移除node crawler框架的爬虫，简化目录结构及依赖</li>
                 <li>添加监控项目： 人民网-湖北频道</li>
-                <li>数据统一从 detail 表取</li>
+                <li>数据统一从 detail 表取，list 表已移除</li>
                 <li>添加 Filter 路由，功能待开发</li>
                 <li>尝试 NLP 开发：关键字提取、文章分类、情感评价，暂未部署上线</li>
               </ul>
