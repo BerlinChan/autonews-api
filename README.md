@@ -47,3 +47,4 @@
 - 运行docker image：`docker run -it -p 3090:3090 autonews-api`
 - stop all Docker container: `docker stop $(docker ps -a -q)`
 - remove all Docker container: `docker rm $(docker ps -a -q)`
+- 使用[qydev.com](http://qydev.com)的内网穿透： `ngrok -config=ngrok.cfg -subdomain autonews 3090`
