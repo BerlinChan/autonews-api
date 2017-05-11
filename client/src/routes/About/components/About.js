@@ -91,6 +91,13 @@ class About extends Component {
           <hr/>
           <ul className={cls.releaseNoteList}>
             <li>
+              <h5>Version: 0.3.1</h5>
+              <p>Date: 2017-05-11</p>
+              <ul>
+                <li>爬虫部署到 docker 容器中，包含关键字提取、文章分类、情感评价功能</li>
+              </ul>
+            </li>
+            <li>
               <h5>Version: 0.3.0</h5>
               <p>Date: 2017-05-06</p>
               <ul>
