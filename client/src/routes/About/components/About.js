@@ -91,6 +91,17 @@ class About extends Component {
           <hr/>
           <ul className={cls.releaseNoteList}>
             <li>
+              <h5>Version: 0.3.1</h5>
+              <p>Date: 2017-05-12</p>
+              <ul>
+                <li>爬虫部署到 docker 中</li>
+                <li>系统具有了人工智能 NLP 特征，包括关键字提取、新闻分类、情感评价。模型都采用 NLP 工具现成的，在情感评价和新闻分类上的准确率还有待提高。</li>
+                <li>关键字提取使用 <a href="https://github.com/hankcs/HanLP">HanLP</a></li>
+                <li>新闻分类使用 <a href="http://thuctc.thunlp.org/">THUCTC</a></li>
+                <li>情感评价 <a href="https://github.com/isnowfy/snownlp">SnowNLP</a></li>
+              </ul>
+            </li>
+            <li>
               <h5>Version: 0.3.0</h5>
               <p>Date: 2017-05-06</p>
               <ul>
