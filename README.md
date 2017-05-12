@@ -44,7 +44,8 @@
 - 备份mongodb：`mongodump -h 127.0.0.1:27017 -d auto-news -o C:\data\backup\`
 - 恢复mongodb：`mongorestore -h 127.0.0.1:27017 -d auto-news C:\data\backup\auto-news`
 - 构建docker image：`docker build -t autonews-api .`
-- 运行docker image：`docker run -d --name autonews-api-container --restart always -p 3090:3090 autonews-api`
+- 运行 API docker：`docker run -d --name autonews-api-container --restart always -p 3090:3090 autonews-api`
+- 运行 scrapy docker(爬虫项目)：`docker run -d --name autonews-scarpy-container --restart always --link autonews-api autonews-scrapy`
 - stop all Docker container: `docker stop $(docker ps -a -q)`
 - remove all Docker container: `docker rm $(docker ps -a -q)`
 - 使用[qydev.com](http://qydev.com)的内网穿透： `ngrok -config=ngrok.cfg -subdomain autonews 3090`
