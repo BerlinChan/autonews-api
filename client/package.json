@@ -77,7 +77,7 @@
   "author": "Berlin",
   "license": "MIT",
   "dependencies": {
-    "antd": "^2.8.3",
+    "antd": "^2.10.1",
     "babel-cli": "^6.5.1",
     "babel-core": "^6.18.2",
     "babel-loader": "^6.4.1",
