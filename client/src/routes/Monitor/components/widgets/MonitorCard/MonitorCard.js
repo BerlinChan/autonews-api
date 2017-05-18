@@ -30,8 +30,7 @@ const TitleCell = ({rowIndex, data, col, ...props}) => {
   const record = data.list[rowIndex];
   const showSentimentInspector = data.showSentimentInspector;
   const inspector = (sentiment) => {
-    let tempSentiment = parseFloat(sentiment);
-    if (tempSentiment && showSentimentInspector) {
+    if ((sentiment !== null || sentiment !== undefined) && showSentimentInspector) {
       let width = Math.abs(sentiment - .5) * 100 + '%';
       return (
         <div className={cls.inspector}>
