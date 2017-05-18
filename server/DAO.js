@@ -32,7 +32,7 @@ async function getTodayList(origin_key) {
             }, //减去8小时？
             "origin_key": {$in: origin_key_array}
         },
-        {sort: {'date': -1}, fields: '_id title subTitle url date'}
+        {sort: {'date': -1}, fields: '_id title subTitle url date nlpSentiment'}
     );
 }
 

@@ -19,6 +19,12 @@ class CoreLayout extends Component {
     this.props.fetchGlobalOrigin();
   }
 
+  componentDidUpdate(prevProps, prevState, prevContext) {
+    if (this.props.location !== prevProps.location) {
+      window.scrollTo(0, 0);
+    }
+  }
+
   getMenu(mode = "vertical") {
     return (
       <Menu theme="dark" mode={mode} selectedKeys={[this.props.location.pathname]} className={cls.menu}>

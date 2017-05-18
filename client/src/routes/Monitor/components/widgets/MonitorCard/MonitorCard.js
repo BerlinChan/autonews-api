@@ -4,8 +4,8 @@
 
 import React, {
   Component,
-  PropTypes,
 } from 'react';
+import PropTypes from 'prop-types';
 import {Card, Badge, Spin, Checkbox} from 'antd';
 import moment from 'moment';
 import cls from './MonitorCard.scss'
@@ -27,7 +27,21 @@ const DateCell = ({rowIndex, data, col, ...props}) => (
 );
 
 const TitleCell = ({rowIndex, data, col, ...props}) => {
-  const record = data[rowIndex];
+  const record = data.list[rowIndex];
+  const showSentimentInspector = data.showSentimentInspector;
+  const inspector = (sentiment) => {
+    let tempSentiment = parseFloat(sentiment);
+    if (tempSentiment && showSentimentInspector) {
+      let width = Math.abs(sentiment - .5) * 100 + '%';
+      return (
+        <div className={cls.inspector}>
+          <div className={sentiment >= .5 ? cls.positive : cls.negative}
+               style={{width}}/>
+        </div>
+      );
+    }
+  };
+
   return (
     <Cell {...props}>
       <a href={record.url} target="_blank">
@@ -35,6 +49,7 @@ const TitleCell = ({rowIndex, data, col, ...props}) => {
           (record.title + (record.subTitle ? (' ' + record.subTitle) : '')) :
           <span style={{color: '#888'}}>（无标题）</span>
         }</a>
+      {inspector(record.nlpSentiment)}
     </Cell>
   )
 };
@@ -47,6 +62,13 @@ class MonitorCard extends Component {
       listSnap: [],
     };
   }
+
+  static propTypes = {
+    origin_key: PropTypes.string,
+    origin_name: PropTypes.string.isRequired,
+    list: PropTypes.array,
+    isFetched: PropTypes.bool,
+  };
 
   render() {
 
@@ -67,7 +89,7 @@ class MonitorCard extends Component {
                onMouseLeave={() => this.setState({mouseEnter: false, listSnap: []})}>
             {this.props.list.length ?
               <Table touchScrollEnabled={true}
-                     headerHeight={24} rowHeight={30}
+                     headerHeight={24} rowHeight={32}
                      rowsCount={this.props.list.length}
                      width={this.props.containerWidth}
                      height={this.props.containerHeight - 48}
@@ -87,7 +109,11 @@ class MonitorCard extends Component {
                 />
                 <Column
                   header={<Cell className={cls.tableHeader}>标题</Cell>}
-                  cell={<TitleCell data={this.state.mouseEnter ? this.state.listSnap : this.props.list} col="title"/>}
+                  cell={<TitleCell col="title"
+                                   data={{
+                                     list: this.state.mouseEnter ? this.state.listSnap : this.props.list,
+                                     showSentimentInspector: this.props.showSentimentInspector
+                                   }}/>}
                   width={.72 * this.props.containerWidth}
                 />
               </Table> :
@@ -99,12 +125,6 @@ class MonitorCard extends Component {
   }
 }
 
-MonitorCard.propTypes = {
-  origin_key: PropTypes.string,
-  origin_name: PropTypes.string.isRequired,
-  list: PropTypes.array,
-  isFetched: PropTypes.bool,
-};
 MonitorCard.defaultProps = {
   origin_key: '',
   origin_name: '楚天都市报',

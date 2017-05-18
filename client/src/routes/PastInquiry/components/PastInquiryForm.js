@@ -4,8 +4,8 @@
 
 import React, {
   Component,
-  PropTypes,
 } from 'react';
+import PropTypes from 'prop-types';
 import moment from 'moment'
 import {Row, Col, Form, Input, DatePicker, Select, Button} from 'antd';
 const FormItem = Form.Item;
@@ -15,6 +15,8 @@ class PastInquiryForm extends Component {
   constructor(props) {
     super(props);
   }
+
+  static propTypes = {};
 
   handleSubmit = (e) => {
     e.preventDefault();
@@ -78,7 +80,6 @@ class PastInquiryForm extends Component {
   }
 }
 
-PastInquiryForm.propTypes = {};
 PastInquiryForm.defaultProps = {};
 
 export default Form.create({

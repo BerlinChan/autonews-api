@@ -8,8 +8,9 @@ class About extends Component {
     super(props);
   }
 
+  static propTypes = {};
+
   componentDidMount() {
-    window.scrollTo(0, 0);
     this.props.fetchAbout();
   }
 
@@ -176,7 +177,6 @@ class About extends Component {
   }
 }
 
-About.propTypes = {};
 About.defaultProps = {};
 
 export default About
