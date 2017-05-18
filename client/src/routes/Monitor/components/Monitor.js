@@ -1,4 +1,5 @@
-import React, {Component, PropTypes,} from 'react'
+import React, {Component,} from 'react'
+import PropTypes from 'prop-types';
 import cls from './Monitor.scss'
 import MonitorCard from './widgets/MonitorCard/MonitorCard'
 import '../../../../node_modules/react-grid-layout/css/styles.css'
@@ -12,7 +13,6 @@ class Monitor extends Component {
   }
 
   componentDidMount() {
-    window.scrollTo(0, 0);
     this.props.fetchMonitor();
   }
 
@@ -38,7 +38,8 @@ class Monitor extends Component {
                 <div key={item} className={cls.layoutContent}>
                   <MonitorCard {...global.toJS().newsList[item]} origin_key={item}
                                filteredList={global.get('filteredList').toJS()}
-                               setFilteredList={setFilteredList}/>
+                               setFilteredList={setFilteredList}
+                               showSentimentInspector={global.getIn(['userSetting', 'showSentimentInspector'])}/>
                 </div>
               );
             }

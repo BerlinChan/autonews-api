@@ -20,6 +20,7 @@ const GLOBAL_FETCH_userSetting_REQUESTED = 'GLOBAL_FETCH_userSetting_REQUESTED';
 const GLOBAL_FETCH_userSetting_SUCCESSED = 'GLOBAL_FETCH_userSetting_SUCCESSED';
 const GLOBAL_SET_layouts = 'GLOBAL_SET_layouts';
 const GLOBAL_SET_filteredList = 'GLOBAL_SET_filteredList';
+const GLOBAL_SET_showSentimentInspector = 'GLOBAL_SET_showSentimentInspector';
 
 
 export function setUserinfo(userInfo) {
@@ -33,10 +34,10 @@ export function fetchGlobalOrigin() {
     type: GLOBAL_FETCH_origin_REQUESTED,
   }
 }
-export function fetchGlobalUserSetting(origin, selectedOriginKeys) {
+export function fetchGlobalUserSetting(origin, selectedOriginKeys, showSentimentInspector = true) {
   return {
     type: GLOBAL_FETCH_userSetting_REQUESTED,
-    origin, selectedOriginKeys,
+    origin, selectedOriginKeys, showSentimentInspector
   }
 }
 export function fetchGlobalNewsList(originKeys) {
@@ -57,6 +58,12 @@ export function setFilteredList(item) {
     item,
   }
 }
+export function setShowSentimentInspector(status) {
+  return {
+    type: GLOBAL_SET_showSentimentInspector,
+    status,
+  }
+}
 
 // Actions
 export const actions = {
@@ -66,6 +73,7 @@ export const actions = {
   fetchGlobalNewsList,
   setLayouts,
   setFilteredList,
+  setShowSentimentInspector,
 };
 
 // Action Handlers
@@ -128,6 +136,11 @@ const ACTION_HANDLERS = {
 
     return state.set('filteredList', Immutable.fromJS(tempList));
   },
+  [GLOBAL_SET_showSentimentInspector]: (state, action) => {
+    localStorage.setItem('userSetting.showSentimentInspector', action.status);
+
+    return state.setIn(['userSetting', 'showSentimentInspector'], action.status)
+  },
 };
 
 // Reducer
@@ -147,8 +160,10 @@ const initialState = Immutable.Map({
      ] */
   ),
   userSetting: Immutable.fromJS({
+    //默认值在 saga-watchFetchGlobalUserSetting 中生成
     originKeys: [],// 已监控的keys
     layouts: {},// monitor layout
+    showSentimentInspector: true,// 是否显示情感评价指示器
   }),
   newsList: Immutable.fromJS({
     /*'ctdsb': {
@@ -159,7 +174,7 @@ const initialState = Immutable.Map({
      ]
      },*/
   }),
-  filteredList: Immutable.List(),
+  filteredList: Immutable.List(),//
 });
 export default function globalReducer(state = initialState, action) {
   const handler = ACTION_HANDLERS[action.type];
@@ -199,20 +214,22 @@ function* watchFetchGlobalOrigin() {
 }
 function* watchFetchGlobalUserSetting() {
   while (true) {
-    const {origin, selectedOriginKeys} = yield take(GLOBAL_FETCH_userSetting_REQUESTED);
+    const {origin, selectedOriginKeys, showSentimentInspector} = yield take(GLOBAL_FETCH_userSetting_REQUESTED);
 
     // get user setting
     let userSetting = {
       originKeys: JSON.parse(localStorage.getItem('userSetting.originKeys')),
       layouts: JSON.parse(localStorage.getItem('userSetting.layouts')),
+      showSentimentInspector: JSON.parse(localStorage.getItem('userSetting.showSentimentInspector')),
     };
     if (!userSetting.originKeys) {
-      // no localStorage data, generate it
+      // no localStorage data, save default to it
       const {global} = yield select();
       const {gridCols, monitorWidth, monitorHeight} = global.get('gridLayoutConfig').toJS();
       userSetting = {
         originKeys: selectedOriginKeys ? selectedOriginKeys : origin.slice(0, 8).map(item => item.key),
         layouts: {lg: [], md: [], sm: [], xs: []},
+        showSentimentInspector: showSentimentInspector,
       };
       for (let i in userSetting.layouts) {
         let currentX = 0;
@@ -238,6 +255,7 @@ function* watchFetchGlobalUserSetting() {
       }
       localStorage.setItem('userSetting.originKeys', JSON.stringify(userSetting.originKeys));
       localStorage.setItem('userSetting.layouts', JSON.stringify(userSetting.layouts));
+      localStorage.setItem('userSetting.showSentimentInspector', true);
     }
 
     yield put({type: GLOBAL_FETCH_userSetting_SUCCESSED, userSetting});

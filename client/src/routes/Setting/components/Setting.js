@@ -9,7 +9,6 @@ class Setting extends Component {
   }
 
   componentDidMount() {
-    window.scrollTo(0, 0);
     this.props.fetchSetting();
   }
 
@@ -26,7 +25,10 @@ class Setting extends Component {
           <SettingForm origin={global.get('origin').toJS()}
                        onSubmit={onSubmitForm}
                        onResetDefault={onResetDefault}
-                       initialValues={{selectedOriginKeys: global.getIn(['userSetting', 'originKeys']).toJS()}}/>
+                       initialValues={{
+                         selectedOriginKeys: global.getIn(['userSetting', 'originKeys']).toJS(),
+                         sentimentInspector: global.getIn(['userSetting', 'showSentimentInspector']),
+                       }}/>
         </Card>
       </div>
     )

@@ -4,8 +4,8 @@
 
 import React, {
   Component,
-  PropTypes,
 } from 'react';
+import PropTypes from 'prop-types';
 import moment from 'moment'
 import {Row, Col, Form, Input, DatePicker, Select, Button} from 'antd';
 const FormItem = Form.Item;

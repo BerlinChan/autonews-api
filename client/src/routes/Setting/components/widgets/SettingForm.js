@@ -3,10 +3,10 @@
  */
 import React, {
   Component,
-  PropTypes,
 } from 'react';
+import PropTypes from 'prop-types';
 import {Field, reduxForm} from 'redux-form';
-import {Row, Col, Form, Input, Select, Button, Transfer, Popconfirm} from 'antd';
+import {Row, Col, Form, Input, Select, Button, Transfer, Popconfirm, Switch} from 'antd';
 const FormItem = Form.Item;
 
 const validate = (values) => {
@@ -38,6 +38,21 @@ const TransferField = ({input, required, dataSource, label, labelSpan, wrapperSp
     </FormItem>
   )
 };
+const SwitchField = ({input, required, label, labelSpan, wrapperSpan, meta: {touched, error}}) => {
+  return (
+    <FormItem label={label}
+              labelCol={{span: labelSpan === undefined ? "8" : labelSpan}}
+              wrapperCol={{span: wrapperSpan === undefined ? "16" : wrapperSpan}}
+              validateStatus={(touched && error) ? "error" : ""}
+              help={touched && error} required={required}>
+      <Switch checkedChildren={'开'} unCheckedChildren={'关'}
+              checked={input.value}
+              onChange={(checked) => {
+                input.onChange(checked);
+              }}/>
+    </FormItem>
+  )
+};
 
 class SettingForm extends Component {
   constructor(props) {
@@ -58,6 +73,12 @@ class SettingForm extends Component {
 
     return (
       <form onSubmit={handleSubmit}>
+        <Field name="sentimentInspector" label="情感评价指示器"
+               labelSpan="3" wrapperSpan="21"
+               onChange={(value) => {
+                 //console.log(value);
+               }}
+               component={SwitchField}/>
         <Field name="selectedOriginKeys" label="监控对象"
                labelSpan="3" wrapperSpan="21"
                dataSource={origin} required={true}

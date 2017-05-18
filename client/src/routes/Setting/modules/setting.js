@@ -4,7 +4,7 @@ import request from 'utils/request'
 import {startSubmit, stopSubmit} from 'redux-form'
 import {message, notification} from 'antd';
 import config from 'utils/config'
-import {fetchGlobalOrigin, fetchGlobalUserSetting} from '../../../redux/Global'
+import {fetchGlobalOrigin, fetchGlobalUserSetting, setShowSentimentInspector} from '../../../redux/Global'
 
 
 // Constants
@@ -82,7 +82,8 @@ function* watchOnSubmitForm() {
     yield put(startSubmit('settingForm'));
     localStorage.removeItem('userSetting.originKeys');
     localStorage.removeItem('userSetting.layouts');
-    yield put(fetchGlobalUserSetting(null, value.selectedOriginKeys));
+    yield put(fetchGlobalUserSetting(null, value.selectedOriginKeys, value.sentimentInspector));
+    yield put(setShowSentimentInspector(value.sentimentInspector));
     yield put(stopSubmit('settingForm'));
   }
 }
