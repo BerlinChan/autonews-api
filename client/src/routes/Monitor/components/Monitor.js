@@ -12,6 +12,11 @@ class Monitor extends Component {
     super(props);
   }
 
+  static propTypes = {
+    newsList: PropTypes.object,
+    origin: PropTypes.array,
+  };
+
   componentDidMount() {
     this.props.fetchMonitor();
   }
@@ -50,10 +55,6 @@ class Monitor extends Component {
   }
 }
 
-Monitor.propTypes = {
-  newsList: PropTypes.object,
-  origin: PropTypes.array,
-};
 Monitor.defaultProps = {
   newsList: {},
   origin: [],

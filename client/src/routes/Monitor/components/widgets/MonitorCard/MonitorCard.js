@@ -63,6 +63,13 @@ class MonitorCard extends Component {
     };
   }
 
+  static propTypes = {
+    origin_key: PropTypes.string,
+    origin_name: PropTypes.string.isRequired,
+    list: PropTypes.array,
+    isFetched: PropTypes.bool,
+  };
+
   render() {
 
     return (
@@ -118,12 +125,6 @@ class MonitorCard extends Component {
   }
 }
 
-MonitorCard.propTypes = {
-  origin_key: PropTypes.string,
-  origin_name: PropTypes.string.isRequired,
-  list: PropTypes.array,
-  isFetched: PropTypes.bool,
-};
 MonitorCard.defaultProps = {
   origin_key: '',
   origin_name: '楚天都市报',

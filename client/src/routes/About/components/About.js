@@ -8,6 +8,8 @@ class About extends Component {
     super(props);
   }
 
+  static propTypes = {};
+
   componentDidMount() {
     this.props.fetchAbout();
   }
@@ -175,7 +177,6 @@ class About extends Component {
   }
 }
 
-About.propTypes = {};
 About.defaultProps = {};
 
 export default About

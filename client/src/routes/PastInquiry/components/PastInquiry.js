@@ -9,6 +9,8 @@ class PastInquiry extends Component {
     super(props);
   }
 
+  static propTypes = {};
+
   componentDidMount() {
   }
 
@@ -123,7 +125,6 @@ class PastInquiry extends Component {
   }
 }
 
-PastInquiry.propTypes = {};
 PastInquiry.defaultProps = {};
 
 export default PastInquiry

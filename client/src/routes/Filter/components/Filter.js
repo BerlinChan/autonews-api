@@ -8,6 +8,8 @@ class Filter extends Component {
     super(props);
   }
 
+  static propTypes = {};
+
   componentDidMount() {
     if (this.props.global.get('filteredList').size > 0) {
       this.props.fetchFilter(this.props.global.get('filteredList').toJS());
@@ -44,7 +46,6 @@ class Filter extends Component {
   }
 }
 
-Filter.propTypes = {};
 Filter.defaultProps = {};
 
 export default Filter

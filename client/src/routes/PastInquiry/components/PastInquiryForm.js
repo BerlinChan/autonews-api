@@ -16,6 +16,8 @@ class PastInquiryForm extends Component {
     super(props);
   }
 
+  static propTypes = {};
+
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
@@ -78,7 +80,6 @@ class PastInquiryForm extends Component {
   }
 }
 
-PastInquiryForm.propTypes = {};
 PastInquiryForm.defaultProps = {};
 
 export default Form.create({

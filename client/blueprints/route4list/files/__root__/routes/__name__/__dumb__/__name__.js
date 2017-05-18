@@ -5,7 +5,9 @@ class  <%= pascalEntityName %> extends Component
 {
   constructor(props) {
       super(props);
-}
+  }
+
+  static propTypes = {};
 
   componentDidMount()
   {
@@ -22,7 +24,6 @@ class  <%= pascalEntityName %> extends Component
   }
 }
 
-<%= pascalEntityName %>.propTypes = {};
 <%= pascalEntityName %>.defaultProps = {};
 
 export default <%= pascalEntityName %>

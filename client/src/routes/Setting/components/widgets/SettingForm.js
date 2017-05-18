@@ -59,6 +59,8 @@ class SettingForm extends Component {
     super(props);
   }
 
+  static propTypes = {};
+
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
@@ -105,7 +107,6 @@ class SettingForm extends Component {
   }
 }
 
-SettingForm.propTypes = {};
 SettingForm.defaultProps = {};
 
 export default reduxForm({

@@ -8,6 +8,8 @@ class Setting extends Component {
     super(props);
   }
 
+  static propTypes = {};
+
   componentDidMount() {
     this.props.fetchSetting();
   }
@@ -35,7 +37,6 @@ class Setting extends Component {
   }
 }
 
-Setting.propTypes = {};
 Setting.defaultProps = {};
 
 export default Setting
